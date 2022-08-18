@@ -7,13 +7,17 @@
  */
 package com.ideas2it.controller;
 
+
 import com.ideas2it.exception.MyCustomException;
 import com.ideas2it.model.Trainee;
 import com.ideas2it.model.Trainer;
 import com.ideas2it.service.Service;
 import com.ideas2it.utils.ValidationUtil;
-import java.time.format.DateTimeParseException;
+import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.text.SimpleDateFormat;
 
 
 /**
@@ -39,14 +42,16 @@ public class EmployeeController {
     private Scanner scanner = new Scanner(System.in);
     private Service service = new Service();
     private static boolean isContinue = true;
+    static Logger logger = Logger.getLogger(EmployeeController.class);
  
     public static void main(String[] args) {
         EmployeeController employeeController = new EmployeeController();
+        BasicConfigurator.configure();
         do {
             try {
                 employeeController.startOperation();
             } catch(InputMismatchException error) {  
-                System.out.println(error+" Error!! please Enter valid input");
+                logger.error(error+" Error!! please Enter valid input");
             } 
         } while (isContinue);      
     }
@@ -64,14 +69,14 @@ public class EmployeeController {
         service.defaultTrainers();
         Scanner scannerInput = new Scanner(System.in);
         while (isContinue) {
-            System.out.print("\n\nChoose one option from below\n 1. Trainee Portal \n 2. Trainer Portal\n 3. HR Portal\n 4. exit\n ");  
+            logger.info("\n\nChoose one option from below\n 1. Trainee Portal \n 2. Trainer Portal\n 3. HR Portal\n 4. exit\n ");  
             int choice = scannerInput.nextInt();
             switch (choice) {
                 case 1:
                     try {
                         traineePortal(choice);
                     } catch(InputMismatchException error) {  
-                        System.out.println(error+" Error!! invalid input");
+                        logger.error(error+" Error!! invalid input");
                     }   
           	    break;
 
@@ -79,7 +84,7 @@ public class EmployeeController {
                     try {
                         trainerPortal(choice);
                     } catch(InputMismatchException error) {  
-                        System.out.println(error+" Error!! invalid input");
+                        logger.error(error+" Error!! invalid input");
                     }  
                     break;
          
@@ -87,7 +92,7 @@ public class EmployeeController {
                     try {  
                         humanResourcePortal();
                     } catch(InputMismatchException error) {  
-                        System.out.println(error+" Error!! invalid input");
+                        logger.error(error+" Error!! invalid input");
                     }  
                     break;
 
@@ -109,7 +114,7 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         boolean isChoice = true;
         do {
-            System.out.print("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your data\n"
+            logger.info("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your data\n"
                 +" 2. update your complete details\n 3. View your data\n 4. update your specific detail\n 5. Go Back\n");  
             int operation = scannerInput.nextInt(); 
             switch (operation) {
@@ -117,7 +122,7 @@ public class EmployeeController {
                     try {
                         addOrUpdateEmployeeDetails(operation, choice);
                     } catch(MyCustomException error) {  
-                        System.out.println(error.getMessage()); 
+                        logger.error(error.getMessage()); 
                     } 
                     break;
 
@@ -125,7 +130,7 @@ public class EmployeeController {
                     try {
                         addOrUpdateEmployeeDetails(operation, choice);
                     } catch(MyCustomException error) {  
-                        System.out.println(error.getMessage()); 
+                        logger.error(error.getMessage()); 
                     } 
                     break;
                                                             
@@ -141,7 +146,7 @@ public class EmployeeController {
                     try {
                         updateEmployeeDetail(choice);
                     } catch(MyCustomException error) {  
-                        System.out.println(error.getMessage()); 
+                        logger.error(error.getMessage()); 
                     } 
                     break;
 
@@ -162,7 +167,7 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         boolean isDecession = true;
         do {
-            System.out.print("\n\n****choose one option from below from TRAINER PORTAL****"
+            logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
                 +"\n 1. Add Trainer data\n 2. update your complete details\n 3. view all Trainer data"
                 +"\n 4. View all Trainee data\n 5. Delete a Trainee data\n 6. Delete a Trainer data"
                 +"\n 7. update your Specific detail\n 8. Go Back\n");
@@ -173,7 +178,7 @@ public class EmployeeController {
                     try {
                         addOrUpdateEmployeeDetails(trainerOption, choice);
                     } catch(MyCustomException error) {  
-                        System.out.println(error.getMessage()); 
+                        logger.error(error.getMessage()); 
                     } 
                     break;
                 
@@ -181,7 +186,7 @@ public class EmployeeController {
                     try {
                         addOrUpdateEmployeeDetails(trainerOption, choice);
                     } catch(MyCustomException error) {  
-                        System.out.println(error.getMessage()); 
+                        logger.error(error.getMessage()); 
                     } 
                     break;                                  
 
@@ -205,7 +210,7 @@ public class EmployeeController {
                     try {
                         updateEmployeeDetail(choice);
                     } catch(MyCustomException error) {  
-                        System.out.println(error.getMessage()); 
+                        logger.error(error.getMessage()); 
                     } 
                     break;
 
@@ -220,7 +225,7 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         boolean isOption = true;
         do {
-            System.out.print("\n\n****choose one option from below from HR PORTAL****"
+            logger.info("\n\n****choose one option from below from HR PORTAL****"
                 +"\n 1. Assign Trainees to Trainer\n 2. update trainees to trainer"
                 +"\n 3. view all Trainees mapped to trainers\n 4. delete Team using trainer id.\n 5. Go Back\n");
             int hrOption = scannerInput.nextInt();
@@ -288,17 +293,17 @@ public class EmployeeController {
 
                 if ((choice == trainer) || isTrainerAvailable) {
                     expertiseIn = validateString("ExpertiseIn:");
-                    System.out.println("Experience:");
+                    logger.info("Experience:");
 	            experience = scanner.next();
                 } else if ((choice == trainee) || isTraineeAvailable) {
-                    System.out.println("TraineeBatch:");
+                    logger.info("TraineeBatch:");
                     traineeBatch = scanner.next();
                     skills = validateString("skills:");
                 }
                 fatherName = validateString("Father Name  :");
                 email = validateString("Email Id:");
                 phoneNumber = validateString("phoneNumber:");
-                System.out.println("EmployeeId Generated");  
+                logger.info("EmployeeId Generated");  
                 employeeId = ValidationUtil.generateEmployeeId();
             } catch (MyCustomException exception) {
                 throw new MyCustomException(exception.getMessage());
@@ -307,23 +312,23 @@ public class EmployeeController {
             if ((operation == add) && (choice == trainee)) {
                 service.addTrainee(firstName, lastName, employeeId, dob, age, gender, traineeBatch, skills,
                     fatherName, email, phoneNumber);
-                System.out.println("\ntrainee Added SUCCESSFULLY");
+                logger.info("\ntrainee Added SUCCESSFULLY");
             } else if (isTraineeAvailable && (choice == trainee)) {
                 service.updateTrainee(firstName, lastName, employeeId, dob, age, gender, traineeBatch, skills,
                     fatherName, email, phoneNumber, employeeEmail, employeeDob);
-                System.out.println("\ntrainee Modified SUCCESSFULLY");
+                logger.info("\ntrainee Modified SUCCESSFULLY");
             } else if ((operation == add) && (choice == trainer)) {  
                 service.addTrainer(firstName, lastName, employeeId, dob, age, gender, expertiseIn, experience,
                     fatherName, email, phoneNumber);
-                System.out.println("\ntrainer Added SUCCESSFULLY");
+                logger.info("\ntrainer Added SUCCESSFULLY");
             } else if (isTrainerAvailable && (choice == trainer)) {
                 service.updateTrainer(firstName, lastName, employeeId, dob, age, gender, expertiseIn, experience,
                     fatherName, email, phoneNumber, employeeEmail, employeeDob);
-                System.out.println("\ntrainer Modified SUCCESSFULLY");
+                logger.info("\ntrainer Modified SUCCESSFULLY");
             }
         } else {
             
-            System.out.println("invalid email or dob");
+            logger.info("invalid email or dob");
         }      
     }
 
@@ -351,10 +356,10 @@ public class EmployeeController {
         }
         if (isTraineeAvailable || isTrainerAvailable) {
             if (choice == trainee) {
-                System.out.println("choose the specifc detail you want to ***MODIFY***\n1. firstName\n2. lastName\n"
+                logger.info("choose the specifc detail you want to ***MODIFY***\n1. firstName\n2. lastName\n"
                     +"3. employeeId\n4. dob\n5. gender\n6. traineeBatch\n7. skills\n8. fatherName\n9. email\n10. phoneNumber\n");  
             } else {
-                System.out.println("choose the specifc detail you want to ***MODIFY***\n1. firstName\n2. lastName\n"
+                logger.info("choose the specifc detail you want to ***MODIFY***\n1. firstName\n2. lastName\n"
                     +"3. employeeId\n4. dob\n5. gender\n6. ExpertiseIn\n7. Experience\n8. fatherName\n9. email\n10. phoneNumber\n"); 
             }
             int task = scanner.nextInt();
@@ -368,27 +373,27 @@ public class EmployeeController {
                 timeDelay();
                 if (choice == trainee) {
                     service.updateSpecificDataOfTrainee(task, newData, age, email, dob);
-                    System.out.println("\ntrainee detail Modified SUCCESSFULLY");
+                    logger.info("\ntrainee detail Modified SUCCESSFULLY");
                 } else {
                     service.updateSpecificDataOfTrainer(task, newData, age, email, dob);
-                    System.out.println("\ntrainer detail Modified SUCCESSFULLY");
+                    logger.info("\ntrainer detail Modified SUCCESSFULLY");
                 }           
             } else if (task > 10) {
-                System.out.println("invalid option");
+                logger.info("invalid option");
             } else {
-                System.out.println("Enter the new data:");
+                logger.info("Enter the new data:");
                 newData = scanner.next();
                 timeDelay();
                 if (choice == trainee) {
                     service.updateSpecificDataOfTrainee(task, newData, 0, email, dob);
-                    System.out.println("\ntrainee detail Modified SUCCESSFULLY");
+                    logger.info("\ntrainee detail Modified SUCCESSFULLY");
                 } else {
                     service.updateSpecificDataOfTrainer(task, newData, 0, email, dob);
-                    System.out.println("\ntrainer detail Modified SUCCESSFULLY");
+                    logger.info("\ntrainer detail Modified SUCCESSFULLY");
                 }   
             }
         } else {
-            System.out.println("invalid email or dob!!");
+            logger.info("invalid email or dob!!");
         }
     }   
     
@@ -401,11 +406,11 @@ public class EmployeeController {
     public void displayTrainees() {
         int index = 0;
         timeDelay();
-        System.out.println("\n\n-----------------------------------------------------------------------------"
+        logger.info("\n\n-----------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
         System.out.printf("%17s %17s %17s %17s %10s %10s %10s %10s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
             "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "TRANEE BATCH", "SKILLS", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-        System.out.println("------------------------------------------------------------------------------"
+        logger.info("------------------------------------------------------------------------------"
             +"-----------------------------------------------------------------------------------------"); 
         List<Trainee> trainees = service.getTraineesDetail();
         for (Trainee trainee: trainees) {
@@ -416,7 +421,7 @@ public class EmployeeController {
         }
 
         if (index == 0) {
-            System.out.println("*********************************Empty*********************************"); 
+            logger.info("*********************************Empty*********************************"); 
         }    
     }
     
@@ -433,11 +438,11 @@ public class EmployeeController {
         isTraineeAvailable = service.isTraineeAvailable(email, dob); 
         timeDelay();
         if (isTraineeAvailable) {
-            System.out.println("\n\n---------------------------------------------------------------------------------"
+            logger.info("\n\n---------------------------------------------------------------------------------"
                 +"------------------------------------------------------------------------------------------");  
             System.out.printf("%17s %17s %17s %17s %10s %17s %10s %17s %24s %13s\n", "FIRST NAME", "LAST NAME", "EMPLOYEE ID", 
                 "DATE OF BIRTH", "GENDER", "TRIANEE BATCH", "SKILLS", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-            System.out.println("----------------------------------------------------------------------------------"
+            logger.info("----------------------------------------------------------------------------------"
                 +"-----------------------------------------------------------------------------------------"); 
             Trainee trainee = service.getTraineeDetail(email, dob);
             System.out.format("%17s %17s %17s %17s %10s %17s %10s %17s %24s %13s\n", trainee.getFirstName(), 
@@ -463,16 +468,16 @@ public class EmployeeController {
         String trainerDob = scanner.next();
         isAvailable = service.isTrainerAvailable(trainerEmail , trainerDob);
         if (isAvailable) {
-            System.out.println("Enter Trainee Employee Number:");
+            logger.info("Enter Trainee Employee Number:");
             String employeeId = scanner.next();
             isDeleted = service.deleteTrainee(employeeId);
             if (isDeleted) {
-                System.out.println("Deleted SUCCESSFULLY");
+                logger.info("Deleted SUCCESSFULLY");
             } else {
-                System.out.println("Trainee NOT Found");
+                logger.info("Trainee NOT Found");
             }
         } else {
-            System.out.println("Invalid EmailId or DOB");
+            logger.info("Invalid EmailId or DOB");
         }
     }
   
@@ -485,11 +490,11 @@ public class EmployeeController {
     public void displayTrainers() {
         timeDelay();
         int index=0;
-        System.out.println("\n\n----------------------------------------------------------------------------------"
+        logger.info("\n\n----------------------------------------------------------------------------------"
             +"-----------------------------------------------------------------------------------------");  
         System.out.printf("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
             "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "EXPERTISE IN", "EXPERIENCE", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-        System.out.println("----------------------------------------------------------------------------------"
+        logger.info("----------------------------------------------------------------------------------"
             +"-----------------------------------------------------------------------------------------"); 
         List<Trainer> trainerList = service.getTrainersDetail();
         for (Trainer trainer: trainerList) {
@@ -499,7 +504,7 @@ public class EmployeeController {
             index++;
         }
         if (index == 0) {
-            System.out.println("*********************************Empty*********************************"); 
+            logger.info("*********************************Empty*********************************"); 
         }
     } 
 
@@ -516,11 +521,11 @@ public class EmployeeController {
         isTrainerAvailable = service.isTrainerAvailable(email , dob); 
         timeDelay();
         if (isTrainerAvailable == true) {
-            System.out.println("\n\n---------------------------------------------------------------------------------"
+            logger.info("\n\n---------------------------------------------------------------------------------"
                 +"------------------------------------------------------------------------------------------");  
             System.out.printf("%17s %17s %17s %10s %17s %10s %17s %17s %24s %13s\n", "FIRST NAME", "LAST NAME", "EMPLOYEE ID", 
                 "DATE OF BIRTH", "GENDER", "EXPERTISE IN", "EXPERIENCE", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-            System.out.println("------------------------------------------------------------------------------------"
+            logger.info("------------------------------------------------------------------------------------"
                 +"---------------------------------------------------------------------------------------"); 
             Trainer trainer = service.getTrainerDetail(email, dob);
             System.out.format("%17s %17s %17s %10s %17s %10s %17s %17s %24s %13s\n", trainer.getFirstName(), 
@@ -551,12 +556,12 @@ public class EmployeeController {
             String employeeId = scanner.next();
             isDeleted = service.deleteTrainer(employeeId);
             if (isDeleted) {
-                System.out.println("\nDeleted SUCCESSFULLY");
+                logger.info("\nDeleted SUCCESSFULLY");
             } else {
-                System.out.println("\nTrainee NOT Found");
+                logger.info("\nTrainee NOT Found");
             }
         } else {
-            System.out.println("\nInvalid EmailId or DOB");
+            logger.info("\nInvalid EmailId or DOB");
         }
     }
     
@@ -663,19 +668,19 @@ public class EmployeeController {
         timeDelay();
         for (Map.Entry<String, List<String>> entry:assignedTraineesAndTrainer.entrySet()) {
             index++;
-            System.out.println("\n\n----------------------------------------------------------------------------------"
+            logger.info("\n\n----------------------------------------------------------------------------------"
                 +" TEAM "+index+"----------------------------------------------------------------------------------");  
             String assignedTrainer = entry.getKey();   
             List<String> assignedTrainees = entry.getValue();
-            System.out.println("\nTRAINER:\n");
+            logger.info("\nTRAINER:\n");
 
             for (Trainer trainer: trainers) {
                 if (assignedTrainer.equals(trainer.getEmployeeId())) {
-                    System.out.println("----------------------------------------------------------------------------------"
+                    logger.info("----------------------------------------------------------------------------------"
                         +"-----------------------------------------------------------------------------------------");  
                     System.out.printf("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
                         "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "EXPERTISE IN", "EXPERIENCE", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-                    System.out.println("----------------------------------------------------------------------------------"
+                    logger.info("----------------------------------------------------------------------------------"
                         +"-----------------------------------------------------------------------------------------"); 
                     System.out.format("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", trainer.getFirstName(), trainer.getLastName(), 
                         trainer.getEmployeeId(), trainer.getDob(), trainer.getAge(), trainer.getGender(), trainer.getExpertiseIn(), 
@@ -683,12 +688,12 @@ public class EmployeeController {
                     break;
                 }
             }
-            System.out.println("\nASSIGNED TRAINEES:\n");
-            System.out.println("-----------------------------------------------------------------------------"
+            logger.info("\nASSIGNED TRAINEES:\n");
+            logger.info("-----------------------------------------------------------------------------"
                 +"------------------------------------------------------------------------------------------");  
             System.out.printf("%17s %17s %17s %17s %10s %10s %10s %10s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
                 "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "TRANEE BATCH", "SKILLS", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-            System.out.println("------------------------------------------------------------------------------"
+            logger.info("------------------------------------------------------------------------------"
                 +"-----------------------------------------------------------------------------------------");
  
             for (Trainee trainee: trainees) {
@@ -744,7 +749,7 @@ public class EmployeeController {
         boolean isValid = false;
 
         for (int index = 0; index <= 4; index++) {
-            System.out.println(input);
+            logger.info(input);
             string = scanner.next();
             if (input.equals("dob (YYYY-MM-DD):")) {
                 isValid = ValidationUtil.validateDob(string);
@@ -766,7 +771,7 @@ public class EmployeeController {
                 break; 
             }else{
                 invalidInput++;
-                System.out.println("\nInvalid Input!! you have "+loop--+" more chance");
+                logger.info("\nInvalid Input!! you have "+loop--+" more chance");
             }
             if (invalidInput == 5) {
                 throw new MyCustomException("Invalid Input Try again!!");
