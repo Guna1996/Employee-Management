@@ -13,11 +13,31 @@ public class Employee {
     protected String lastName;
     protected String employeeId;
     protected String dob;
-    protected int age;
     protected String gender;
+    protected String experience;
+    protected String batch;
+    protected String designation;
+    protected String city;
     protected String fatherName;
     protected String email;
     protected String phoneNumber;
+   
+    public Employee(String firstName, String lastName, String employeeId, String dob, String gender, String experience, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.employeeId = employeeId;
+        this.dob = dob;
+        this.gender = gender;
+        this.experience = experience;
+        this.batch = batch;
+        this.designation = designation;
+        this.city = city;
+        this.fatherName = fatherName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
 
     public String getFirstName() {
         return firstName;
@@ -34,14 +54,28 @@ public class Employee {
     public String getDob() {
         return dob;
     }
- 
-    public int getAge() {
-        return age;
-    }
 
     public String getGender() {
         return gender;
     }
+
+     public String getDateOfJoining() {
+        return experience;
+    }
+
+
+    public String getBatch() {
+        return batch;
+    }
+ 
+    public String getDesignation() {
+        return designation;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
 
     public String getFatherName() {
         return fatherName;
@@ -70,13 +104,25 @@ public class Employee {
     public void setDob(String dob) {
         this.dob = dob;
     }
- 
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public void setDateOfJoining(String experience) {
+        this.experience = experience;
+    }
+    
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+ 
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public void setFatherName(String fatherName) {
@@ -90,4 +136,6 @@ public class Employee {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    
 }

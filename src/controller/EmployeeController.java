@@ -9,10 +9,10 @@ package com.ideas2it.controller;
 
 
 import com.ideas2it.exception.MyCustomException;
-import com.ideas2it.model.Trainee;
-import com.ideas2it.model.Trainer;
+import com.ideas2it.model.EmployeeDto;
 import com.ideas2it.service.Service;
 import com.ideas2it.utils.ValidationUtil;
+import com.ideas2it.utils.Constant;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 
@@ -59,22 +59,20 @@ public class EmployeeController {
     
     /**
      * <p>
-     * This the concrete method which calls all other methods for various operations for trainee portal and trainer portal
+     * This the concrete method which perform Trainer and trainee operations
      * </p>
      * 
      * 
      */    
     public void startOperation() {
-        service.defaultTrainees();
-        service.defaultTrainers();
         Scanner scannerInput = new Scanner(System.in);
         while (isContinue) {
-            logger.info("\n\nChoose one option from below\n 1. Trainee Portal \n 2. Trainer Portal\n 3. HR Portal\n 4. exit\n ");  
+            logger.info("\n\nChoose one option from below\n 1. Trainee Portal \n 2. Trainer Portal\n 3. exit\n ");  
             int choice = scannerInput.nextInt();
             switch (choice) {
                 case 1:
                     try {
-                        traineePortal(choice);
+                        traineePortal();
                     } catch(InputMismatchException error) {  
                         logger.error(error+" Error!! invalid input");
                     }   
@@ -82,20 +80,12 @@ public class EmployeeController {
 
                 case 2:
                     try {
-                        trainerPortal(choice);
+                        trainerPortal();
                     } catch(InputMismatchException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;
-         
-                case 3:
-                    try {  
-                        humanResourcePortal();
-                    } catch(InputMismatchException error) {  
-                        logger.error(error+" Error!! invalid input");
-                    }  
-                    break;
-
+        
                 default:
                         System.out.print("Thank you");
                         isContinue = false;
@@ -110,17 +100,17 @@ public class EmployeeController {
      * </p>
      * 
      */ 
-    public void traineePortal(int choice) {
+    public void traineePortal() {
         Scanner scannerInput = new Scanner(System.in);
         boolean isChoice = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your data\n"
-                +" 2. update your complete details\n 3. View your data\n 4. update your specific detail\n 5. Go Back\n");  
+                +" 2. update your complete details\n 3. Go Back\n");  
             int operation = scannerInput.nextInt(); 
             switch (operation) {
 	        case 1:
                     try {
-                        addOrUpdateEmployeeDetails(operation, choice);
+                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINEE);
                     } catch(MyCustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
@@ -128,28 +118,12 @@ public class EmployeeController {
 
                 case 2:
                     try {
-                        addOrUpdateEmployeeDetails(operation, choice);
+                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINEE);
                     } catch(MyCustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;
-                                                            
-                case 3:
-                    System.out.print("Enter Trainee EmailId: ");
-                    String traineeEmail = scanner.next();
-                    System.out.print("Enter Trainee DOB (YYYY-MM-DD): ");
-                    String traineeDob = scanner.next();
-                    viewTraineeByEmailAndDob(traineeEmail, traineeDob);
-                    break;
-       
-                case 4:
-                    try {
-                        updateEmployeeDetail(choice);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
-                    } 
-                    break;
-
+                                                                   
                 default:
                     System.out.print("Thank you");
                     isChoice = false;
@@ -163,20 +137,18 @@ public class EmployeeController {
      * </p>
      * 
      */ 
-    public void trainerPortal(int choice) {
+    public void trainerPortal() {
         Scanner scannerInput = new Scanner(System.in);
         boolean isDecession = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
-                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. view all Trainer data"
-                +"\n 4. View all Trainee data\n 5. Delete a Trainee data\n 6. Delete a Trainer data"
-                +"\n 7. update your Specific detail\n 8. Go Back\n");
+                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
                 case 1:
                     try {
-                        addOrUpdateEmployeeDetails(trainerOption, choice);
+                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINER);
                     } catch(MyCustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
@@ -184,35 +156,11 @@ public class EmployeeController {
                 
                 case 2:
                     try {
-                        addOrUpdateEmployeeDetails(trainerOption, choice);
+                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINER);
                     } catch(MyCustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;                                  
-
-                case 3:
-                    displayTrainers();
-                    break;
-                           
-                case 4:
-                    displayTrainees();
-                    break;
-
-                case 5:
-                    deleteTrainee();
-                    break;
-                            
-                case 6:
-                    deleteTrainer();
-                    break;
-
-                case 7:
-                    try {
-                        updateEmployeeDetail(choice);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
-                    } 
-                    break;
 
                 default:
                     System.out.print("Thank you");
@@ -221,85 +169,40 @@ public class EmployeeController {
         } while(isDecession);
     }
  
-    public void humanResourcePortal() {
-        Scanner scannerInput = new Scanner(System.in);
-        boolean isOption = true;
-        do {
-            logger.info("\n\n****choose one option from below from HR PORTAL****"
-                +"\n 1. Assign Trainees to Trainer\n 2. update trainees to trainer"
-                +"\n 3. view all Trainees mapped to trainers\n 4. delete Team using trainer id.\n 5. Go Back\n");
-            int hrOption = scannerInput.nextInt();
-            
-            switch (hrOption) {
-                case 1:
-                    assignTraineesToTrainer();
-                    break;
-                 
-                case 2:
-                    updateTraineesToTrainer();
-                    break;                                  
-                     
-                case 3:
-                    displayAssignedTraineesToTrainer(); 
-                    break;
-
-                case 4:
-                    deleteTeam();
-                    break;     
-                       
-                default:
-                    System.out.print("Thank you");
-                    isOption = false;  
-            }  
-        } while (isOption);
-    }
-
+   
     /**
      * <p>
      * This method is used to add or update Employee details
      * </p>
      * 
      */ 
-    public void addOrUpdateEmployeeDetails(int operation, int choice) throws MyCustomException {
-        boolean isTraineeAvailable = false;
-        boolean isTrainerAvailable = false;
-        int age = 0;
-        int trainee = 1;
-        int trainer = 2;
-        int add = 1;
-        int update = 2;
+    public void addOrUpdateEmployeeDetails(String operation, String userType) throws MyCustomException {
+        String trainee = "trainee";
+        String trainer = "trainer";
+        String add = "add";
+        String update = "update";
         String employeeEmail = null , employeeDob = null;
-        String firstName = "", lastName = "", employeeId = "", skills = "", dob = "", gender = "", traineeBatch = "",
-            fatherName = "", email = "", phoneNumber = "", expertiseIn = "", experience = "";
-        if (operation == (update)) {
+        String firstName = "", lastName = "", employeeId = "", city = "", dob = "", gender = "", batch = "",
+            fatherName = "", email = "", phoneNumber = "", designation = "", dateOfJoining = "";
+        if (operation.equals(update)) {
             System.out.print("Enter Trainee EmailId: ");
             employeeEmail = scanner.next();
             System.out.print("Enter Trainee DOB: ");
             employeeDob = scanner.next();
-            if (choice == trainee) {
-                isTraineeAvailable = service.isTraineeAvailable(employeeEmail,  employeeDob);
-            } else {
-                isTrainerAvailable = service.isTrainerAvailable(employeeEmail,  employeeDob);   
-            }
         }
-        if ((operation == add) || isTraineeAvailable || isTrainerAvailable) {
+        if (operation.equals(add)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
             try { 
 	        firstName = validateString("First Name:");
 	        lastName = validateString("Last Name:");
 	        dob = validateString("dob (YYYY-MM-DD):");
-                age = ValidationUtil.calculateAge(dob);
                 gender = validateString("Gender:");
-
-                if ((choice == trainer) || isTrainerAvailable) {
-                    expertiseIn = validateString("ExpertiseIn:");
-                    logger.info("Experience:");
-	            experience = scanner.next();
-                } else if ((choice == trainee) || isTraineeAvailable) {
-                    logger.info("TraineeBatch:");
-                    traineeBatch = scanner.next();
-                    skills = validateString("skills:");
-                }
+                designation = validateString("Designation:");
+                city = validateString("City :");
+                logger.info("Date of Joining:");
+	        dateOfJoining = validateString("dob (YYYY-MM-DD):");
+                logger.info("Batch:");
+                batch = scanner.next();
                 fatherName = validateString("Father Name  :");
                 email = validateString("Email Id:");
                 phoneNumber = validateString("phoneNumber:");
@@ -309,432 +212,19 @@ public class EmployeeController {
                 throw new MyCustomException(exception.getMessage());
             } 
             timeDelay();
-            if ((operation == add) && (choice == trainee)) {
-                service.addTrainee(firstName, lastName, employeeId, dob, age, gender, traineeBatch, skills,
-                    fatherName, email, phoneNumber);
-                logger.info("\ntrainee Added SUCCESSFULLY");
-            } else if (isTraineeAvailable && (choice == trainee)) {
-                service.updateTrainee(firstName, lastName, employeeId, dob, age, gender, traineeBatch, skills,
-                    fatherName, email, phoneNumber, employeeEmail, employeeDob);
-                logger.info("\ntrainee Modified SUCCESSFULLY");
-            } else if ((operation == add) && (choice == trainer)) {  
-                service.addTrainer(firstName, lastName, employeeId, dob, age, gender, expertiseIn, experience,
-                    fatherName, email, phoneNumber);
-                logger.info("\ntrainer Added SUCCESSFULLY");
-            } else if (isTrainerAvailable && (choice == trainer)) {
-                service.updateTrainer(firstName, lastName, employeeId, dob, age, gender, expertiseIn, experience,
-                    fatherName, email, phoneNumber, employeeEmail, employeeDob);
-                logger.info("\ntrainer Modified SUCCESSFULLY");
-            }
+            if (operation.equals(add)) {
+                EmployeeDto employeeDto = new EmployeeDto(firstName, lastName, employeeId, dob, gender, dateOfJoining, batch,
+                    designation, city, fatherName, email, phoneNumber);
+                if(service.addEmployee(employeeDto)) {
+                    logger.info("\ntrainee Added SUCCESSFULLY");
+                }
+            }   
         } else {
             
             logger.info("invalid email or dob");
         }      
     }
-
-    /**
-     * <p>
-     * This method is used to update Employees specific detail by tainees email and dob
-     * </p>
-     *
-     */ 
-
-    public void updateEmployeeDetail(int choice) throws MyCustomException {
-        String newData;
-        int trainee = 1;
-        int age;
-        boolean isTraineeAvailable = false;
-        boolean isTrainerAvailable = false;
-        System.out.print("Enter Trainee EmailId: ");
-        String email = scanner.next();
-        System.out.print("Enter Trainee DOB: ");
-        String dob = scanner.next();
-        if (choice == trainee) {
-            isTraineeAvailable = service.isTraineeAvailable(email,  dob);
-        } else {
-            isTrainerAvailable = service.isTrainerAvailable(email,  dob);
-        }
-        if (isTraineeAvailable || isTrainerAvailable) {
-            if (choice == trainee) {
-                logger.info("choose the specifc detail you want to ***MODIFY***\n1. firstName\n2. lastName\n"
-                    +"3. employeeId\n4. dob\n5. gender\n6. traineeBatch\n7. skills\n8. fatherName\n9. email\n10. phoneNumber\n");  
-            } else {
-                logger.info("choose the specifc detail you want to ***MODIFY***\n1. firstName\n2. lastName\n"
-                    +"3. employeeId\n4. dob\n5. gender\n6. ExpertiseIn\n7. Experience\n8. fatherName\n9. email\n10. phoneNumber\n"); 
-            }
-            int task = scanner.nextInt();
-            if (task == 4) {
-                try {
-                    newData = validateString("dob (YYYY-MM-DD):");
-                    age = ValidationUtil.calculateAge(newData);
-                } catch (MyCustomException exception) {
-                    throw new MyCustomException("invalid");
-                }
-                timeDelay();
-                if (choice == trainee) {
-                    service.updateSpecificDataOfTrainee(task, newData, age, email, dob);
-                    logger.info("\ntrainee detail Modified SUCCESSFULLY");
-                } else {
-                    service.updateSpecificDataOfTrainer(task, newData, age, email, dob);
-                    logger.info("\ntrainer detail Modified SUCCESSFULLY");
-                }           
-            } else if (task > 10) {
-                logger.info("invalid option");
-            } else {
-                logger.info("Enter the new data:");
-                newData = scanner.next();
-                timeDelay();
-                if (choice == trainee) {
-                    service.updateSpecificDataOfTrainee(task, newData, 0, email, dob);
-                    logger.info("\ntrainee detail Modified SUCCESSFULLY");
-                } else {
-                    service.updateSpecificDataOfTrainer(task, newData, 0, email, dob);
-                    logger.info("\ntrainer detail Modified SUCCESSFULLY");
-                }   
-            }
-        } else {
-            logger.info("invalid email or dob!!");
-        }
-    }   
-    
-   /**
-    * <p>
-    * This method is used to Display trainees details
-    * </p>
-    * 
-    */ 
-    public void displayTrainees() {
-        int index = 0;
-        timeDelay();
-        logger.info("\n\n-----------------------------------------------------------------------------"
-            +"------------------------------------------------------------------------------------------");  
-        System.out.printf("%17s %17s %17s %17s %10s %10s %10s %10s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
-            "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "TRANEE BATCH", "SKILLS", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-        logger.info("------------------------------------------------------------------------------"
-            +"-----------------------------------------------------------------------------------------"); 
-        List<Trainee> trainees = service.getTraineesDetail();
-        for (Trainee trainee: trainees) {
-            System.out.format("%17s %17s %17s %17s %10s %10s %10s %10s %17s %20s %13s\n", trainee.getFirstName(), 
-            trainee.getLastName(), trainee.getEmployeeId(), trainee.getDob(), trainee.getAge(), trainee.getGender(),
-            trainee.getTraineeBatch(), trainee.getSkills(), trainee.getFatherName(), trainee.getEmail(), trainee.getPhoneNumber());
-            index++;
-        }
-
-        if (index == 0) {
-            logger.info("*********************************Empty*********************************"); 
-        }    
-    }
-    
-     /**
-     * <p>
-     * Get and Display particular Trainee details by email and DOB
-     * </p>
-     *
-     * @parm email verifies and helps to find the trainee to display
-     * @parm dob verifies and helps to find the trainee to display
-     */
-    public void viewTraineeByEmailAndDob(String email, String dob) {
-        boolean isTraineeAvailable = false;
-        isTraineeAvailable = service.isTraineeAvailable(email, dob); 
-        timeDelay();
-        if (isTraineeAvailable) {
-            logger.info("\n\n---------------------------------------------------------------------------------"
-                +"------------------------------------------------------------------------------------------");  
-            System.out.printf("%17s %17s %17s %17s %10s %17s %10s %17s %24s %13s\n", "FIRST NAME", "LAST NAME", "EMPLOYEE ID", 
-                "DATE OF BIRTH", "GENDER", "TRIANEE BATCH", "SKILLS", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-            logger.info("----------------------------------------------------------------------------------"
-                +"-----------------------------------------------------------------------------------------"); 
-            Trainee trainee = service.getTraineeDetail(email, dob);
-            System.out.format("%17s %17s %17s %17s %10s %17s %10s %17s %24s %13s\n", trainee.getFirstName(), 
-                trainee.getLastName(), trainee.getEmployeeId(), trainee.getDob(), trainee.getGender(), trainee.getTraineeBatch(), 
-                trainee.getSkills(), trainee.getFatherName(), trainee.getEmail(), trainee.getPhoneNumber());      
-        } else {
-            System.out.print("Invalid EmailId or DOB");
-        }
-    }    
-    
-     /**
-     * <p>
-     * This method is used to Delete trainee details
-     * </p>
-     * 
-     */ 
-    public void deleteTrainee() {
-        boolean isDeleted = false;
-        boolean isAvailable = false;
-        System.out.print("Enter Trainer EmailId: ");
-        String trainerEmail = scanner.next();
-        System.out.print("Enter Trainer DOB (DD/MM/YYYY): ");
-        String trainerDob = scanner.next();
-        isAvailable = service.isTrainerAvailable(trainerEmail , trainerDob);
-        if (isAvailable) {
-            logger.info("Enter Trainee Employee Number:");
-            String employeeId = scanner.next();
-            isDeleted = service.deleteTrainee(employeeId);
-            if (isDeleted) {
-                logger.info("Deleted SUCCESSFULLY");
-            } else {
-                logger.info("Trainee NOT Found");
-            }
-        } else {
-            logger.info("Invalid EmailId or DOB");
-        }
-    }
-  
-    /**
-     * <p>
-     * This method is used to Display trainers details
-     * </p>
-     * 
-     */ 
-    public void displayTrainers() {
-        timeDelay();
-        int index=0;
-        logger.info("\n\n----------------------------------------------------------------------------------"
-            +"-----------------------------------------------------------------------------------------");  
-        System.out.printf("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
-            "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "EXPERTISE IN", "EXPERIENCE", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-        logger.info("----------------------------------------------------------------------------------"
-            +"-----------------------------------------------------------------------------------------"); 
-        List<Trainer> trainerList = service.getTrainersDetail();
-        for (Trainer trainer: trainerList) {
-            System.out.format("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", trainer.getFirstName(), trainer.getLastName(), 
-            trainer.getEmployeeId(), trainer.getDob(), trainer.getAge(), trainer.getGender(), trainer.getExpertiseIn(), 
-            trainer.getExperience(), trainer.getFatherName(), trainer.getEmail(), trainer.getPhoneNumber());
-            index++;
-        }
-        if (index == 0) {
-            logger.info("*********************************Empty*********************************"); 
-        }
-    } 
-
-    /**
-     * <p>
-     * Get and 44Display Trainer details by email and DOB
-     * </p>
-     * 
-     * @parm email verifies and helps to find the trainer to display
-     * @parm dob verifies and helps to find the trainer to display
-     */
-    public void viewTrainerByEmailAndDob(String email, String dob) {
-        boolean isTrainerAvailable = false;
-        isTrainerAvailable = service.isTrainerAvailable(email , dob); 
-        timeDelay();
-        if (isTrainerAvailable == true) {
-            logger.info("\n\n---------------------------------------------------------------------------------"
-                +"------------------------------------------------------------------------------------------");  
-            System.out.printf("%17s %17s %17s %10s %17s %10s %17s %17s %24s %13s\n", "FIRST NAME", "LAST NAME", "EMPLOYEE ID", 
-                "DATE OF BIRTH", "GENDER", "EXPERTISE IN", "EXPERIENCE", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-            logger.info("------------------------------------------------------------------------------------"
-                +"---------------------------------------------------------------------------------------"); 
-            Trainer trainer = service.getTrainerDetail(email, dob);
-            System.out.format("%17s %17s %17s %10s %17s %10s %17s %17s %24s %13s\n", trainer.getFirstName(), 
-                trainer.getLastName(), trainer.getEmployeeId(), trainer.getDob(), trainer.getGender(), 
-                trainer.getExpertiseIn(), trainer.getExperience(), trainer.getFatherName(), trainer.getEmail(), trainer.getPhoneNumber());      
-        }   
-        else
-            System.out.print("Invalid EmailId or DOB");
-    } 
- 
-     /**
-     * <p>
-     * This method is used to Delete trainer details
-     * </p>
-     * 
-     */ 
-    public void deleteTrainer() {
-        boolean isDeleted = false;
-        boolean isAvailable = false;
-        System.out.print("Enter Trainer EmailId: ");
-        String trainerEmail = scanner.next();
-        System.out.print("Enter Staff DOB (YYYY-MM-DD): ");
-        String trainerDob = scanner.next();
-        isAvailable = service.isTrainerAvailable(trainerEmail , trainerDob);
-        timeDelay();
-        if (isAvailable) {
-            System.out.print("\nEnter Trainer EmployeId: ");
-            String employeeId = scanner.next();
-            isDeleted = service.deleteTrainer(employeeId);
-            if (isDeleted) {
-                logger.info("\nDeleted SUCCESSFULLY");
-            } else {
-                logger.info("\nTrainee NOT Found");
-            }
-        } else {
-            logger.info("\nInvalid EmailId or DOB");
-        }
-    }
-    
-     /**
-     * <p>
-     * This method is used to Assign Trainees to Trainer details
-     * </p>
-     * 
-     */ 
-    public void assignTraineesToTrainer() {
-        List<String> assignedTraineeId = new ArrayList<String>();
-        Map<String, List<String>> assignedTraineesAndTrainer = service.getAssignedTraineesToTrainer();
-        System.out.print("Enter the User Id:");
-        String userId = scanner.next();
-        System.out.print("Enter the Password");
-        String password = scanner.next();
-        if (userId.equals("IDEAS2") && password.equals("IT")) {
-            System.out.print("\t\t\tTRAINER LIST\n\n");
-            displayTrainers();
-            System.out.print("\n\n\t\t\tTRAINEE LIST\n\n");
-            displayTrainees();
-            boolean isAssigned = false;
-            System.out.print("Enter the Trainer Id: ");
-            String trainerId = scanner.next();  
-            if (!assignedTraineesAndTrainer.containsKey(trainerId)) {   
-                System.out.print("Enter the number of trainee you want to Assign: ");
-                int number = scanner.nextInt();
-
-                for (int index=0; index<number;index++) {
-                    System.out.print("Enter the Trainee Id: ");
-                    String traineeId = scanner.next();
-                    assignedTraineeId.add(traineeId);
-                }
-                isAssigned = service.assignTraineesToTrainer(trainerId, assignedTraineeId);
-                timeDelay();
-                if (isAssigned) {      
-                    System.out.print("\nAssigned Successfully");
-                } else {
-                    System.out.print("\ninvalid employee ID!!");
-                }
-            } else {
-                System.out.print("\nThis trainer already assigned try again!");
-            }
-        } else {
-            System.out.print("\ninvalid login id or password");
-        }      
-    }
-    
-    /**
-     * <p>
-     * This method is used to Update Trainees to Trainer details
-     * </p>
-     * 
-     */ 
-    public void updateTraineesToTrainer() {
-        List<String> assignedTraineesId = new ArrayList<String>();
-        Map<String, List<String>> assignedTraineesAndTrainer = service.getAssignedTraineesToTrainer();
-        System.out.print("Enter the User Id:");
-        String userId = scanner.next();
-        System.out.print("Enter the Password");
-        String password = scanner.next();
-
-        if (userId.equals("IDEAS2") && password.equals("IT")) {
-            displayAssignedTraineesToTrainer();
-            boolean isUpdated = false;
-            System.out.print("Enter the Trainer Id: ");
-            String trainerId = scanner.next();  
-
-            if (assignedTraineesAndTrainer.containsKey(trainerId)) {   
-                System.out.print("Enter the number of trainee you want to Assign: ");
-                int number = scanner.nextInt();
-
-                for (int index=0; index<number;index++) {
-                    System.out.print("Enter the Trainee Id: ");
-                    String traineeId = scanner.next();
-                    assignedTraineesId.add(traineeId);
-                }
-                isUpdated = service.updateTraineesToTrainer(trainerId, assignedTraineesId);
-                timeDelay();
-                if (isUpdated) {      
-                    System.out.print("\nUpdated Successfully");
-                } else {
-                    System.out.print("\ninvalid employee ID!!");
-                }
-            } else {
-                System.out.print("\nThis trainer doesn't exist try again!");
-            }
-        } else {
-            System.out.print("\ninvalid login id or password");
-        }
-    }
-   
-    /**
-     * <p>
-     * This method is used to Display Trainees to Trainer details
-     * </p>
-     * 
-     */ 
-    public void displayAssignedTraineesToTrainer() {
-        int index = 0;
-        List<Trainer> trainers = service.getTrainersDetail();
-        List<Trainee> trainees = service.getTraineesDetail();
-        Map<String, List<String>> assignedTraineesAndTrainer = service.getAssignedTraineesToTrainer();
-        timeDelay();
-        for (Map.Entry<String, List<String>> entry:assignedTraineesAndTrainer.entrySet()) {
-            index++;
-            logger.info("\n\n----------------------------------------------------------------------------------"
-                +" TEAM "+index+"----------------------------------------------------------------------------------");  
-            String assignedTrainer = entry.getKey();   
-            List<String> assignedTrainees = entry.getValue();
-            logger.info("\nTRAINER:\n");
-
-            for (Trainer trainer: trainers) {
-                if (assignedTrainer.equals(trainer.getEmployeeId())) {
-                    logger.info("----------------------------------------------------------------------------------"
-                        +"-----------------------------------------------------------------------------------------");  
-                    System.out.printf("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
-                        "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "EXPERTISE IN", "EXPERIENCE", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-                    logger.info("----------------------------------------------------------------------------------"
-                        +"-----------------------------------------------------------------------------------------"); 
-                    System.out.format("%17s %17s %15s %10s %10s %10s %10s %17s %17s %20s %13s\n", trainer.getFirstName(), trainer.getLastName(), 
-                        trainer.getEmployeeId(), trainer.getDob(), trainer.getAge(), trainer.getGender(), trainer.getExpertiseIn(), 
-                        trainer.getExperience(), trainer.getFatherName(), trainer.getEmail(), trainer.getPhoneNumber());
-                    break;
-                }
-            }
-            logger.info("\nASSIGNED TRAINEES:\n");
-            logger.info("-----------------------------------------------------------------------------"
-                +"------------------------------------------------------------------------------------------");  
-            System.out.printf("%17s %17s %17s %17s %10s %10s %10s %10s %17s %20s %13s\n", "FIRST NAME", "LAST NAME", 
-                "EMPLOYEE ID", "DATE OF BIRTH", "AGE", "GENDER", "TRANEE BATCH", "SKILLS", "FATHER NAME", "EMAIL", "PHONE NUMBER" ); 
-            logger.info("------------------------------------------------------------------------------"
-                +"-----------------------------------------------------------------------------------------");
- 
-            for (Trainee trainee: trainees) {
-                if (assignedTrainees.contains(trainee.getEmployeeId())) {
-                    System.out.format("%17s %17s %17s %17s %10s %10s %10s %10s %17s %20s %13s\n",  trainee.getFirstName(), 
-                        trainee.getLastName(),  trainee.getEmployeeId(),  trainee.getDob(),  trainee.getAge(),  trainee.getGender(),  trainee.getTraineeBatch(), 
-                        trainee.getSkills(),  trainee.getFatherName(),  trainee.getEmail(),  trainee.getPhoneNumber());
-                }  
-            }
-        }  
-    }
-
-    /**
-     * <p>
-     * This method is used to Delete Trainees to Trainer details
-     * </p>
-     * 
-     */ 
-    public void deleteTeam() {
-        Map<String, List<String>> assignedTraineesAndTrainer = service.getAssignedTraineesToTrainer();
-        System.out.print("Enter the User Id:");
-        String userId = scanner.next();
-        System.out.print("Enter the Password");
-        String password = scanner.next();
-        if (userId.equals("ideas") && password.equals("2it")) {
-            displayAssignedTraineesToTrainer();
-            boolean isUpdated = false;
-            System.out.print("Enter the Trainer id of team you wish to delete: ");
-            String trainerId = scanner.next(); 
-            timeDelay(); 
-            if (assignedTraineesAndTrainer.containsKey(trainerId)) {   
-                service.deleteTraineesToTrainer(trainerId);
-                System.out.print("\nteam of tarainer" + trainerId + "is DELETED");
-            } else {
-                System.out.print("\nThis trainer doesn't exist try again!");
-            }
-        } else {
-            System.out.print("\ninvalid login id or password");
-        }
-    }
-  
+     
     /**
      * <p>
      * This method is used to validate names while getting input
