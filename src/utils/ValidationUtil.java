@@ -20,7 +20,7 @@ public class ValidationUtil {
     public static String EMAIL_REGEX = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";   
     public static String NAME_REGEX = "^[a-zA-Z]*$";
     
-    public static String generateEmployeeId() {
+    public static String generateStaffNumber() {
         count++;
         String employeeId = company + count;
         return employeeId; 

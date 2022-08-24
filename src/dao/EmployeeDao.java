@@ -9,52 +9,56 @@ package com.ideas2it.dao;
 
 import com.ideas2it.model.Employee;
 import com.ideas2it.utils.Constant;
+import com.ideas2it.dao.BaseDao;
+import com.ideas2it.exception.MyCustomException;
 
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
 * Implementation to Insert,update and Access Trainers 
 **/
-public class EmployeeDao {
-   
+public class EmployeeDao extends DatabaseConnection {
+     int employeeId = 0;
+     PreparedStatement preparedStatemt;
      /**
      * <p>
      * This method is used to insert Trainee details
      * </p>
      * 
      */  
-    public boolean insertEmployee(Employee employee) {
+    public int insertEmployee(Employee employee) throws MyCustomException{
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(Constant.DATABASE_URL,Constant.DATABASE_USER_NAME,Constant.DATABASE_PASSWORD);  //test1 is dbname,   root is dbusername and dbpassword
-            Statement statement = connection.createStatement();
-            // statement.execute("create table employee( first_name varchar(30), last_name varchar(30), employee_id varchar(30), dob varchar(30), gender varchar(30),dateOfJoining varchar(30), batch varchar(30),"
-             //   +"designation varchar(30), fatherName varchar(30), email varchar(30), phoneNumber varchar(30))");
-            String query = " insert into employee(first_name, last_name, employee_id, dob, gender,dateOfJoining, batch, designation, fatherName, email, phoneNumber) "
-                + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString (1, employee.getFirstName());
-            preparedStmt.setString (2, employee.getLastName());
-            preparedStmt.setString (3, employee.getEmployeeId());
-            preparedStmt.setString (4, employee.getDob());
-            preparedStmt.setString (5, employee.getGender());
-            preparedStmt.setString (6, employee.getDateOfJoining());
-            preparedStmt.setString (7, employee.getBatch());
-            preparedStmt.setString (8, employee.getDesignation());
-            preparedStmt.setString (9, employee.getFatherName());
-            preparedStmt.setString (10, employee.getEmail());
-            preparedStmt.setString (11, employee.getPhoneNumber());
-            preparedStmt.execute();
-            System.out.println("Table inserted");
-            return true;
-                
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
- 
+            Connection connection = mysqlConnection();
+            String query = " insert into employee(first_name, last_name, staff_number, dob, gender,dateOfJoining, batch, designation, city, fatherName, email, phoneNumber) "
+                + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            preparedStatemt = connection.prepareStatement(query);
+            preparedStatemt.setString (1, employee.getFirstName());
+            preparedStatemt.setString (2, employee.getLastName());
+            preparedStatemt.setString (3, employee.getStaffNumber());
+            preparedStatemt.setString (4, employee.getDob());
+            preparedStatemt.setString (5, employee.getGender());
+            preparedStatemt.setString (6, employee.getDateOfJoining());
+            preparedStatemt.setString (7, employee.getBatch());
+            preparedStatemt.setString (8, employee.getDesignation());
+            preparedStatemt.setString (9, employee.getCity());
+            preparedStatemt.setString (10, employee.getFatherName());
+            preparedStatemt.setString (11, employee.getEmail());
+            preparedStatemt.setString (12, employee.getPhoneNumber());
+            preparedStatemt.execute();
+            String sql = "SELECT * FROM employee ORDER BY id DESC LIMIT 1";
+            preparedStatemt = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatemt.executeQuery();
+            while(resultSet.next()) {
+            employeeId = resultSet.getInt("id");
+            } 
+            return employeeId;
+        } catch(Exception exception) {
+            exception.printStackTrace();  
+            throw new MyCustomException(exception.getMessage());
+        }                              
+    } 
 }
    
     

@@ -9,10 +9,10 @@ package com.ideas2it.service;
 
 import com.ideas2it.dao.EmployeeDao;
 import com.ideas2it.model.Employee;
-import com.ideas2it.model.EmployeeDto;
+import com.ideas2it.dto.EmployeeDto;
+import com.ideas2it.dao.RoleDao;
 import com.ideas2it.mapper.EmployeeMapper;
-
-
+import com.ideas2it.exception.MyCustomException;
 
 /**
  * The {@code Service} class contains the method for trainees, trainers and Human Resource Services. access 
@@ -29,6 +29,7 @@ public class Service {
 
     EmployeeDao employeeDao = new EmployeeDao();
     EmployeeMapper employeeMapper = new EmployeeMapper();
+    RoleDao roleDao = new RoleDao();
    
     /**
      * <p>
@@ -46,10 +47,16 @@ public class Service {
      * @parm email is email id of trainee
      * @parm phoneNumber is contact number of trainee
      */     
-    public boolean addEmployee(EmployeeDto employeeDto) {
+    public boolean addEmployee(EmployeeDto employeeDto, String role) throws MyCustomException{
+        int employeeId;
         Employee employee = employeeMapper.employeeDtoTOEmployee(employeeDto);
-        return employeeDao.insertEmployee(employee);
-      
+        try {
+            employeeId = employeeDao.insertEmployee(employee);
+            return roleDao.assignEmployeeRole(employeeId, role);
+        } catch(MyCustomException exception) {  
+            throw new MyCustomException(exception.getMessage());
+        }  
+             
     }
  
 }

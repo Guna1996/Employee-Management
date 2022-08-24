@@ -5,16 +5,16 @@
  *
  *
  */
-package com.ideas2it.model;
+package com.ideas2it.dto;
  
-public class Employee {
+public class EmployeeDto {
  
     protected String firstName;
     protected String lastName;
     protected String staffNumber;
     protected String dob;
     protected String gender;
-    protected String experience;
+    protected String dateOfJoining;
     protected String batch;
     protected String designation;
     protected String city;
@@ -22,14 +22,14 @@ public class Employee {
     protected String email;
     protected String phoneNumber;
    
-    public Employee(String firstName, String lastName, String staffNumber, String dob, String gender, String experience, String batch, 
+    public EmployeeDto(String firstName, String lastName, String staffNumber, String dob, String gender, String dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber) { 
         this.firstName = firstName;
         this.lastName = lastName;
         this.staffNumber = staffNumber;
         this.dob = dob;
         this.gender = gender;
-        this.experience = experience;
+        this.dateOfJoining = dateOfJoining;
         this.batch = batch;
         this.designation = designation;
         this.city = city;
@@ -58,11 +58,10 @@ public class Employee {
     public String getGender() {
         return gender;
     }
-
-     public String getDateOfJoining() {
-        return experience;
+   
+    public String getDateOfJoining() {
+        return dateOfJoining;
     }
-
 
     public String getBatch() {
         return batch;
@@ -109,8 +108,8 @@ public class Employee {
         this.gender = gender;
     }
 
-    public void setDateOfJoining(String experience) {
-        this.experience = experience;
+    public void setDateOfJoining(String dateOfJoining) {
+        this.dateOfJoining = dateOfJoining;
     }
     
     public void setBatch(String batch) {
@@ -137,5 +136,10 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    
-}
+    @Override
+    public String toString() {
+        String output = String.format("%17s %17s %17s %10s %10s %10s %10s %10s %5s %10s %20s %13s\n", firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch, 
+        designation, city, fatherName, email, phoneNumber);    
+        return output;   
+    }
+}  

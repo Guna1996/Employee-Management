@@ -9,7 +9,7 @@ package com.ideas2it.controller;
 
 
 import com.ideas2it.exception.MyCustomException;
-import com.ideas2it.model.EmployeeDto;
+import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.service.Service;
 import com.ideas2it.utils.ValidationUtil;
 import com.ideas2it.utils.Constant;
@@ -182,7 +182,7 @@ public class EmployeeController {
         String add = "add";
         String update = "update";
         String employeeEmail = null , employeeDob = null;
-        String firstName = "", lastName = "", employeeId = "", city = "", dob = "", gender = "", batch = "",
+        String firstName = "", lastName = "", staffNumber = "", city = "", dob = "", gender = "", batch = "",
             fatherName = "", email = "", phoneNumber = "", designation = "", dateOfJoining = "";
         if (operation.equals(update)) {
             System.out.print("Enter Trainee EmailId: ");
@@ -193,6 +193,7 @@ public class EmployeeController {
         if (operation.equals(add)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
             try { 
+                
 	        firstName = validateString("First Name:");
 	        lastName = validateString("Last Name:");
 	        dob = validateString("dob (YYYY-MM-DD):");
@@ -206,19 +207,20 @@ public class EmployeeController {
                 fatherName = validateString("Father Name  :");
                 email = validateString("Email Id:");
                 phoneNumber = validateString("phoneNumber:");
-                logger.info("EmployeeId Generated");  
-                employeeId = ValidationUtil.generateEmployeeId();
+                logger.info("StaffNumber Generated");  
+                staffNumber = ValidationUtil.generateStaffNumber();
+                timeDelay();
+                if (operation.equals(add)) {
+                    EmployeeDto employeeDto = new EmployeeDto(firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch,
+                        designation, city, fatherName, email, phoneNumber);
+                    
+                    if(service.addEmployee(employeeDto, userType)) {
+                        logger.info("\nEmployee Added SUCCESSFULLY");
+                    }
+                }
             } catch (MyCustomException exception) {
                 throw new MyCustomException(exception.getMessage());
-            } 
-            timeDelay();
-            if (operation.equals(add)) {
-                EmployeeDto employeeDto = new EmployeeDto(firstName, lastName, employeeId, dob, gender, dateOfJoining, batch,
-                    designation, city, fatherName, email, phoneNumber);
-                if(service.addEmployee(employeeDto)) {
-                    logger.info("\ntrainee Added SUCCESSFULLY");
-                }
-            }   
+            }     
         } else {
             
             logger.info("invalid email or dob");
