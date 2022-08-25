@@ -14,6 +14,9 @@ import com.ideas2it.dao.RoleDao;
 import com.ideas2it.mapper.EmployeeMapper;
 import com.ideas2it.exception.MyCustomException;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * The {@code Service} class contains the method for trainees, trainers and Human Resource Services. access 
  * and controls the methods of the classes, such as {@code TraineeDao} {@code TrainerDao} {@code HumanResourceDao}, Accessed by  
@@ -47,16 +50,33 @@ public class Service {
      * @parm email is email id of trainee
      * @parm phoneNumber is contact number of trainee
      */     
-    public boolean addEmployee(EmployeeDto employeeDto, String role) throws MyCustomException{
+    public boolean addEmployee(EmployeeDto employeeDto, String roleName) throws MyCustomException{
         int employeeId;
-        Employee employee = employeeMapper.employeeDtoTOEmployee(employeeDto);
-        try {
-            employeeId = employeeDao.insertEmployee(employee);
-            return roleDao.assignEmployeeRole(employeeId, role);
-        } catch(MyCustomException exception) {  
-            throw new MyCustomException(exception.getMessage());
-        }  
-             
+        int roleId;
+        Employee employee = employeeMapper.fromDto(employeeDto);
+        if (employeeDao.insertEmployee(employee)) {
+            employeeId = employeeDao.retrieveLastInsertedEmployeeId();
+            roleId = roleDao.retrieveRoleIdByName(roleName);
+            return roleDao.assignEmployeeRole(employeeId, roleId);
+        } else {
+            return false;
+        }            
     }
- 
+
+     public boolean updateEmployee(EmployeeDto employeeDto, String email, String dob) throws MyCustomException{
+        Employee employee = employeeMapper.fromDto(employeeDto);
+        return employeeDao.updateEmployee(employee, email, dob);          
+    }    
+
+    public List<EmployeeDto> getEmployeeDetails(String employeeRole) throws MyCustomException{
+        int roleId;
+        roleId = roleDao.retrieveRoleIdByName(employeeRole);
+        List<Employee> employees = employeeDao.retrieveEmployeesByRoleId(roleId);
+        List<EmployeeDto> employeesDto = new ArrayList<EmployeeDto>();
+        for (Employee employee:employees) {
+            EmployeeDto employeeDto = employeeMapper.toDto(employee);
+            employeesDto.add(employeeDto);
+        }  
+        return employeesDto;         
+    }
 }

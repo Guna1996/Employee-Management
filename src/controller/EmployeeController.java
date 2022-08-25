@@ -142,7 +142,7 @@ public class EmployeeController {
         boolean isDecession = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
-                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. Go Back\n");
+                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. Display all trainers\n 4. Display all Trainees\n 5. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
@@ -156,12 +156,28 @@ public class EmployeeController {
                 
                 case 2:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINER);
+                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINER);
                     } catch(MyCustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
-                    break;                                  
-
+                    break;
+ 
+                case 3 :
+                    try {
+                        displayEmployeeDetails(Constant.TRAINER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    }                                   
+                    break;
+ 
+                case 4 :
+                    try {
+                        displayEmployeeDetails(Constant.TRAINEE);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+ 
                 default:
                     System.out.print("Thank you");
                     isDecession = false;
@@ -181,41 +197,41 @@ public class EmployeeController {
         String trainer = "trainer";
         String add = "add";
         String update = "update";
-        String employeeEmail = null , employeeDob = null;
-        String firstName = "", lastName = "", staffNumber = "", city = "", dob = "", gender = "", batch = "",
-            fatherName = "", email = "", phoneNumber = "", designation = "", dateOfJoining = "";
+        String email = null , dob = null;
+        EmployeeDto employeeDto = new EmployeeDto();
         if (operation.equals(update)) {
-            System.out.print("Enter Trainee EmailId: ");
-            employeeEmail = scanner.next();
-            System.out.print("Enter Trainee DOB: ");
-            employeeDob = scanner.next();
+            System.out.print("**Enter Trainer email and Dob to Login** ");
+            email = validateString("Email Id:");
+            dob = validateString("dob (YYYY-MM-DD):");
         }
-        if (operation.equals(add)) {
+        if (operation.equals(add) || operation.equals(update)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
             try { 
-                
-	        firstName = validateString("First Name:");
-	        lastName = validateString("Last Name:");
-	        dob = validateString("dob (YYYY-MM-DD):");
-                gender = validateString("Gender:");
-                designation = validateString("Designation:");
-                city = validateString("City :");
-                logger.info("Date of Joining:");
-	        dateOfJoining = validateString("dob (YYYY-MM-DD):");
-                logger.info("Batch:");
-                batch = scanner.next();
-                fatherName = validateString("Father Name  :");
-                email = validateString("Email Id:");
-                phoneNumber = validateString("phoneNumber:");
+	        employeeDto.setFirstName(validateString("First Name:"));
+	        employeeDto.setLastName(validateString("Last Name:"));
+	        employeeDto.setDob(validateString("dob (YYYY-MM-DD):"));
+                employeeDto.setGender(validateString("Gender:"));
+                employeeDto.setDesignation(validateString("Designation:"));
+                employeeDto.setCity(validateString("City :"));
+	        employeeDto.setDateOfJoining(validateString("Date of Joining:"));
+                employeeDto.setBatch(validateString("Batch:"));
+                employeeDto.setFatherName(validateString("Father Name  :"));
+                employeeDto.setEmail(validateString("Email Id:"));
+                employeeDto.setPhoneNumber(validateString("phoneNumber:"));
                 logger.info("StaffNumber Generated");  
-                staffNumber = ValidationUtil.generateStaffNumber();
+                employeeDto.setStaffNumber(ValidationUtil.generateStaffNumber());
                 timeDelay();
-                if (operation.equals(add)) {
-                    EmployeeDto employeeDto = new EmployeeDto(firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch,
-                        designation, city, fatherName, email, phoneNumber);
-                    
+                if (operation.equals(add)) {                    
                     if(service.addEmployee(employeeDto, userType)) {
                         logger.info("\nEmployee Added SUCCESSFULLY");
+                    } else {
+                        logger.info("\nProcess FAILED");
+                    }
+                } else if(operation.equals(update)) {
+                    if(service.updateEmployee(employeeDto, email, dob)) {
+                        logger.info("\nEmployee Added SUCCESSFULLY");
+                    } else {
+                        logger.info("\nProcess FAILED");
                     }
                 }
             } catch (MyCustomException exception) {
@@ -225,6 +241,19 @@ public class EmployeeController {
             
             logger.info("invalid email or dob");
         }      
+    }
+
+    public void displayEmployeeDetails(String employeeRole) throws MyCustomException{
+        List<EmployeeDto> employeesDto = service.getEmployeeDetails(employeeRole);
+        System.out.println("---------------------------------------------------------------------------------"
+            +"------------------------------------------------------------------------------------------");  
+        System.out.format("%17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", "FIRST_NAME", "LAST_NAME", "STAFF_NUMBER", 
+            "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER" ); 
+        System.out.println("------------------------------------------------------------------------------------"
+            +"---------------------------------------------------------------------------------------");
+        for (EmployeeDto employeeDto: employeesDto) {
+            System.out.println(employeeDto);  
+        } 
     }
      
     /**
@@ -243,7 +272,7 @@ public class EmployeeController {
         for (int index = 0; index <= 4; index++) {
             logger.info(input);
             string = scanner.next();
-            if (input.equals("dob (YYYY-MM-DD):")) {
+            if (input.equals("dob (YYYY-MM-DD):") || input.equals("Date of Joining:")) {
                 isValid = ValidationUtil.validateDob(string);
                 try {
                     int age = ValidationUtil.calculateAge(string);
@@ -254,7 +283,7 @@ public class EmployeeController {
                 isValid = ValidationUtil.validateGender(string);
             } else if (input.equals("Email Id:")) {
                 isValid = ValidationUtil.validate(ValidationUtil.EMAIL_REGEX, string);
-            } else if (input.equals("phoneNumber:")) {
+            } else if (input.equals("phoneNumber:") || input.equals("Batch:")) {
                 isValid = ValidationUtil.validate(ValidationUtil.PHONE_NUMBER_REGEX, string);
             } else {
                 isValid = ValidationUtil.validate(ValidationUtil.NAME_REGEX, string);

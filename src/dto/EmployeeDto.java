@@ -21,6 +21,9 @@ public class EmployeeDto {
     protected String fatherName;
     protected String email;
     protected String phoneNumber;
+
+    public EmployeeDto() {
+    }
    
     public EmployeeDto(String firstName, String lastName, String staffNumber, String dob, String gender, String dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber) { 
@@ -138,7 +141,7 @@ public class EmployeeDto {
 
     @Override
     public String toString() {
-        String output = String.format("%17s %17s %17s %10s %10s %10s %10s %10s %5s %10s %20s %13s\n", firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch, 
+        String output = String.format("%17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch, 
         designation, city, fatherName, email, phoneNumber);    
         return output;   
     }

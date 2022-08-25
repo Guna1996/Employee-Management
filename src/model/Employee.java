@@ -14,7 +14,7 @@ public class Employee {
     protected String staffNumber;
     protected String dob;
     protected String gender;
-    protected String experience;
+    protected String dateOfJoining;
     protected String batch;
     protected String designation;
     protected String city;
@@ -22,14 +22,14 @@ public class Employee {
     protected String email;
     protected String phoneNumber;
    
-    public Employee(String firstName, String lastName, String staffNumber, String dob, String gender, String experience, String batch, 
+    public Employee(String firstName, String lastName, String staffNumber, String dob, String gender, String dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber) { 
         this.firstName = firstName;
         this.lastName = lastName;
         this.staffNumber = staffNumber;
         this.dob = dob;
         this.gender = gender;
-        this.experience = experience;
+        this.dateOfJoining = dateOfJoining;
         this.batch = batch;
         this.designation = designation;
         this.city = city;
@@ -60,7 +60,7 @@ public class Employee {
     }
 
      public String getDateOfJoining() {
-        return experience;
+        return dateOfJoining;
     }
 
 
@@ -109,8 +109,8 @@ public class Employee {
         this.gender = gender;
     }
 
-    public void setDateOfJoining(String experience) {
-        this.experience = experience;
+    public void setDateOfJoining(String dateOfJoining) {
+        this.dateOfJoining = dateOfJoining;
     }
     
     public void setBatch(String batch) {
