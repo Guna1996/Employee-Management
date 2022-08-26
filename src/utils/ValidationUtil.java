@@ -32,12 +32,10 @@ public class ValidationUtil {
     }
 
     public static boolean validateDob(String validated) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        simpleDateFormat.setLenient(false);
         try {
-            Date date = simpleDateFormat.parse(validated); 
+            LocalDate date = LocalDate.parse(validated); 
         }
-        catch (ParseException e) {
+        catch (Exception e) {
             return false;
         } 
         return true;                                  

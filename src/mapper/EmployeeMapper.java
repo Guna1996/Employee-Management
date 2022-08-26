@@ -19,7 +19,7 @@ public class EmployeeMapper {
     }
 
     public EmployeeDto toDto(Employee employee) {
-        EmployeeDto employeeDto = new EmployeeDto(employee.getFirstName(), employee.getLastName(), employee.getStaffNumber(), employee.getDob(), employee.getGender(),
+        EmployeeDto employeeDto = new EmployeeDto(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getStaffNumber(), employee.getDob(), employee.getGender(),
             employee.getDateOfJoining(), employee.getBatch(), employee.getDesignation(), employee.getCity(), employee.getFatherName(), employee.getEmail(), employee.getPhoneNumber());
         return employeeDto;
     }

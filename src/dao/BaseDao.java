@@ -14,13 +14,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDao {
-    public Connection mysqlConnection() throws MyCustomException{
+    public Connection mysqlConnection() {
         try {
             Connection connection = DriverManager.getConnection(Constant.DATABASE_URL, Constant.DATABASE_USER_NAME, Constant.DATABASE_PASSWORD);
             return connection;
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            return null;
         }     
     }
 }

@@ -50,33 +50,51 @@ public class Service {
      * @parm email is email id of trainee
      * @parm phoneNumber is contact number of trainee
      */     
-    public boolean addEmployee(EmployeeDto employeeDto, String roleName) throws MyCustomException{
+    public int addEmployee(EmployeeDto employeeDto, String roleName) throws MyCustomException{
         int employeeId;
         int roleId;
         Employee employee = employeeMapper.fromDto(employeeDto);
-        if (employeeDao.insertEmployee(employee)) {
+        if (employeeDao.insertEmployee(employee) == 1) {
             employeeId = employeeDao.retrieveLastInsertedEmployeeId();
             roleId = roleDao.retrieveRoleIdByName(roleName);
             return roleDao.assignEmployeeRole(employeeId, roleId);
         } else {
-            return false;
+            return 0;
         }            
     }
 
-     public boolean updateEmployee(EmployeeDto employeeDto, String email, String dob) throws MyCustomException{
+    public int updateEmployee(EmployeeDto employeeDto, String email, String dob) throws MyCustomException{
         Employee employee = employeeMapper.fromDto(employeeDto);
         return employeeDao.updateEmployee(employee, email, dob);          
     }    
+ 
+    public int updateEmployeeDetail(String variable, String value, String email, String dob) throws MyCustomException{
+        return employeeDao.updateEmployeeDetail(variable, value, email, dob);
+    }
+
+    public int deleteEmployeeById(int employeeId) throws MyCustomException{
+        return employeeDao.deleteEmployeeById(employeeId);          
+    }   
+
+    public boolean checkIsEmployeeAvailable(String email, String dob) throws MyCustomException{
+        for (Employee employee: employeeDao.retrieveEmployees()) {
+            if (employee.getEmail().equals(email) && employee.getDob().equals(dob)) {
+                return true;
+            }       
+        }
+        return false;
+    }
 
     public List<EmployeeDto> getEmployeeDetails(String employeeRole) throws MyCustomException{
-        int roleId;
-        roleId = roleDao.retrieveRoleIdByName(employeeRole);
+        int roleId = roleDao.retrieveRoleIdByName(employeeRole);
         List<Employee> employees = employeeDao.retrieveEmployeesByRoleId(roleId);
-        List<EmployeeDto> employeesDto = new ArrayList<EmployeeDto>();
-        for (Employee employee:employees) {
+        List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
+        for (Employee employee: employees) {
             EmployeeDto employeeDto = employeeMapper.toDto(employee);
-            employeesDto.add(employeeDto);
+            employeeDtos.add(employeeDto);
         }  
-        return employeesDto;         
+        return employeeDtos;         
     }
+    
+    
 }

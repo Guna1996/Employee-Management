@@ -6,15 +6,17 @@
  *
  */
 package com.ideas2it.model;
+
+import java.time.LocalDate;  
  
 public class Employee {
- 
+    protected int id;
     protected String firstName;
     protected String lastName;
     protected String staffNumber;
-    protected String dob;
+    protected LocalDate dob;
     protected String gender;
-    protected String dateOfJoining;
+    protected LocalDate dateOfJoining;
     protected String batch;
     protected String designation;
     protected String city;
@@ -22,7 +24,7 @@ public class Employee {
     protected String email;
     protected String phoneNumber;
    
-    public Employee(String firstName, String lastName, String staffNumber, String dob, String gender, String dateOfJoining, String batch, 
+    public Employee(String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber) { 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,8 +39,28 @@ public class Employee {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+ 
+    public Employee(int id, String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.staffNumber = staffNumber;
+        this.dob = dob;
+        this.gender = gender;
+        this.dateOfJoining = dateOfJoining;
+        this.batch = batch;
+        this.designation = designation;
+        this.city = city;
+        this.fatherName = fatherName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 
-
+    public int getId() {
+        return id;
+    }
+    
     public String getFirstName() {
         return firstName;
     }
@@ -51,7 +73,7 @@ public class Employee {
         return staffNumber;
     }
 
-    public String getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
@@ -59,7 +81,7 @@ public class Employee {
         return gender;
     }
 
-     public String getDateOfJoining() {
+     public LocalDate getDateOfJoining() {
         return dateOfJoining;
     }
 
@@ -101,7 +123,7 @@ public class Employee {
         this.staffNumber = staffNumber;
     }
 
-    public void setDob(String dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
@@ -109,7 +131,7 @@ public class Employee {
         this.gender = gender;
     }
 
-    public void setDateOfJoining(String dateOfJoining) {
+    public void setDateOfJoining(LocalDate dateOfJoining) {
         this.dateOfJoining = dateOfJoining;
     }
     

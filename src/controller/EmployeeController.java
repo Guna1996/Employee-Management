@@ -16,7 +16,7 @@ import com.ideas2it.utils.Constant;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;  
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -105,7 +105,7 @@ public class EmployeeController {
         boolean isChoice = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your data\n"
-                +" 2. update your complete details\n 3. Go Back\n");  
+                +" 2. update your complete details\n 3. update Specific detail\n 4. Go Back\n");  
             int operation = scannerInput.nextInt(); 
             switch (operation) {
 	        case 1:
@@ -119,6 +119,14 @@ public class EmployeeController {
                 case 2:
                     try {
                         addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINEE);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+ 
+                case 3:
+                   try {
+                        updateEmployeeDetail();
                     } catch(MyCustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
@@ -142,7 +150,8 @@ public class EmployeeController {
         boolean isDecession = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
-                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. Display all trainers\n 4. Display all Trainees\n 5. Go Back\n");
+                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. Display all trainers\n"
+                +" 4. Display all Trainees\n 5. delete employee details\n 6. update Specific detail\n 7. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
@@ -177,7 +186,23 @@ public class EmployeeController {
                         logger.error(error.getMessage()); 
                     } 
                     break;
- 
+  
+                case 5 :
+                    try {
+                        deleteEmployeeDetails();
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                 
+                case 6:
+                   try {
+                        updateEmployeeDetail();
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                 
                 default:
                     System.out.print("Thank you");
                     isDecession = false;
@@ -198,45 +223,49 @@ public class EmployeeController {
         String add = "add";
         String update = "update";
         String email = null , dob = null;
+        boolean isEmployeeAvailable = false;
         EmployeeDto employeeDto = new EmployeeDto();
         if (operation.equals(update)) {
-            System.out.print("**Enter Trainer email and Dob to Login** ");
+            System.out.print("**Enter your email and Dob to Login** ");
             email = validateString("Email Id:");
             dob = validateString("dob (YYYY-MM-DD):");
+            isEmployeeAvailable = service.checkIsEmployeeAvailable(email, dob);
         }
-        if (operation.equals(add) || operation.equals(update)) {
+        if (operation.equals(add) || isEmployeeAvailable) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
-            try { 
-	        employeeDto.setFirstName(validateString("First Name:"));
-	        employeeDto.setLastName(validateString("Last Name:"));
-	        employeeDto.setDob(validateString("dob (YYYY-MM-DD):"));
+	    employeeDto.setFirstName(validateString("First Name:"));
+	    employeeDto.setLastName(validateString("Last Name:"));
+            try {
+	        employeeDto.setDob(LocalDate.parse(validateString("dob (YYYY-MM-DD):")));
                 employeeDto.setGender(validateString("Gender:"));
                 employeeDto.setDesignation(validateString("Designation:"));
                 employeeDto.setCity(validateString("City :"));
-	        employeeDto.setDateOfJoining(validateString("Date of Joining:"));
-                employeeDto.setBatch(validateString("Batch:"));
-                employeeDto.setFatherName(validateString("Father Name  :"));
-                employeeDto.setEmail(validateString("Email Id:"));
-                employeeDto.setPhoneNumber(validateString("phoneNumber:"));
-                logger.info("StaffNumber Generated");  
-                employeeDto.setStaffNumber(ValidationUtil.generateStaffNumber());
-                timeDelay();
-                if (operation.equals(add)) {                    
-                    if(service.addEmployee(employeeDto, userType)) {
-                        logger.info("\nEmployee Added SUCCESSFULLY");
-                    } else {
-                        logger.info("\nProcess FAILED");
-                    }
-                } else if(operation.equals(update)) {
-                    if(service.updateEmployee(employeeDto, email, dob)) {
-                        logger.info("\nEmployee Added SUCCESSFULLY");
-                    } else {
-                        logger.info("\nProcess FAILED");
-                    }
+	        employeeDto.setDateOfJoining(LocalDate.parse(validateString("Date of Joining:")));
+            } catch(Exception error) {
+                throw new MyCustomException("date parse error!!");
+            }
+            logger.info("Batch:");
+            String batch = scanner.next();
+            employeeDto.setBatch(batch);
+            employeeDto.setFatherName(validateString("Father Name  :"));
+            employeeDto.setEmail(validateString("Email Id:"));
+            employeeDto.setPhoneNumber(validateString("phoneNumber:"));  
+            employeeDto.setStaffNumber(ValidationUtil.generateStaffNumber());
+            timeDelay();
+            if (operation.equals(add)) {                    
+                if(service.addEmployee(employeeDto, userType) == 1) {
+                    logger.info("\n1 row inserted..Employee added Successfully");
+                } else {
+                    logger.info("\n0 row inserted..process failed");
                 }
-            } catch (MyCustomException exception) {
-                throw new MyCustomException(exception.getMessage());
-            }     
+            } else if(operation.equals(update)) {
+                if(service.updateEmployee(employeeDto, email, dob) == 1) {
+                    logger.info("\nEmployee updated SUCCESSFULLY");
+                } else {
+                    logger.info("\nProcess FAILED..invalid email or dob");
+                }
+            }
+    
         } else {
             
             logger.info("invalid email or dob");
@@ -244,18 +273,104 @@ public class EmployeeController {
     }
 
     public void displayEmployeeDetails(String employeeRole) throws MyCustomException{
-        List<EmployeeDto> employeesDto = service.getEmployeeDetails(employeeRole);
+        List<EmployeeDto> employeeDtos = service.getEmployeeDetails(employeeRole);
         System.out.println("---------------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
-        System.out.format("%17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", "FIRST_NAME", "LAST_NAME", "STAFF_NUMBER", 
+        System.out.format("%5s %17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", "ID", "FIRST_NAME", "LAST_NAME", "STAFF_NUMBER", 
             "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER" ); 
         System.out.println("------------------------------------------------------------------------------------"
             +"---------------------------------------------------------------------------------------");
-        for (EmployeeDto employeeDto: employeesDto) {
+        for (EmployeeDto employeeDto: employeeDtos) {
             System.out.println(employeeDto);  
         } 
     }
-     
+ 
+    public void deleteEmployeeDetails() throws MyCustomException{
+        System.out.print("**Enter your email and Dob to Login** ");
+        String email = validateString("Email Id:");
+        String dob = validateString("dob (YYYY-MM-DD):"); 
+        if (service.checkIsEmployeeAvailable(email, dob)) {
+            System.out.print("Enter the Employee Id you want to delete: ");
+            int employeeId = scanner.nextInt();
+            if (service.deleteEmployeeById(employeeId) >= 1) {
+                logger.info("\n1 row deleted..Employee deleted Successfully");
+            } else {
+                logger.info("\n0 row deleted..process failed");
+            }
+        } else {     
+            logger.info("invalid email or dob");
+        }   
+    }
+ 
+    public void updateEmployeeDetail() throws MyCustomException{
+        int isUpdated = 0;
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your email and Dob to Login** ");
+        String employeeEmail = validateString("Email Id:");
+        String employeeDob = validateString("dob (YYYY-MM-DD):"); 
+        System.out.print("select the data you want to update\n 1. First Name\n 2. Last Name\n 3. Staff Number\n"
+            + " 4. Date Of Birth\n 5. Gender\n 6. Date Of Joining\n 7. Batch\n 8. Designation\n 9. city\n 10.Father Name\n 11. Email\n 12. Phone Number\n");
+        int option = scannerInput.nextInt();
+        switch(option) {
+            case 1:
+                String firstName = validateString("First Name:");
+                isUpdated = service.updateEmployeeDetail("first_name", firstName, employeeEmail, employeeDob);
+                break;
+            case 2:
+                String lastName = validateString("Last Name:");
+                isUpdated = service.updateEmployeeDetail("last_name", lastName, employeeEmail, employeeDob); 
+                break;
+            case 3:
+                String staffNumber = validateString("Staff Name:");
+                isUpdated = service.updateEmployeeDetail("staff_number", staffNumber, employeeEmail, employeeDob);
+                break;
+            case 4:
+                String dob = validateString("dob (YYYY-MM-DD):");
+                isUpdated = service.updateEmployeeDetail("dob", dob, employeeEmail, employeeDob);
+                break;
+            case 5:
+                String gender = validateString("Gender:");
+                isUpdated = service.updateEmployeeDetail("gender", gender, employeeEmail, employeeDob);
+                break;
+            case 6:
+                String dateOfJoining = validateString("Date of Joining:");
+                isUpdated = service.updateEmployeeDetail("date_of_joining", dateOfJoining, employeeEmail, employeeDob);
+                break;
+            case 7:
+                logger.info("Batch:");
+                String batch = scanner.next();
+                isUpdated = service.updateEmployeeDetail("batch", batch, employeeEmail, employeeDob);
+                break;
+            case 8:
+                String designation = validateString("Designation:");
+                service.updateEmployeeDetail("designation", designation, employeeEmail, employeeDob);
+                break;
+            case 9:
+                String city = validateString("City :");
+                isUpdated = service.updateEmployeeDetail("city", city, employeeEmail, employeeDob);
+                break;
+            case 10:
+                String fatherName = validateString("Father Name  :");
+                isUpdated = service.updateEmployeeDetail("father_name", fatherName, employeeEmail, employeeDob);
+                break;
+            case 11:
+                String email = validateString("Email Id:");
+                isUpdated = service.updateEmployeeDetail("email", email, employeeEmail, employeeDob);
+                break;
+            case 12:
+                String phoneNumber = validateString("phoneNumber:");
+                isUpdated = service.updateEmployeeDetail("phone_number", phoneNumber, employeeEmail, employeeDob);
+                break;
+            default:
+                break;
+        }    
+        if (isUpdated >= 1) {
+            logger.info("\nEmployee detail updated SUCCESSFULLY");
+        } else {
+            logger.info("\nProcess FAILED..invalid email or dob");
+        }
+    }
+
     /**
      * <p>
      * This method is used to validate names while getting input
@@ -283,7 +398,7 @@ public class EmployeeController {
                 isValid = ValidationUtil.validateGender(string);
             } else if (input.equals("Email Id:")) {
                 isValid = ValidationUtil.validate(ValidationUtil.EMAIL_REGEX, string);
-            } else if (input.equals("phoneNumber:") || input.equals("Batch:")) {
+            } else if (input.equals("phoneNumber:")) {
                 isValid = ValidationUtil.validate(ValidationUtil.PHONE_NUMBER_REGEX, string);
             } else {
                 isValid = ValidationUtil.validate(ValidationUtil.NAME_REGEX, string);

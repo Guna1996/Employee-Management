@@ -6,15 +6,17 @@
  *
  */
 package com.ideas2it.dto;
- 
+
+import java.time.LocalDate;   
+
 public class EmployeeDto {
- 
+    protected int id;
     protected String firstName;
     protected String lastName;
     protected String staffNumber;
-    protected String dob;
+    protected LocalDate dob;
     protected String gender;
-    protected String dateOfJoining;
+    protected LocalDate dateOfJoining;
     protected String batch;
     protected String designation;
     protected String city;
@@ -25,7 +27,7 @@ public class EmployeeDto {
     public EmployeeDto() {
     }
    
-    public EmployeeDto(String firstName, String lastName, String staffNumber, String dob, String gender, String dateOfJoining, String batch, 
+    public EmployeeDto(String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber) { 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,10 +43,32 @@ public class EmployeeDto {
         this.phoneNumber = phoneNumber;
     }
 
+    public EmployeeDto(int id, String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.staffNumber = staffNumber;
+        this.dob = dob;
+        this.gender = gender;
+        this.dateOfJoining = dateOfJoining;
+        this.batch = batch;
+        this.designation = designation;
+        this.city = city;
+        this.fatherName = fatherName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 
+
+    public int getId() {
+        return id;
+    }
+   
     public String getFirstName() {
         return firstName;
     }
+
 
     public String getLastName() {
         return lastName;
@@ -54,7 +78,7 @@ public class EmployeeDto {
         return staffNumber;
     }
 
-    public String getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
@@ -62,7 +86,7 @@ public class EmployeeDto {
         return gender;
     }
    
-    public String getDateOfJoining() {
+    public LocalDate getDateOfJoining() {
         return dateOfJoining;
     }
 
@@ -103,7 +127,7 @@ public class EmployeeDto {
         this.staffNumber = staffNumber;
     }
 
-    public void setDob(String dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
@@ -111,7 +135,7 @@ public class EmployeeDto {
         this.gender = gender;
     }
 
-    public void setDateOfJoining(String dateOfJoining) {
+    public void setDateOfJoining(LocalDate dateOfJoining) {
         this.dateOfJoining = dateOfJoining;
     }
     
@@ -141,7 +165,7 @@ public class EmployeeDto {
 
     @Override
     public String toString() {
-        String output = String.format("%17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch, 
+        String output = String.format("%5s %17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", id, firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch, 
         designation, city, fatherName, email, phoneNumber);    
         return output;   
     }

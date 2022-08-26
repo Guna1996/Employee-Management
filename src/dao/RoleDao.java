@@ -15,18 +15,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 
-public class RoleDao extends DatabaseConnection {
+public class RoleDao extends BaseDao {
     int roleId =0 ;
     PreparedStatement preparedStatemt;
      
-    public boolean assignEmployeeRole(int employeeId, int roleId) throws MyCustomException{
+    public int assignEmployeeRole(int employeeId, int roleId) throws MyCustomException{
         try {
             Connection connection = mysqlConnection();
             String query = " insert into employee_roles(employee_id, role_id) values (?, ?)";
             preparedStatemt = connection.prepareStatement(query);
             preparedStatemt.setInt (1, employeeId);
             preparedStatemt.setInt (2, roleId);
-            return preparedStatemt.execute();
+            return (preparedStatemt.executeUpdate()); 
         } catch(Exception exception) {
             exception.printStackTrace();  
             throw new MyCustomException(exception.getMessage());
