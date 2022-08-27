@@ -16,6 +16,7 @@ import com.ideas2it.exception.MyCustomException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 /**
  * The {@code Service} class contains the method for trainees, trainers and Human Resource Services. access 
@@ -63,12 +64,12 @@ public class Service {
         }            
     }
 
-    public int updateEmployee(EmployeeDto employeeDto, String email, String dob) throws MyCustomException{
+    public int updateEmployee(EmployeeDto employeeDto, String email, LocalDate dob) throws MyCustomException{
         Employee employee = employeeMapper.fromDto(employeeDto);
         return employeeDao.updateEmployee(employee, email, dob);          
     }    
  
-    public int updateEmployeeDetail(String variable, String value, String email, String dob) throws MyCustomException{
+    public int updateEmployeeDetail(String variable, String value, String email, LocalDate dob) throws MyCustomException{
         return employeeDao.updateEmployeeDetail(variable, value, email, dob);
     }
 
@@ -76,8 +77,9 @@ public class Service {
         return employeeDao.deleteEmployeeById(employeeId);          
     }   
 
-    public boolean checkIsEmployeeAvailable(String email, String dob) throws MyCustomException{
-        for (Employee employee: employeeDao.retrieveEmployees()) {
+    public boolean checkIsEmployeeAvailable(String email, LocalDate dob, String roleName) throws MyCustomException{
+        int roleId = roleDao.retrieveRoleIdByName(roleName);
+        for (Employee employee: employeeDao.retrieveEmployeesByRoleId(roleId)) {
             if (employee.getEmail().equals(email) && employee.getDob().equals(dob)) {
                 return true;
             }       
@@ -85,7 +87,7 @@ public class Service {
         return false;
     }
 
-    public List<EmployeeDto> getEmployeeDetails(String employeeRole) throws MyCustomException{
+    public List<EmployeeDto> getEmployeesDetails(String employeeRole) throws MyCustomException{
         int roleId = roleDao.retrieveRoleIdByName(employeeRole);
         List<Employee> employees = employeeDao.retrieveEmployeesByRoleId(roleId);
         List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
@@ -94,6 +96,12 @@ public class Service {
             employeeDtos.add(employeeDto);
         }  
         return employeeDtos;         
+    }
+
+    public EmployeeDto getEmployeeDetails(String email, LocalDate dob, String employeeRole) throws MyCustomException{
+        int roleId = roleDao.retrieveRoleIdByName(employeeRole);
+        Employee employee = employeeDao.retrieveEmployeeByEmailAndDob(email, dob, roleId);
+        return employeeMapper.toDto(employee);  
     }
     
     

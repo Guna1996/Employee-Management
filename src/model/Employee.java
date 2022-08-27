@@ -13,7 +13,6 @@ public class Employee {
     protected int id;
     protected String firstName;
     protected String lastName;
-    protected String staffNumber;
     protected LocalDate dob;
     protected String gender;
     protected LocalDate dateOfJoining;
@@ -23,12 +22,15 @@ public class Employee {
     protected String fatherName;
     protected String email;
     protected String phoneNumber;
+    protected String status;
    
-    public Employee(String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
-        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+    public Employee() {
+    }
+    
+    public Employee(String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.staffNumber = staffNumber;
         this.dob = dob;
         this.gender = gender;
         this.dateOfJoining = dateOfJoining;
@@ -38,14 +40,15 @@ public class Employee {
         this.fatherName = fatherName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.status = status;
     }
  
-    public Employee(int id, String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
-        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+    public Employee(int id, String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.staffNumber = staffNumber;
+        this.status = status;
         this.dob = dob;
         this.gender = gender;
         this.dateOfJoining = dateOfJoining;
@@ -69,8 +72,8 @@ public class Employee {
         return lastName;
     }
 
-    public String getStaffNumber() {
-        return staffNumber;
+    public String getStatus() {
+        return status;
     }
 
     public LocalDate getDob() {
@@ -119,8 +122,8 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public void setStaffNumber(String staffNumber) {
-        this.staffNumber = staffNumber;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setDob(LocalDate dob) {

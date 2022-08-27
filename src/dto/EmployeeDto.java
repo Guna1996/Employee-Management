@@ -13,7 +13,6 @@ public class EmployeeDto {
     protected int id;
     protected String firstName;
     protected String lastName;
-    protected String staffNumber;
     protected LocalDate dob;
     protected String gender;
     protected LocalDate dateOfJoining;
@@ -23,15 +22,15 @@ public class EmployeeDto {
     protected String fatherName;
     protected String email;
     protected String phoneNumber;
+    protected String status;
 
     public EmployeeDto() {
     }
    
-    public EmployeeDto(String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
-        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+    public EmployeeDto(String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.staffNumber = staffNumber;
         this.dob = dob;
         this.gender = gender;
         this.dateOfJoining = dateOfJoining;
@@ -41,14 +40,14 @@ public class EmployeeDto {
         this.fatherName = fatherName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.status = status;
     }
 
-    public EmployeeDto(int id, String firstName, String lastName, String staffNumber, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
-        String designation, String city, String fatherName, String email,  String phoneNumber) { 
+    public EmployeeDto(int id, String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+        String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.staffNumber = staffNumber;
         this.dob = dob;
         this.gender = gender;
         this.dateOfJoining = dateOfJoining;
@@ -58,6 +57,7 @@ public class EmployeeDto {
         this.fatherName = fatherName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.status = status;
     }
 
 
@@ -74,8 +74,8 @@ public class EmployeeDto {
         return lastName;
     }
 
-    public String getStaffNumber() {
-        return staffNumber;
+    public String getStatus() {
+        return status;
     }
 
     public LocalDate getDob() {
@@ -123,8 +123,8 @@ public class EmployeeDto {
         this.lastName = lastName;
     }
 
-    public void setStaffNumber(String staffNumber) {
-        this.staffNumber = staffNumber;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setDob(LocalDate dob) {
@@ -165,8 +165,8 @@ public class EmployeeDto {
 
     @Override
     public String toString() {
-        String output = String.format("%5s %17s %8s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s\n", id, firstName, lastName, staffNumber, dob, gender, dateOfJoining, batch, 
-        designation, city, fatherName, email, phoneNumber);    
+        String output = String.format("%5s %17s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s %8s\n", id, firstName, lastName, dob, gender, dateOfJoining, batch, 
+        designation, city, fatherName, email, phoneNumber, status);    
         return output;   
     }
 }  

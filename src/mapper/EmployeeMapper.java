@@ -13,14 +13,15 @@ import com.ideas2it.dto.EmployeeDto;
 public class EmployeeMapper {
     
     public Employee fromDto(EmployeeDto employeeDto) {
-        Employee employee = new Employee(employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getStaffNumber(), employeeDto.getDob(), employeeDto.getGender(),
-            employeeDto.getDateOfJoining(), employeeDto.getBatch(), employeeDto.getDesignation(), employeeDto.getCity(), employeeDto.getFatherName(), employeeDto.getEmail(), employeeDto.getPhoneNumber());
+        Employee employee = new Employee(employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getDob(), employeeDto.getGender(),
+            employeeDto.getDateOfJoining(), employeeDto.getBatch(), employeeDto.getDesignation(), employeeDto.getCity(), employeeDto.getFatherName(),
+            employeeDto.getEmail(), employeeDto.getPhoneNumber(), employeeDto.getStatus());
         return employee;
     }
 
     public EmployeeDto toDto(Employee employee) {
-        EmployeeDto employeeDto = new EmployeeDto(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getStaffNumber(), employee.getDob(), employee.getGender(),
-            employee.getDateOfJoining(), employee.getBatch(), employee.getDesignation(), employee.getCity(), employee.getFatherName(), employee.getEmail(), employee.getPhoneNumber());
+        EmployeeDto employeeDto = new EmployeeDto(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getDob(), employee.getGender(),
+            employee.getDateOfJoining(), employee.getBatch(), employee.getDesignation(), employee.getCity(), employee.getFatherName(), employee.getEmail(), employee.getPhoneNumber(), employee.getStatus());
         return employeeDto;
     }
 }
