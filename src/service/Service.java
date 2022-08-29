@@ -10,8 +10,12 @@ package com.ideas2it.service;
 import com.ideas2it.dao.EmployeeDao;
 import com.ideas2it.model.Employee;
 import com.ideas2it.dto.EmployeeDto;
+import com.ideas2it.dto.ProjectDto;
+import com.ideas2it.dao.ProjectDao;
 import com.ideas2it.dao.RoleDao;
+import com.ideas2it.model.Project;
 import com.ideas2it.mapper.EmployeeMapper;
+import com.ideas2it.mapper.ProjectMapper;
 import com.ideas2it.exception.MyCustomException;
 
 import java.util.List;
@@ -32,24 +36,17 @@ import java.time.LocalDate;
 public class Service {
 
     EmployeeDao employeeDao = new EmployeeDao();
+    ProjectDao projectDao = new ProjectDao();
     EmployeeMapper employeeMapper = new EmployeeMapper();
+    ProjectMapper projectMapper = new ProjectMapper();
     RoleDao roleDao = new RoleDao();
    
     /**
      * <p>
-     * This method is used to add Trainee details
+     * 
      * </p>
      * 
-     * @parm firstName is first name of the trainee
-     * @parm lastName is last name of the trainee
-     * @parm employeeId is employee id of the trainee
-     * @parm dob is date of birth of the trainee
-     * @parm gender is gender of the trainee
-     * @parm traineeBatch is batch of trainee
-     * @parm skills is skills of trainee
-     * @parm fatherName is fathername of trainee
-     * @parm email is email id of trainee
-     * @parm phoneNumber is contact number of trainee
+     * @parm 
      */     
     public int addEmployee(EmployeeDto employeeDto, String roleName) throws MyCustomException{
         int employeeId;
@@ -104,5 +101,15 @@ public class Service {
         return employeeMapper.toDto(employee);  
     }
     
-    
+    public int addProject(ProjectDto projectDto) throws MyCustomException{
+        int projectId;
+        int roleId;
+        Project project = projectMapper.fromDto(projectDto);
+        return projectDao.insertProject(project);          
+    }
+ 
+    public int updateProject(ProjectDto projectDto, String email, LocalDate dob) throws MyCustomException{
+        Project project = projectMapper.fromDto(projectDto);
+        return projectDao.updateProject(project, email, dob);          
+    }    
 }

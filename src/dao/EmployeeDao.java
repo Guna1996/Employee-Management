@@ -101,10 +101,10 @@ public class EmployeeDao extends BaseDao {
         }     
     }
  
-    public int updateEmployeeDetail(String variable, String value, String email, LocalDate dob) throws MyCustomException {
+    public int updateEmployeeDetail(String fieldName, String value, String email, LocalDate dob) throws MyCustomException {
         PreparedStatement preparedStatemt;
         try {
-            String query = "update employee set last_modified_date = current_timestamp, " + variable + " = ? where email= ? and dob = ? ";
+            String query = "update employee set last_modified_date = current_timestamp, " + fieldName + " = ? where email= ? and dob = ? ";
             preparedStatemt = connection.prepareStatement(query);
             preparedStatemt.setString(1, value);
             preparedStatemt.setString(2, email);

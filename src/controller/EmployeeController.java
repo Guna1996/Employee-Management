@@ -10,6 +10,7 @@ package com.ideas2it.controller;
 
 import com.ideas2it.exception.MyCustomException;
 import com.ideas2it.dto.EmployeeDto;
+import com.ideas2it.dto.ProjectDto;
 import com.ideas2it.service.Service;
 import com.ideas2it.utils.ValidationUtil;
 import com.ideas2it.utils.Constant;
@@ -67,7 +68,7 @@ public class EmployeeController {
     public void startOperation() {
         Scanner scannerInput = new Scanner(System.in);
         while (isContinue) {
-            logger.info("\n\nChoose one option from below\n 1. Trainee Portal \n 2. Trainer Portal\n 3. exit\n ");  
+            logger.info("\n\nChoose one option from below\n 1. Trainee Portal \n 2. Trainer Portal\n 3. Project manager Portal\n 4. exit\n ");  
             int choice = scannerInput.nextInt();
             switch (choice) {
                 case 1:
@@ -81,6 +82,14 @@ public class EmployeeController {
                 case 2:
                     try {
                         trainerPortal();
+                    } catch(InputMismatchException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
+                    break;
+
+                case 3:
+                    try {
+                        projectManagerPortal();
                     } catch(InputMismatchException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
@@ -104,8 +113,8 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         boolean isChoice = true;
         do {
-            logger.info("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your data\n"
-                +" 2. update your complete details\n 3. update Specific detail\n 4. view only your details\n 5. Go Back\n");  
+            logger.info("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your details\n"
+                +" 2. update your complete details\n 3. update Specific detail\n 4. view your details\n 5. Go Back\n");  
             int operation = scannerInput.nextInt(); 
             switch (operation) {
 	        case 1:
@@ -158,8 +167,8 @@ public class EmployeeController {
         boolean isDecession = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
-                +"\n 1. Add Trainer data\n 2. update your complete details\n 3. Display all trainers\n"
-                +" 4. Display all Trainees\n 5. view only your details\n 6. delete employee details\n 7. update Specific detail\n 8. Go Back\n");
+                +"\n 1. Add Trainer details\n 2. update your complete details\n 3. Display all trainers\n"
+                +" 4. Display all Trainees\n 5. view your details\n 6. delete employee details\n 7. update Specific detail\n 8. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
@@ -226,6 +235,95 @@ public class EmployeeController {
         } while(isDecession);
     }
  
+    public void projectManagerPortal() {
+        Scanner scannerInput = new Scanner(System.in);
+        boolean isDecession = true;
+        do {
+            logger.info("\n\n****choose one option from below from PROJECT MANAGER PORTAL****"
+                +"\n 1. Add Project Manager details\n 2. update your complete details\n 3. Display all Trainers\n"
+                +" 4. Display all Projectmanagers\n 5. view your details\n 6. delete ProjectManager details\n"
+                +" 7. update Specific detail\n 8. add projects\n 9. update projects\n 10. Go Back\n");
+            int trainerOption = scannerInput.nextInt();
+  
+            switch (trainerOption) {
+                case 1:
+                    try {
+                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                
+                case 2:
+                    try {
+                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+ 
+                case 3:
+                    try {
+                        displayEmployeesDetails(Constant.TRAINER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    }                                   
+                    break;
+ 
+                case 4:
+                    try {
+                        displayEmployeesDetails(Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+
+                case 5:
+                    try {
+                        displayEmployeeDetails(Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    }                                   
+                    break;
+  
+                case 6:
+                    try {
+                        deleteEmployeeDetails(Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                 
+                case 7:
+                   try {
+                        updateEmployeeDetail(Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+
+                case 8:
+                    try {
+                        addOrUpdateProjectDetails(Constant.ADD, Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+ 
+                case 9:
+                    try {
+                        addOrUpdateProjectDetails(Constant.UPDATE, Constant.PROJECT_MANAGER);
+                    } catch(MyCustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                 
+                default:
+                    System.out.print("Thank you");
+                    isDecession = false;
+            }
+        } while(isDecession);
+    }
    
     /**
      * <p>
@@ -408,6 +506,55 @@ public class EmployeeController {
         }  
     }
 
+    public void addOrUpdateProjectDetails(String operation, String userType) throws MyCustomException {
+        int failed = 0;
+        String add = "add";
+        String update = "update";
+        String email = null;
+        LocalDate dob = null;
+        boolean isEmployeeAvailable = false;
+        ProjectDto projectDto = new ProjectDto();
+        if (operation.equals(update)) {
+            System.out.print("**Enter your email and Dob to Login** ");
+            email = validateString("Email Id:");
+            dob = LocalDate.parse(validateString("dob (YYYY-MM-DD):"));
+            isEmployeeAvailable = service.checkIsEmployeeAvailable(email, dob, userType);
+        }
+        if (operation.equals(add) || isEmployeeAvailable) {
+            System.out.print("Enter the Required Data to **add Project**\n"); 
+	    projectDto.setName(validateString("Project Name:"));
+	    projectDto.setClientName(validateString("Client Name:"));
+            projectDto.setCompanyName(validateString("Company Name:"));
+            try {
+	        projectDto.setStartDate(LocalDate.parse(validateString("Started Date (YYYY-MM-DD):")));
+                projectDto.setStatus(validateString("Status:"));
+                projectDto.setEstimatedDuration(validateString("Estimated Duration:"));
+                projectDto.setEstimatedBudget(validateString("Estimated Budget :"));
+	        projectDto.setTechnologyUsed(validateString("Technology Used:"));
+            } catch(Exception error) {
+                throw new MyCustomException("date parse error!!");
+            }
+            timeDelay();
+            if (operation.equals(add)) {                    
+                if(service.addProject(projectDto) != failed) {
+                    logger.info("\n1 row inserted..Employee added Successfully");
+                } else {
+                    logger.info("\n0 row inserted..process failed");
+                }
+            } else if(operation.equals(update)) {
+                if(service.updateProject(projectDto, email, dob) != failed) {
+                    logger.info("\nEmployee updated SUCCESSFULLY");
+                } else {
+                    logger.info("\nProcess FAILED..invalid email or dob");
+                }
+            }
+    
+        } else {
+            
+            logger.info("invalid email or dob");
+        }      
+    }
+
     /**
      * <p>
      * This method is used to validate names while getting input
@@ -424,7 +571,7 @@ public class EmployeeController {
         for (int index = 0; index <= 4; index++) {
             logger.info(input);
             string = scanner.next();
-            if (input.equals("dob (YYYY-MM-DD):") || input.equals("Date of Joining:")) {
+            if (input.equals("dob (YYYY-MM-DD):") || input.equals("Date of Joining:") || input.equals("Started Date (YYYY-MM-DD):")) {
                 isValid = ValidationUtil.validateDob(string);
                 try {
                     int age = ValidationUtil.calculateAge(string);
