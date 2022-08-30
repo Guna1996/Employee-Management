@@ -122,7 +122,6 @@ public class EmployeeDao extends BaseDao {
        try {
             String sql = " select employee.* from employee, employee_roles where employee.id = employee_roles.employee_id"
                 + " and employee.status = 'active' and employee_roles.role_id=" + roleId;
-            connection = mysqlConnection();
             preparedStatemt = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatemt.executeQuery();
             while(resultSet.next()) {
@@ -166,7 +165,6 @@ public class EmployeeDao extends BaseDao {
             Employee employee = new Employee();
             String sql = " select employee.* from employee, employee_roles where employee.id = employee_roles.employee_id"
                 + " and employee.status = 'active' and employee.email = ? and employee.dob = ? and employee_roles.role_id=" + roleId;
-            connection = mysqlConnection();
             preparedStatemt = connection.prepareStatement(sql);
             preparedStatemt.setString(1, email);
             preparedStatemt.setDate(2, date.valueOf(dob));

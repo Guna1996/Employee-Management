@@ -108,8 +108,24 @@ public class Service {
         return projectDao.insertProject(project);          
     }
  
-    public int updateProject(ProjectDto projectDto, String email, LocalDate dob) throws MyCustomException{
+    public int updateProject(ProjectDto projectDto, int projectId) throws MyCustomException{
         Project project = projectMapper.fromDto(projectDto);
-        return projectDao.updateProject(project, email, dob);          
-    }    
+        return projectDao.updateProject(project, projectId);          
+    }
+
+    public List<ProjectDto> getProjectsDetails() throws MyCustomException{
+        List<Project> projects = projectDao.retrieveProjects();
+        List<ProjectDto> projectDtos = new ArrayList<ProjectDto>();
+        for (Project project: projects) {
+            ProjectDto projectDto = projectMapper.toDto(project);
+            projectDtos.add(projectDto);
+        }  
+        return projectDtos;         
+    }
+
+    public int updateProjectDetail(String variable, String value, int projectId) throws MyCustomException{
+        return projectDao.updateProjectDetail(variable, value, projectId);
+    }
+
+        
 }

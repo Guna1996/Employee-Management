@@ -16,26 +16,26 @@ public class ProjectDto {
     protected String companyName;
     protected LocalDate startDate;
     protected String estimatedDuration;
-    protected String estimatedBudget;
+    protected String description;
     protected String technologyUsed;
     protected String status;
    
     public ProjectDto() {
     }
     
-    public ProjectDto(String name, String clientName, String companyName, LocalDate startDate, String estimatedDuration, String estimatedBudget, 
+    public ProjectDto(String name, String clientName, String companyName, LocalDate startDate, String estimatedDuration, String description, 
         String technologyUsed, String status) { 
         this.name = name;
         this.clientName = clientName;
         this.companyName = companyName;
         this.startDate = startDate;
         this.estimatedDuration = estimatedDuration;
-        this.estimatedBudget = estimatedBudget;
+        this.description = description;
         this.technologyUsed = technologyUsed;
         this.status = status;
     }
  
-    public ProjectDto(int id, String name, String clientName, String companyName, LocalDate startDate, String estimatedDuration, String estimatedBudget, 
+    public ProjectDto(int id, String name, String clientName, String companyName, LocalDate startDate, String estimatedDuration, String description, 
         String technologyUsed, String status) { 
         this.id = id;
         this.name = name;
@@ -43,7 +43,7 @@ public class ProjectDto {
         this.companyName = companyName;
         this.startDate = startDate;
         this.estimatedDuration = estimatedDuration;
-        this.estimatedBudget = estimatedBudget;
+        this.description = description;
         this.technologyUsed = technologyUsed;
         this.status = status;
     }
@@ -72,8 +72,8 @@ public class ProjectDto {
         return estimatedDuration;
     }
 
-    public String getEstimatedBudget() {
-        return estimatedBudget;
+    public String getDescription() {
+        return description;
     }
  
     public String getTechnologyUsed() {
@@ -104,8 +104,8 @@ public class ProjectDto {
         this.estimatedDuration = estimatedDuration;
     }
 
-    public void setEstimatedBudget(String estimatedBudget) {
-        this.estimatedBudget = estimatedBudget;
+    public void setDescription(String description) {
+        this.description = description;
     }
  
     public void setTechnologyUsed(String technologyUsed) {
@@ -116,5 +116,10 @@ public class ProjectDto {
         this.status = status;
     }
 
-   
+   @Override
+    public String toString() {
+        String output = String.format(" %17s  %17s  %17s  %17s  %17s  %17s  %17s  %17s %17s\n", id, name,
+        clientName, companyName, startDate, estimatedDuration, description, technologyUsed, status);    
+        return output;   
+    }
 }

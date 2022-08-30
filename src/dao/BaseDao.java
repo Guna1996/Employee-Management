@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDao {
-    public Connection mysqlConnection() {
+    public static Connection mysqlConnection() {
         try {
             Connection connection = DriverManager.getConnection(Constant.DATABASE_URL, Constant.DATABASE_USER_NAME, Constant.DATABASE_PASSWORD);
             return connection;
