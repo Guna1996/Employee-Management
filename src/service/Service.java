@@ -8,13 +8,17 @@
 package com.ideas2it.service;
 
 import com.ideas2it.dao.EmployeeDao;
+import com.ideas2it.dao.EmployeeProjectDao;
 import com.ideas2it.model.Employee;
+import com.ideas2it.model.EmployeeProject;
+import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.ProjectDto;
 import com.ideas2it.dao.ProjectDao;
 import com.ideas2it.dao.RoleDao;
 import com.ideas2it.model.Project;
 import com.ideas2it.mapper.EmployeeMapper;
+import com.ideas2it.mapper.EmployeeProjectMapper;
 import com.ideas2it.mapper.ProjectMapper;
 import com.ideas2it.exception.MyCustomException;
 
@@ -37,7 +41,9 @@ public class Service {
 
     EmployeeDao employeeDao = new EmployeeDao();
     ProjectDao projectDao = new ProjectDao();
+    EmployeeProjectDao employeeProjectDao = new EmployeeProjectDao();
     EmployeeMapper employeeMapper = new EmployeeMapper();
+    EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
     ProjectMapper projectMapper = new ProjectMapper();
     RoleDao roleDao = new RoleDao();
    
@@ -101,19 +107,19 @@ public class Service {
         return employeeMapper.toDto(employee);  
     }
     
-    public int addProject(ProjectDto projectDto) throws MyCustomException{
+    public int addProject(ProjectDto projectDto) throws MyCustomException {
         int projectId;
         int roleId;
         Project project = projectMapper.fromDto(projectDto);
         return projectDao.insertProject(project);          
     }
  
-    public int updateProject(ProjectDto projectDto, int projectId) throws MyCustomException{
+    public int updateProject(ProjectDto projectDto, int projectId) throws MyCustomException {
         Project project = projectMapper.fromDto(projectDto);
         return projectDao.updateProject(project, projectId);          
     }
 
-    public List<ProjectDto> getProjectsDetails() throws MyCustomException{
+    public List<ProjectDto> getProjectsDetails() throws MyCustomException {
         List<Project> projects = projectDao.retrieveProjects();
         List<ProjectDto> projectDtos = new ArrayList<ProjectDto>();
         for (Project project: projects) {
@@ -123,9 +129,31 @@ public class Service {
         return projectDtos;         
     }
 
-    public int updateProjectDetail(String variable, String value, int projectId) throws MyCustomException{
+    public int updateProjectDetail(String variable, String value, int projectId) throws MyCustomException {
         return projectDao.updateProjectDetail(variable, value, projectId);
     }
 
-        
+    public int assignProjectsToEmployees(int projectId, List<EmployeeProjectDto> assignedEmployeesDto) throws MyCustomException {
+        List<EmployeeProject> assignedEmployeeProjects = new ArrayList<EmployeeProject>();
+        for (EmployeeProjectDto employeeProjectDto: assignedEmployeesDto) {
+            EmployeeProject employeeProject = employeeProjectMapper.fromDto(employeeProjectDto);
+            assignedEmployeeProjects.add(employeeProject);
+        }  
+        return employeeProjectDao.assignProjectsToEmployees(projectId, assignedEmployeeProjects);
+    }  
+   
+    public List<EmployeeProjectDto> getAssignedProjectsToEmployees() throws MyCustomException {
+        List<EmployeeProject> assignedEmployeesToProjects = employeeProjectDao.retrieveAssignedProjectsToEmployees();
+        List<EmployeeProjectDto> assignedEmployeesToProjectsDto = new ArrayList<EmployeeProjectDto>();
+        for (EmployeeProject employeeProject: assignedEmployeesToProjects) {
+            EmployeeProjectDto employeeProjectDto = employeeProjectMapper.toDto(employeeProject);
+            assignedEmployeesToProjectsDto.add(employeeProjectDto);
+        }  
+        return assignedEmployeesToProjectsDto;         
+    }
+
+    public int deleteAssignedEmployeeToProjectById(int employeeId, int projectId) throws MyCustomException {
+        return employeeProjectDao.deleteAssignedEmployeeToProjectById(employeeId, projectId);  
+    } 
+     
 }
