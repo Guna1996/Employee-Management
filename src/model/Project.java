@@ -8,16 +8,42 @@
 package com.ideas2it.model;
 
 import java.time.LocalDate;  
+import javax.persistence.Entity;  
+import javax.persistence.Id;  
+import javax.persistence.Table; 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue; 
  
+@Entity
+@Table(name = "project_detail")
 public class Project {
+    @Id 
+    @GeneratedValue
+    @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
     protected int id;
+    
+    @Column(name = "name")
     protected String name;
+
+    @Column(name = "client_name")
     protected String clientName;
+
+    @Column(name = "company_name")
     protected String companyName;
+
+    @Column(name = "start_name")
     protected LocalDate startDate;
+
+    @Column(name = "estimated_duration")
     protected String estimatedDuration;
+
+    @Column(name = "description")
     protected String description;
+
+    @Column(name = "technology_used")
     protected String technologyUsed;
+
+    @Column(name = "status")
     protected String status;
    
     public Project(String name, String clientName, String companyName, LocalDate startDate, String estimatedDuration, String description, 

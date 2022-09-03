@@ -344,7 +344,8 @@ public class EmployeeController {
             employeeDto.setBatch(validateString("Batch:"));
             employeeDto.setFatherName(validateString("Father Name  :"));
             employeeDto.setEmail(validateString("Email Id:"));
-            employeeDto.setPhoneNumber(validateString("phoneNumber:"));  
+            employeeDto.setPhoneNumber(validateString("phoneNumber:")); 
+            employeeDto.setStatus("active"); 
             timeDelay();
             if (operation.equals(add)) {                    
                 if(service.addEmployee(employeeDto, userType) != failed) {
@@ -607,13 +608,13 @@ public class EmployeeController {
         }  
     }
 
-    public void assignProjectsToEmployees(String userType) throws MyCustomException{
+    public void assignProjectsToEmployees() throws MyCustomException{
         int failed = 0;
         List<EmployeeProjectDto> assignedEmployeesDto = new ArrayList<EmployeeProjectDto>();
         System.out.print("**Enter your email and Dob to Login** ");
         String employeeEmail = validateString("Email Id:");
         LocalDate employeeDob = LocalDate.parse(validateString("dob (YYYY-MM-DD):")); 
-        if (service.checkIsEmployeeAvailable(employeeEmail, employeeDob, userType)) {
+        if (service.checkIsEmployeeAvailable(employeeEmail, employeeDob, Constant.PROJECT_MANAGER)) {
             System.out.print("Enter the Project Id: ");
             int projectId = scanner.nextInt();  
            // if (!assignedProjectsToEmployees.containsKey(projectId)) {   
@@ -749,7 +750,7 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         boolean isChoice = true;
         do {
-            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n 4. update specific detail of a project\n 5. assign projects to employees\n 6. display assigned projects to employees\n 7. delete assigned employees to project\n 8. Go back\n ");  
+            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n 4. update specific detail of a project\n 5. assign projects to employees\n 6. display assigned projects to employees\n 7. Go back\n ");  
             int choice = scannerInput.nextInt();
             switch (choice) {
                 case 1:
@@ -782,7 +783,7 @@ public class EmployeeController {
                     break; 
                  case 5:
                     try {
-                        assignProjectsToEmployees(Constant.PROJECT_MANAGER);
+                        assignProjectsToEmployees();
                     } catch(MyCustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
@@ -793,14 +794,14 @@ public class EmployeeController {
                     } catch(MyCustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
-                    break;
+                    break;  
                 case 7:
                     try {
-                        deleteAssignedEmployeeToProject(Constant.PROJECT_MANAGER);
+                        displayAssignedProjectsToEmployees();
                     } catch(MyCustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
-                    break;              
+                    break;             
                 default:
                         System.out.print("Thank you");
                         isChoice = false;

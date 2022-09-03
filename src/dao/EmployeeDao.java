@@ -20,12 +20,25 @@ import java.sql.ResultSet;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import org.hibernate.Session;  
+import org.hibernate.cfg.Configuration;    
+import org.hibernate.SessionFactory;    
+import org.hibernate.Transaction;  
+import org.hibernate.boot.Metadata;  
+import org.hibernate.boot.MetadataSources;  
+import org.hibernate.boot.registry.StandardServiceRegistry;  
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;  
+  
+
 /**
 * Implementation to Insert,update and Access Trainers 
 **/
 public class EmployeeDao extends BaseDao {
      Date date = new Date(0);
      Connection connection = mysqlConnection();
+    static Configuration config= new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(com.ideas2it.model.Employee.class);
+    static StandardServiceRegistryBuilder reg = new StandardServiceRegistryBuilder().applySettings(config.getProperties());
+    static SessionFactory sessionFactory = config.buildSessionFactory(reg.build());
      /**
      * <p>
      * This method is used to insert Trainee details
@@ -33,28 +46,19 @@ public class EmployeeDao extends BaseDao {
      * 
      */  
     public int insertEmployee(Employee employee) throws MyCustomException{
-        PreparedStatement preparedStatemt;
         try {
-            String query = " insert into employee(first_name, last_name, dob, gender,"
-                + "date_of_joining, batch, designation, city, father_name, email, phone_number, status) "
-                + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
-            preparedStatemt = connection.prepareStatement(query);
-            preparedStatemt.setString(1, employee.getFirstName());
-            preparedStatemt.setString(2, employee.getLastName());
-            preparedStatemt.setDate(3, date.valueOf(employee.getDob()));
-            preparedStatemt.setString(4, employee.getGender());
-            preparedStatemt.setDate(5, date.valueOf(employee.getDateOfJoining()));
-            preparedStatemt.setString(6, employee.getBatch());
-            preparedStatemt.setString(7, employee.getDesignation());
-            preparedStatemt.setString(8, employee.getCity());
-            preparedStatemt.setString(9, employee.getFatherName());
-            preparedStatemt.setString(10, employee.getEmail());
-            preparedStatemt.setString(11, employee.getPhoneNumber());
-            return (preparedStatemt.executeUpdate());
+            Session session = sessionFactory.openSession();  
+            Transaction t = session.beginTransaction();     
+            session.save(employee);  
+            t.commit();  
+            System.out.println("successfully saved");    
+            sessionFactory.close();  
+            session.close();
+            return 1; 
         } catch(Exception exception) {
-            exception.printStackTrace();  
+            exception.printStackTrace();
             throw new MyCustomException(exception.getMessage());
-        }     
+        }   
     }
 
     public int retrieveLastInsertedEmployeeId() throws MyCustomException{

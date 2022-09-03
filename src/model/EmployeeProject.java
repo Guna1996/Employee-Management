@@ -8,15 +8,39 @@
 package com.ideas2it.model;
 
 import java.time.LocalDate;  
+import javax.persistence.Entity;  
+import javax.persistence.Id;  
+import javax.persistence.Table; 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue; 
  
+@Entity
+@Table(name = "employee_project")
 public class EmployeeProject {
+    @Id 
+    @GeneratedValue
+    @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
     protected int id;
+
+    @Column(name = "employee_id")
     protected int employeeId;
+
+    @Column(name = "project_id")
     protected int projectId;
+
+    @Column(name = "status")
     protected String status;
+
+    @Column(name = "assigned_date")
     protected LocalDate assignedDate;
+
+    @Column(name = "assigned_by")
     protected String assignedBy;
+
+    @Column(name = "employee_role")
     protected String employeeRole;
+
+    @Column(name = "relieved_date")
     protected LocalDate relievedDate;
 
     public EmployeeProject() {
