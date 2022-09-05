@@ -35,14 +35,7 @@ public class RoleDao extends BaseDao {
 
     public int retrieveRoleIdByName(String name) throws MyCustomException{
         try {
-            Connection connection = mysqlConnection();
-            String sql = "SELECT id FROM role where name = '"+ name +"'";
-            preparedStatemt = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatemt.executeQuery();
-            while(resultSet.next()) {
-                roleId = resultSet.getInt("id");
-            }
-            return roleId;
+            return 0;
         } catch(Exception exception) {
             exception.printStackTrace();  
             throw new MyCustomException(exception.getMessage());

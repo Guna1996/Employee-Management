@@ -7,12 +7,21 @@
  */
 package com.ideas2it.model;
 
+import java.util.ArrayList;
+
+import java.util.List;
+
 import java.time.LocalDate;
 import javax.persistence.Entity;  
 import javax.persistence.Id;  
+import javax.persistence.CascadeType;
 import javax.persistence.Table; 
 import javax.persistence.Column;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.GeneratedValue;
+import com.ideas2it.model.Role;
    
  
 @Entity
@@ -59,6 +68,14 @@ public class Employee {
     @Column(name = "status")
     protected String status;
    
+    @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.ALL})
+    @JoinTable(
+        name = "employee_roles", 
+        joinColumns = { @JoinColumn(name = "employee_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "role_id")}
+    )
+    private List<Role> roles = new ArrayList<Role>();
+     
     public Employee() {
     }
     
@@ -149,6 +166,15 @@ public class Employee {
         return phoneNumber;
     }
     
+     public List<Role> getRole() {
+        return roles;
+    }
+    
+    public void setRole(List<Role> roles) {
+        this.roles = roles;
+    }
+
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

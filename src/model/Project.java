@@ -15,7 +15,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue; 
  
 @Entity
-@Table(name = "project_detail")
+@Table(name = "project")
 public class Project {
     @Id 
     @GeneratedValue

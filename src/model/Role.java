@@ -7,8 +7,11 @@
  */
 package com.ideas2it.model;
 
+import java.util.HashSet;
+
+import java.util.Set;
 import java.time.LocalDate;  
-import javax.persistence.Entity;  
+import javax.persistence.*;  
 import javax.persistence.Id;  
 import javax.persistence.Table; 
 import javax.persistence.Column;
@@ -42,7 +45,7 @@ public class Role {
         return id;
     }
     
-    public String getName(String name) {
+    public String getName() {
         return name;
     }
 

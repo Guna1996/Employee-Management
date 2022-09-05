@@ -58,38 +58,10 @@ public class Service {
         int employeeId;
         int roleId;
         Employee employee = employeeMapper.fromDto(employeeDto);
-        if (employeeDao.insertEmployee(employee) == 1) {
-            employeeId = employeeDao.retrieveLastInsertedEmployeeId();
-            roleId = roleDao.retrieveRoleIdByName(roleName);
-            return roleDao.assignEmployeeRole(employeeId, roleId);
-        } else {
-            return 0;
-        }            
+        return employeeDao.insertEmployee(employee, roleName); 
     }
 
-    public int updateEmployee(EmployeeDto employeeDto, String email, LocalDate dob) throws MyCustomException{
-        Employee employee = employeeMapper.fromDto(employeeDto);
-        return employeeDao.updateEmployee(employee, email, dob);          
-    }    
- 
-    public int updateEmployeeDetail(String variable, String value, String email, LocalDate dob) throws MyCustomException{
-        return employeeDao.updateEmployeeDetail(variable, value, email, dob);
-    }
-
-    public int deleteEmployeeById(int employeeId) throws MyCustomException{
-        return employeeDao.deleteEmployeeById(employeeId);          
-    }   
-
-    public boolean checkIsEmployeeAvailable(String email, LocalDate dob, String roleName) throws MyCustomException{
-        int roleId = roleDao.retrieveRoleIdByName(roleName);
-        for (Employee employee: employeeDao.retrieveEmployeesByRoleId(roleId)) {
-            if (employee.getEmail().equals(email) && employee.getDob().equals(dob)) {
-                return true;
-            }       
-        }
-        return false;
-    }
-
+   
     public List<EmployeeDto> getEmployeesDetails(String employeeRole) throws MyCustomException{
         int roleId = roleDao.retrieveRoleIdByName(employeeRole);
         List<Employee> employees = employeeDao.retrieveEmployeesByRoleId(roleId);
@@ -100,60 +72,6 @@ public class Service {
         }  
         return employeeDtos;         
     }
-
-    public EmployeeDto getEmployeeDetails(String email, LocalDate dob, String employeeRole) throws MyCustomException{
-        int roleId = roleDao.retrieveRoleIdByName(employeeRole);
-        Employee employee = employeeDao.retrieveEmployeeByEmailAndDob(email, dob, roleId);
-        return employeeMapper.toDto(employee);  
-    }
     
-    public int addProject(ProjectDto projectDto) throws MyCustomException {
-        int projectId;
-        int roleId;
-        Project project = projectMapper.fromDto(projectDto);
-        return projectDao.insertProject(project);          
-    }
- 
-    public int updateProject(ProjectDto projectDto, int projectId) throws MyCustomException {
-        Project project = projectMapper.fromDto(projectDto);
-        return projectDao.updateProject(project, projectId);          
-    }
-
-    public List<ProjectDto> getProjectsDetails() throws MyCustomException {
-        List<Project> projects = projectDao.retrieveProjects();
-        List<ProjectDto> projectDtos = new ArrayList<ProjectDto>();
-        for (Project project: projects) {
-            ProjectDto projectDto = projectMapper.toDto(project);
-            projectDtos.add(projectDto);
-        }  
-        return projectDtos;         
-    }
-
-    public int updateProjectDetail(String variable, String value, int projectId) throws MyCustomException {
-        return projectDao.updateProjectDetail(variable, value, projectId);
-    }
-
-    public int assignProjectsToEmployees(int projectId, List<EmployeeProjectDto> assignedEmployeesDto) throws MyCustomException {
-        List<EmployeeProject> assignedEmployeeProjects = new ArrayList<EmployeeProject>();
-        for (EmployeeProjectDto employeeProjectDto: assignedEmployeesDto) {
-            EmployeeProject employeeProject = employeeProjectMapper.fromDto(employeeProjectDto);
-            assignedEmployeeProjects.add(employeeProject);
-        }  
-        return employeeProjectDao.assignProjectsToEmployees(projectId, assignedEmployeeProjects);
-    }  
    
-    public List<EmployeeProjectDto> getAssignedProjectsToEmployees() throws MyCustomException {
-        List<EmployeeProject> assignedEmployeesToProjects = employeeProjectDao.retrieveAssignedProjectsToEmployees();
-        List<EmployeeProjectDto> assignedEmployeesToProjectsDto = new ArrayList<EmployeeProjectDto>();
-        for (EmployeeProject employeeProject: assignedEmployeesToProjects) {
-            EmployeeProjectDto employeeProjectDto = employeeProjectMapper.toDto(employeeProject);
-            assignedEmployeesToProjectsDto.add(employeeProjectDto);
-        }  
-        return assignedEmployeesToProjectsDto;         
-    }
-
-    public int deleteAssignedEmployeeToProjectById(int employeeId, int projectId) throws MyCustomException {
-        return employeeProjectDao.deleteAssignedEmployeeToProjectById(employeeId, projectId);  
-    } 
-     
 }
