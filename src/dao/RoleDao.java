@@ -8,37 +8,32 @@
 package com.ideas2it.dao;
 
 import com.ideas2it.dao.BaseDao;
-import com.ideas2it.exception.MyCustomException;
+import com.ideas2it.model.Role;
+import com.ideas2it.model.Employee;
+import com.ideas2it.exception.CustomException;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 
 
 public class RoleDao extends BaseDao {
-    int roleId =0 ;
-    PreparedStatement preparedStatemt;
-     
-    public int assignEmployeeRole(int employeeId, int roleId) throws MyCustomException{
-        try {
-            Connection connection = mysqlConnection();
-            String query = " insert into employee_roles(employee_id, role_id) values (?, ?)";
-            preparedStatemt = connection.prepareStatement(query);
-            preparedStatemt.setInt (1, employeeId);
-            preparedStatemt.setInt (2, roleId);
-            return (preparedStatemt.executeUpdate()); 
-        } catch(Exception exception) {
-            exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
-        }                              
-    } 
 
-    public int retrieveRoleIdByName(String name) throws MyCustomException{
+    public List<Role> retrieveRoleByName(String name) throws CustomException{
         try {
-            return 0;
+            Session session = sessionFactory.openSession(); 
+            Criteria criteria = session.createCriteria(Role.class);
+            criteria.add(Restrictions.eq("name", name));
+            return criteria.list();
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     }
 }

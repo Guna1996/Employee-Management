@@ -8,7 +8,7 @@
 package com.ideas2it.controller;
 
 
-import com.ideas2it.exception.MyCustomException;
+import com.ideas2it.exception.CustomException;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.dto.ProjectDto;
@@ -117,13 +117,17 @@ public class EmployeeController {
 	        case 1:
                     try {
                         addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINEE);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     } 
                     break;
 
                 case 2:
-                    
+                    try {
+                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINEE);
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     break;
  
                 case 3:
@@ -159,15 +163,15 @@ public class EmployeeController {
                 case 1:
                     try {
                         addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINER);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     } 
                     break;
                 
                 case 2:
                     try {
                         addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINER);
-                    } catch(MyCustomException error) {  
+                    } catch(CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;
@@ -175,16 +179,16 @@ public class EmployeeController {
                 case 3:
                     try {
                         displayEmployeesDetails(Constant.TRAINER);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     }                                   
                     break;
  
                 case 4:
                     try {
                         displayEmployeesDetails(Constant.TRAINEE);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     } 
                     break;
 
@@ -192,6 +196,11 @@ public class EmployeeController {
                     
                     break;
                 case 6:
+                   try {
+                        deleteEmployee();
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                    
                     break;
                  
@@ -220,31 +229,31 @@ public class EmployeeController {
                 case 1:
                     try {
                         addOrUpdateEmployeeDetails(Constant.ADD, Constant.PROJECT_MANAGER);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     } 
                     break;
                 
                 case 2:
                     try {
                         addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.PROJECT_MANAGER);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     } 
                     break;
  
                 case 3:
                     try {
                         displayEmployeesDetails(Constant.TRAINER);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     }                                   
                     break; 
                 case 4:
                     try {
                         displayEmployeesDetails(Constant.PROJECT_MANAGER);
-                    } catch(MyCustomException error) {  
-                        logger.error(error.getMessage()); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
                     } 
                     break;
                 case 5:
@@ -271,8 +280,10 @@ public class EmployeeController {
      * </p>
      * 
      */ 
-    public void addOrUpdateEmployeeDetails(String operation, String userType) throws MyCustomException {
+    public void addOrUpdateEmployeeDetails(String operation, String userType) throws CustomException {
+        Scanner scannerInput = new Scanner(System.in);
         int failed = 0;
+        int employeeId = 0;
         String add = "add";
         String update = "update";
         String email = null;
@@ -280,11 +291,10 @@ public class EmployeeController {
         boolean isEmployeeAvailable = false;
         EmployeeDto employeeDto = new EmployeeDto();
         if (operation.equals(update)) {
-            System.out.print("**Enter your email and Dob to Login** ");
-            email = validateString("Email Id:");
-            dob = LocalDate.parse(validateString("dob (YYYY-MM-DD):"));
+            System.out.print("**Enter your employeeeId** ");
+            employeeId = scannerInput.nextInt();
         }
-        if (operation.equals(add)) {
+        if (operation.equals(add) || operation.equals(update)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
 	    employeeDto.setFirstName(validateString("First Name:"));
 	    employeeDto.setLastName(validateString("Last Name:"));
@@ -295,7 +305,7 @@ public class EmployeeController {
                 employeeDto.setCity(validateString("City :"));
 	        employeeDto.setDateOfJoining(LocalDate.parse(validateString("Date of Joining:")));
             } catch(Exception error) {
-                throw new MyCustomException("date parse error!!");
+                throw new CustomException("date parse error!!");
             }
             employeeDto.setBatch(validateString("Batch:"));
             employeeDto.setFatherName(validateString("Father Name  :"));
@@ -304,20 +314,25 @@ public class EmployeeController {
             employeeDto.setStatus("active"); 
             timeDelay();
             if (operation.equals(add)) {                    
-                if(service.addEmployee(employeeDto, userType) != failed) {
+                if(service.addEmployee(employeeDto, userType)) {
                     logger.info("\n1 row inserted..Employee added Successfully");
                 } else {
                     logger.info("\n0 row inserted..process failed");
                 }
-            } 
+            } else if(operation.equals(update)) {
+                if(service.updateEmployee(employeeDto, employeeId, userType)) {
+                    logger.info("\nEmployee updated SUCCESSFULLY");
+                } else {
+                    logger.info("\nProcess FAILED..invalid email or dob");
+                }
+            }
     
-        } else {
-            
+        } else { 
             logger.info("invalid email or dob");
         }      
     }
 
-    public void displayEmployeesDetails(String employeeRole) throws MyCustomException{
+    public void displayEmployeesDetails(String employeeRole) throws CustomException {
         List<EmployeeDto> employeeDtos = service.getEmployeesDetails(employeeRole);
         System.out.println("---------------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
@@ -330,6 +345,17 @@ public class EmployeeController {
         } 
     }
 
+    public void deleteEmployee() throws CustomException {
+        int failed = 0;
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your employeeeId you want to delete** ");
+        int employeeId = scannerInput.nextInt();
+        if (service.deleteEmployee(employeeId) != failed) {
+            logger.info("\nEmployee Deleted SUCCESSFULLY");
+        } else {
+            logger.info("\nProcess FAILED..invalid email or dob");
+        }  
+    }
     
     /**
      * <p>
@@ -338,7 +364,7 @@ public class EmployeeController {
      * 
      * @parm input is used as attribute to validate the given input
      */ 
-     public String validateString(String input) throws MyCustomException{
+     public String validateString(String input) throws CustomException{
         int invalidInput = 0;
         int loop = 4;
         String string= null;
@@ -377,7 +403,7 @@ public class EmployeeController {
                 logger.info("\nInvalid Input!! you have "+loop--+" more chance");
             }
             if (invalidInput == 5) {
-                throw new MyCustomException("Invalid Input Try again!!");
+                throw new CustomException("Invalid Input Try again!!");
             }
         }
         return string;

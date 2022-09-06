@@ -13,7 +13,7 @@ import java.util.List;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;  
-import javax.persistence.Id;  
+import javax.persistence.*; 
 import javax.persistence.CascadeType;
 import javax.persistence.Table; 
 import javax.persistence.Column;
@@ -29,7 +29,7 @@ import com.ideas2it.model.Role;
 public class Employee {
     @Id 
     @GeneratedValue
-    @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
+    @Column(name="id")
     protected int id;
     
     @Column(name = "first_name")
@@ -68,9 +68,9 @@ public class Employee {
     @Column(name = "status")
     protected String status;
    
-    @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "employee_roles", 
+        name = "employee_roles",
         joinColumns = { @JoinColumn(name = "employee_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "role_id")}
     )
@@ -221,7 +221,5 @@ public class Employee {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    
+    }    
 }

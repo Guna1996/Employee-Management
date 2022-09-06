@@ -7,11 +7,12 @@
  */
 package com.ideas2it.model;
 
-import java.util.HashSet;
-
-import java.util.Set;
+import java.util.ArrayList;
+import com.ideas2it.model.Employee;
+import java.util.List; 
+import javax.persistence.*;
 import java.time.LocalDate;  
-import javax.persistence.*;  
+import javax.persistence.Entity;  
 import javax.persistence.Id;  
 import javax.persistence.Table; 
 import javax.persistence.Column;
@@ -23,15 +24,19 @@ public class Role {
 
     @Id 
     @GeneratedValue 
-    @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
+    @Column(name="id")
     protected int id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     protected String name;
 
-    public Role() {
-    }
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+    private List<Employee> employees;
    
+    public Role() { 
+        
+    }
+
     public Role(String name) { 
         this.name = name;
     }
@@ -55,5 +60,18 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Employee> getEmployee() {
+        return employees;
+    }
+    
+    public void setEmployee(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    @Override
+    public String toString() {
+        return name + id;
     }
 }

@@ -11,7 +11,7 @@ import com.ideas2it.model.Employee;
 import com.ideas2it.model.EmployeeProject;
 import com.ideas2it.utils.Constant;
 import com.ideas2it.dao.BaseDao;
-import com.ideas2it.exception.MyCustomException;
+import com.ideas2it.exception.CustomException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -33,7 +33,7 @@ public class EmployeeProjectDao extends BaseDao {
      * </p>
      * 
      */  
-    public int assignProjectsToEmployees(int projectId, List<EmployeeProject> assignedEmployeeProjects) throws MyCustomException{
+    public int assignProjectsToEmployees(int projectId, List<EmployeeProject> assignedEmployeeProjects) throws CustomException{
         PreparedStatement preparedStatemt;
         int isExecuted = 0;
         
@@ -55,11 +55,11 @@ public class EmployeeProjectDao extends BaseDao {
             return isExecuted;
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     }
 
-    public List<EmployeeProject> retrieveAssignedProjectsToEmployees() throws MyCustomException{
+    public List<EmployeeProject> retrieveAssignedProjectsToEmployees() throws CustomException{
        PreparedStatement preparedStatemt;
        List<EmployeeProject> assignedEmployeesProjects = new ArrayList<EmployeeProject>();
        try {
@@ -81,11 +81,11 @@ public class EmployeeProjectDao extends BaseDao {
             return assignedEmployeesProjects;
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     }
 
-    public int deleteAssignedEmployeeToProjectById(int employeeId, int projectId) throws MyCustomException {
+    public int deleteAssignedEmployeeToProjectById(int employeeId, int projectId) throws CustomException {
         PreparedStatement preparedStatemt;
         try {
             String query = "update employee_projects set status = 'inactive' where employee_id = ? and project_id = ?";
@@ -95,7 +95,7 @@ public class EmployeeProjectDao extends BaseDao {
             return preparedStatemt.executeUpdate();
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }             
     }
 }

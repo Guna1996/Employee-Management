@@ -10,7 +10,7 @@ package com.ideas2it.dao;
 import com.ideas2it.model.Project;
 import com.ideas2it.utils.Constant;
 import com.ideas2it.dao.BaseDao;
-import com.ideas2it.exception.MyCustomException;
+import com.ideas2it.exception.CustomException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ProjectDao extends BaseDao {
      * </p>
      * 
      */  
-    public int insertProject(Project project) throws MyCustomException{
+    public int insertProject(Project project) throws CustomException{
         PreparedStatement preparedStatemt;
         try {
             String query = " insert into project(name, client_name, company_name, start_date,"
@@ -50,11 +50,11 @@ public class ProjectDao extends BaseDao {
             return (preparedStatemt.executeUpdate());
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     }
 
-    public int updateProject(Project project, int projectId) throws MyCustomException{
+    public int updateProject(Project project, int projectId) throws CustomException{
         PreparedStatement preparedStatemt;
         try {
             String query = "update project set last_modified_date = current_timestamp, name = ?, client_name = ?, company_name = ?, start_date = ?,"
@@ -73,11 +73,11 @@ public class ProjectDao extends BaseDao {
             return (preparedStatemt.executeUpdate());
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     } 
 
-    public List<Project> retrieveProjects() throws MyCustomException{
+    public List<Project> retrieveProjects() throws CustomException{
        PreparedStatement preparedStatemt;
        List<Project> projects = new ArrayList<Project>();
        try {
@@ -94,11 +94,11 @@ public class ProjectDao extends BaseDao {
             return projects;
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     } 
 
-     public int updateProjectDetail(String fieldName, String value, int projectId) throws MyCustomException {
+     public int updateProjectDetail(String fieldName, String value, int projectId) throws CustomException {
         PreparedStatement preparedStatemt;
         try {
             String query = "update project set modified_date = current_timestamp, " + fieldName + " = ? where id = ? ";
@@ -108,7 +108,7 @@ public class ProjectDao extends BaseDao {
             return (preparedStatemt.executeUpdate());
         } catch(Exception exception) {
             exception.printStackTrace();  
-            throw new MyCustomException(exception.getMessage());
+            throw new CustomException(exception.getMessage());
         }     
     } 
 }

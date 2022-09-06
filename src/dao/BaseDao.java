@@ -8,12 +8,16 @@
 package com.ideas2it.dao;
 
 import com.ideas2it.utils.Constant;
-import com.ideas2it.exception.MyCustomException;
+import com.ideas2it.exception.CustomException;
+
+import org.hibernate.SessionFactory; 
+import org.hibernate.cfg.Configuration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDao {
+    static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
     public static Connection mysqlConnection() {
         try {
             Connection connection = DriverManager.getConnection(Constant.DATABASE_URL, Constant.DATABASE_USER_NAME, Constant.DATABASE_PASSWORD);
