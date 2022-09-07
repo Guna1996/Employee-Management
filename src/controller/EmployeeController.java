@@ -135,6 +135,11 @@ public class EmployeeController {
                     break;
 
                 case 4:
+                    try {
+                        displayEmployeeDetailsById();
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     
                                                                    
                 default:
@@ -156,7 +161,7 @@ public class EmployeeController {
         do {
             logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
                 +"\n 1. Add Trainer details\n 2. update your complete details\n 3. Display all trainers\n"
-                +" 4. Display all Trainees\n 5. view your details\n 6. delete employee details\n 7. update Specific detail\n 8. Go Back\n");
+                +" 4. Display all Trainees\n 5. view your details\n 6. delete employee details\n 7. Display All Employees\n 8. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
@@ -178,7 +183,7 @@ public class EmployeeController {
  
                 case 3:
                     try {
-                        displayEmployeesDetails(Constant.TRAINER);
+                        displayEmployeesDetailsByRoleName(Constant.TRAINER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                   
@@ -186,14 +191,19 @@ public class EmployeeController {
  
                 case 4:
                     try {
-                        displayEmployeesDetails(Constant.TRAINEE);
+                       displayEmployeesDetailsByRoleName(Constant.TRAINEE);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
 
                 case 5:
-                    
+                    try {
+                         displayEmployeeDetailsById();
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
+                   
                     break;
                 case 6:
                    try {
@@ -205,7 +215,11 @@ public class EmployeeController {
                     break;
                  
                 case 7:
-                
+                    try {    
+                        displayEmployeesDetails();
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     break;
                  
                 default:
@@ -244,22 +258,32 @@ public class EmployeeController {
  
                 case 3:
                     try {
-                        displayEmployeesDetails(Constant.TRAINER);
+                        displayEmployeesDetailsByRoleName(Constant.TRAINER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                   
                     break; 
                 case 4:
                     try {
-                        displayEmployeesDetails(Constant.PROJECT_MANAGER);
+                        displayEmployeesDetailsByRoleName(Constant.PROJECT_MANAGER);
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    }       
+                    break;
+                case 5:
+                    try {
+                         displayEmployeeDetailsById();
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
-                    break;
-                case 5:
-                                                   
+                                                  
                     break;  
                 case 6:
+                    try {
+                        deleteEmployee();
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     break;                 
                 case 7:
                    
@@ -288,11 +312,14 @@ public class EmployeeController {
         String update = "update";
         String email = null;
         LocalDate dob = null;
+        String roleName = null;
         boolean isEmployeeAvailable = false;
         EmployeeDto employeeDto = new EmployeeDto();
         if (operation.equals(update)) {
             System.out.print("**Enter your employeeeId** ");
             employeeId = scannerInput.nextInt();
+            employeeDto.setId(employeeId);
+            roleName = validateString("enter the employee role you want to update:");
         }
         if (operation.equals(add) || operation.equals(update)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
@@ -320,7 +347,7 @@ public class EmployeeController {
                     logger.info("\n0 row inserted..process failed");
                 }
             } else if(operation.equals(update)) {
-                if(service.updateEmployee(employeeDto, employeeId, userType)) {
+                if(service.updateEmployee(employeeDto, roleName)) {
                     logger.info("\nEmployee updated SUCCESSFULLY");
                 } else {
                     logger.info("\nProcess FAILED..invalid email or dob");
@@ -332,18 +359,47 @@ public class EmployeeController {
         }      
     }
 
-    public void displayEmployeesDetails(String employeeRole) throws CustomException {
-        List<EmployeeDto> employeeDtos = service.getEmployeesDetails(employeeRole);
+    public void displayEmployeesDetails() throws CustomException {
+        List<EmployeeDto> employeeDtos = service.getEmployeesDetails();
         System.out.println("---------------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
-        System.out.format("%5s %17s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s %8s\n", "ID", "FIRST_NAME", "LAST_NAME", 
-            "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS"); 
+        System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
+            "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
         System.out.println("------------------------------------------------------------------------------------"
             +"---------------------------------------------------------------------------------------");
         for (EmployeeDto employeeDto: employeeDtos) {
             System.out.println(employeeDto);  
         } 
     }
+
+    public void displayEmployeesDetailsByRoleName(String roleName) throws CustomException {
+        List<EmployeeDto> employeeDtos = service.getEmployeesDetailsByRoleName(roleName);
+        System.out.println("---------------------------------------------------------------------------------"
+            +"------------------------------------------------------------------------------------------");  
+        System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
+            "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
+        System.out.println("------------------------------------------------------------------------------------"
+            +"---------------------------------------------------------------------------------------");
+        for (EmployeeDto employeeDto: employeeDtos) {
+            System.out.println(employeeDto);  
+        } 
+    }
+
+    public void displayEmployeeDetailsById() throws CustomException {
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your employeeeId** ");
+        int employeeId = scannerInput.nextInt();
+        EmployeeDto employeeDto = service.getEmployeeDetailsById(employeeId);
+        System.out.println("---------------------------------------------------------------------------------"
+            +"------------------------------------------------------------------------------------------");  
+        System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
+            "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
+        System.out.println("------------------------------------------------------------------------------------"
+            +"---------------------------------------------------------------------------------------");
+        System.out.println(employeeDto);         
+    }    
+
+
 
     public void deleteEmployee() throws CustomException {
         int failed = 0;
@@ -407,7 +463,7 @@ public class EmployeeController {
             }
         }
         return string;
-    }
+    }    
 
     public void timeDelay() {
         try {

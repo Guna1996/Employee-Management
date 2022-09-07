@@ -68,14 +68,17 @@ public class Employee {
     @Column(name = "status")
     protected String status;
    
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "employee_roles",
         joinColumns = { @JoinColumn(name = "employee_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "role_id")}
     )
     private List<Role> roles = new ArrayList<Role>();
-     
+
+    @Transient
+    protected String roleName; 
+
     public Employee() {
     }
     
@@ -165,6 +168,10 @@ public class Employee {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+  
+    public String getRoleName() {
+        return roleName;
+    }
     
      public List<Role> getRole() {
         return roles;
@@ -222,4 +229,8 @@ public class Employee {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }    
+
+     public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }

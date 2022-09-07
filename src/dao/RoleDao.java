@@ -18,23 +18,40 @@ import org.hibernate.criterion.Restrictions;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.List;
-
+import java.util.ArrayList;
+import org.hibernate.Transaction; 
 
 public class RoleDao extends BaseDao {
 
-    public List<Role> retrieveRoleByName(String name) throws CustomException{
+    public Role retrieveRoleByName(String name) throws CustomException{
         try {
             Session session = sessionFactory.openSession(); 
             Criteria criteria = session.createCriteria(Role.class);
             criteria.add(Restrictions.eq("name", name));
-            return criteria.list();
+            List<Role> roles = criteria.list();
+            return roles.get(0);
         } catch(Exception exception) {
             exception.printStackTrace();  
             throw new CustomException(exception.getMessage());
         }     
+    }
+ 
+    public List<Employee> retrieveEmployeesByRoleName(String roleName) throws CustomException{
+        Session session = null;  
+        List<Employee> employees = new ArrayList<Employee>();
+        try {
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            employees = session.createQuery("FROM Employee where status = 'active'").list();
+            transaction.commit();
+            return employees;
+        } catch (Exception exception) {
+            exception.printStackTrace(); 
+            throw new CustomException(exception.getMessage());
+        } finally {
+            session.close();  
+        }    
     }
 }
    

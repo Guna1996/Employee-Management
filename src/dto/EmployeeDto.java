@@ -23,6 +23,7 @@ public class EmployeeDto {
     protected String email;
     protected String phoneNumber;
     protected String status;
+    protected String roleName;
 
     public EmployeeDto() {
     }
@@ -44,7 +45,7 @@ public class EmployeeDto {
     }
 
     public EmployeeDto(int id, String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
-        String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
+        String designation, String city, String fatherName, String email,  String phoneNumber, String status, String roleName) { 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,6 +59,7 @@ public class EmployeeDto {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.roleName = roleName;
     }
 
 
@@ -101,8 +103,7 @@ public class EmployeeDto {
     public String getCity() {
         return city;
     }
-
-
+   
     public String getFatherName() {
         return fatherName;
     }
@@ -110,11 +111,20 @@ public class EmployeeDto {
     public String getEmail() {
         return email;
     }
+   
+    public String getRoleName() {
+        return roleName;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
+   
+     public void setId(int id) {
+        this.id = id;
+    }
     
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -163,10 +173,14 @@ public class EmployeeDto {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String toString() {
-        String output = String.format("%5s %17s %8s %15s %8s %15s %5s %15s %8s %15s %20s %13s %8s\n", id, firstName, lastName, dob, gender, dateOfJoining, batch, 
-        designation, city, fatherName, email, phoneNumber, status);    
+        String output = String.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", id, firstName, lastName, dob, gender, dateOfJoining, batch, 
+        designation, city, fatherName, email, phoneNumber, status, roleName);    
         return output;   
     }
 }  

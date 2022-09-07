@@ -44,29 +44,28 @@ public class EmployeeDao extends BaseDao {
      * </p>
      * 
      */  
-    public boolean insertEmployee(Employee employee, List<Role> roles) throws CustomException{
-        employee.setRole(roles);
+    public boolean insertEmployee(Employee employee) throws CustomException{
+        Session session = null;
         try {
-            Session session = sessionFactory.openSession();  
+            session = sessionFactory.openSession();  
             Transaction transaction = session.beginTransaction();     
             session.save(employee);  
             transaction.commit();        
-            session.close();
             return true; 
         } catch(Exception exception) {
             exception.printStackTrace();
             throw new CustomException(exception.getMessage());
-        }   
+        } finally {
+            session.close();  
+        }
     } 
 
-    public List<Employee> retrieveEmployeesByRoleName(Role role) throws CustomException{
-        Session session = sessionFactory.openSession();
-
-         Transaction transaction = null;  
-        List<Employee> employeesByRole = new ArrayList<Employee>();
+    public List<Employee> retrieveEmployees() throws CustomException{
+        Session session = null;  
         List<Employee> employees = new ArrayList<Employee>();
         try {
-            transaction = session.beginTransaction();
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
             employees = session.createQuery("FROM Employee where status = 'active'").list();
             transaction.commit();
             return employees;
@@ -74,56 +73,58 @@ public class EmployeeDao extends BaseDao {
             exception.printStackTrace(); 
             throw new CustomException(exception.getMessage());
         } finally {
-            session.close(); 
-        }       
+            session.close();  
+        }    
+    }
+
+    public Employee retrieveEmployeeById(int employeeId) throws CustomException{
+        Session session = null;      
+        try {  
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction(); 
+            Employee employee = (Employee)session.get(Employee.class, employeeId);   
+            transaction.commit();
+            return employee;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new CustomException(exception.getMessage());
+        } finally {
+            session.close();  
+        }     
     }
   
-    public boolean updateEmployee(Employee employeeUpdated, int employeeId, String roleName) throws CustomException{
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();  
+    public boolean updateEmployee(Employee employee) throws CustomException{  
+        Session session = null;   
         try {  
-            Employee employee = (Employee)session.get(Employee.class, employeeId); 
-            employee.setFirstName(employeeUpdated.getFirstName());
-            employee.setLastName(employeeUpdated.getLastName());            
-            employee.setStatus(employeeUpdated.getStatus());
-            employee.setDob(employeeUpdated.getDob());
-            employee.setGender(employeeUpdated.getGender());
-            employee.setDateOfJoining(employeeUpdated.getDateOfJoining());
-            employee.setBatch(employeeUpdated.getBatch());
-            employee.setDesignation(employeeUpdated.getDesignation());
-            employee.setCity(employeeUpdated.getCity());
-            employee.setFatherName(employeeUpdated.getFatherName());
-            employee.setEmail(employeeUpdated.getEmail());
-            employee.setPhoneNumber(employeeUpdated.getPhoneNumber());
-            Role role = new Role();
-            role.setName(roleName);
-            (employeeUpdated.getRole()).add(role);
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
             session.update(employee); 
-            transaction.commit();
+            transaction.commit();   
             return true;
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new CustomException(exception.getMessage());
         } finally {
-            session.close();         
+            session.close();  
         }   
     }
 
     public int deleteEmployeeById(int employeeId) throws CustomException{
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();  
+        Session session = null;   
         try {  
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction(); 
             Employee employee = (Employee)session.get(Employee.class, employeeId);   
             employee.setStatus("inactive");
             session.update(employee); 
-            transaction.commit();
+            transaction.commit(); 
             return 1;
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new CustomException(exception.getMessage());
         } finally {
-            session.close();         
-        }   
+            session.close();  
+        }    
     }
 }
    

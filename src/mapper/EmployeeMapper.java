@@ -18,10 +18,17 @@ public class EmployeeMapper {
             employeeDto.getEmail(), employeeDto.getPhoneNumber(), employeeDto.getStatus());
         return employee;
     }
+ 
+    public Employee fromDtoId(EmployeeDto employeeDto) {
+        Employee employee = new Employee(employeeDto.getId(), employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getDob(), employeeDto.getGender(),
+            employeeDto.getDateOfJoining(), employeeDto.getBatch(), employeeDto.getDesignation(), employeeDto.getCity(), employeeDto.getFatherName(),
+            employeeDto.getEmail(), employeeDto.getPhoneNumber(), employeeDto.getStatus());
+        return employee;
+    }
 
-    public EmployeeDto toDto(Employee employee) {
+    public EmployeeDto toDto(Employee employee) {  
         EmployeeDto employeeDto = new EmployeeDto(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getDob(), employee.getGender(),
-            employee.getDateOfJoining(), employee.getBatch(), employee.getDesignation(), employee.getCity(), employee.getFatherName(), employee.getEmail(), employee.getPhoneNumber(), employee.getStatus());
+            employee.getDateOfJoining(), employee.getBatch(), employee.getDesignation(), employee.getCity(), employee.getFatherName(), employee.getEmail(), employee.getPhoneNumber(), employee.getStatus(), employee.getRoleName());
         return employeeDto;
     }
 }

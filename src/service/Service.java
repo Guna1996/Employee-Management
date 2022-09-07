@@ -24,8 +24,6 @@ import com.ideas2it.mapper.ProjectMapper;
 import com.ideas2it.exception.CustomException;
 
 import java.util.List;
-
-import java.util.Set;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -59,31 +57,53 @@ public class Service {
      * @parm 
      */     
     public boolean addEmployee(EmployeeDto employeeDto, String roleName) throws CustomException{
-        int employeeId;
-        int roleId;
+        List<Role> roles = new ArrayList<Role>();
         Employee employee = employeeMapper.fromDto(employeeDto);
-        List<Role> role = roleDao.retrieveRoleByName(roleName);
-        return employeeDao.insertEmployee(employee, role); 
+        Role role = roleDao.retrieveRoleByName(roleName);
+        roles.add(role);
+        employee.setRole(roles);
+        return employeeDao.insertEmployee(employee); 
     }
 
    
-    public List<EmployeeDto> getEmployeesDetails(String employeeRole) throws CustomException{
-        List<Role> roles = roleDao.retrieveRoleByName(employeeRole);
-        Role role = roles.get(0);
-        System.out.println(role.getName());
-            
-        List<Employee> employees = employeeDao.retrieveEmployeesByRoleName(role);
+    public List<EmployeeDto> getEmployeesDetails() throws CustomException{
+        List<Employee> employees = employeeDao.retrieveEmployees();
         List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
         for (Employee employee: employees) {
+            employee.setRoleName(employee.getRole().get(0).getName());
             EmployeeDto employeeDto = employeeMapper.toDto(employee);
             employeeDtos.add(employeeDto);
         }  
         return employeeDtos;         
     }
-  
-    public boolean updateEmployee(EmployeeDto employeeDto, int employeeId, String employeeRole) throws CustomException{
-        Employee employee = employeeMapper.fromDto(employeeDto);
-        return employeeDao.updateEmployee(employee, employeeId, employeeRole); 
+
+    public List<EmployeeDto> getEmployeesDetailsByRoleName(String roleName) throws CustomException{
+        Role role = roleDao.retrieveRoleByName(roleName);
+        List<Employee> employees = role.getEmployee();
+        List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
+        for (Employee employee: employees) {
+            employee.setRoleName(role.getName()); 
+            EmployeeDto employeeDto = employeeMapper.toDto(employee);
+            employeeDtos.add(employeeDto);
+        }  
+        return employeeDtos;         
+    }
+    
+    public EmployeeDto getEmployeeDetailsById(int employeeId) throws CustomException{
+        Employee employee = employeeDao.retrieveEmployeeById(employeeId);      
+        EmployeeDto employeeDto = employeeMapper.toDto(employee);
+            
+        return employeeDto;         
+    }
+
+    public boolean updateEmployee(EmployeeDto employeeDto, String employeeRole) throws CustomException{
+        Employee employee = employeeMapper.fromDtoId(employeeDto); 
+        Employee employeeDb = employeeDao.retrieveEmployeeById(employee.getId());      
+        Role role = roleDao.retrieveRoleByName(employeeRole);
+        List<Role> roles = employeeDb.getRole();
+        roles.add(role);
+        employee.setRole(roles);
+        return employeeDao.updateEmployee(employee); 
     }
 
     public int deleteEmployee(int employeeId) throws CustomException{
