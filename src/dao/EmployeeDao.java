@@ -7,36 +7,36 @@
  */
 package com.ideas2it.dao;
 
+import com.ideas2it.dao.BaseDao;
+import com.ideas2it.exception.CustomException;
 import com.ideas2it.model.Employee;
 import com.ideas2it.model.Role;
 import com.ideas2it.utils.Constant;
-import com.ideas2it.dao.BaseDao;
-import com.ideas2it.exception.CustomException;
 
 import java.sql.Connection;
-import java.util.List;
-import java.util.ArrayList;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.Session;  
-import org.hibernate.cfg.Configuration;    
-import org.hibernate.SessionFactory;    
-import org.hibernate.Transaction;  
 import org.hibernate.boot.Metadata;  
 import org.hibernate.boot.MetadataSources;  
 import org.hibernate.boot.registry.StandardServiceRegistry;  
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;  
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;    
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;  
+import org.hibernate.SessionFactory;    
+import org.hibernate.Transaction;  
   
-
 /**
 * Implementation to Insert,update and Access employee 
 **/
 public class EmployeeDao extends BaseDao {
+     SessionFactory sessionFactory = databaseConnection();
      Date date = new Date(0);
      /**
      * <p>
@@ -44,86 +44,98 @@ public class EmployeeDao extends BaseDao {
      * </p>
      * 
      */  
-    public boolean insertEmployee(Employee employee) throws CustomException{
+    public int insertEmployee(Employee employee) throws CustomException {
+        int employeeId = 0;
         Session session = null;
         try {
             session = sessionFactory.openSession();  
             Transaction transaction = session.beginTransaction();     
-            session.save(employee);  
-            transaction.commit();        
-            return true; 
+            employeeId = (Integer)session.save(employee);  
+            transaction.commit();
+            return employeeId;        
         } catch(Exception exception) {
             exception.printStackTrace();
-            throw new CustomException(exception.getMessage());
+            throw new CustomException("Error occured while Inserting employee", exception);
         } finally {
-            session.close();  
+            if (session != null) {
+                session.close();  
+            }    
         }
     } 
 
-    public List<Employee> retrieveEmployees() throws CustomException{
+    public List<Employee> retrieveEmployees() throws CustomException {
         Session session = null;  
         List<Employee> employees = new ArrayList<Employee>();
         try {
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            employees = session.createQuery("FROM Employee where status = 'active'").list();
+            employees = session.createQuery("FROM Employee where status = :status").setString("status", "active").list();
             transaction.commit();
             return employees;
         } catch (Exception exception) {
             exception.printStackTrace(); 
-            throw new CustomException(exception.getMessage());
+            throw new CustomException("Error occured while Retrieving all employees" ,exception);
         } finally {
-            session.close();  
+            if (session != null) {
+                session.close();  
+            }   
         }    
     }
 
-    public Employee retrieveEmployeeById(int employeeId) throws CustomException{
+    public Employee retrieveEmployeeById(int employeeId) throws CustomException {
         Session session = null;      
         try {  
+            String status = "active";
             session = sessionFactory.openSession();
+            int a = 10/0;
+            System.out.println("---------------------------------------");
             Transaction transaction = session.beginTransaction(); 
-            Employee employee = (Employee)session.get(Employee.class, employeeId);   
+            Employee employee = (Employee) session.createQuery("FROM Employee where status = :status and id = :id").setString("status", "active").setInteger("id", employeeId).uniqueResult();   
             transaction.commit();
             return employee;
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new CustomException(exception.getMessage());
+            throw new CustomException("Error occured while Retrieving employee by Id", exception);
         } finally {
-            session.close();  
+            if (session != null) {
+                session.close();  
+            }     
         }     
     }
-  
-    public boolean updateEmployee(Employee employee) throws CustomException{  
+
+    public String updateEmployee(Employee employee) throws CustomException {  
         Session session = null;   
         try {  
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
             session.update(employee); 
             transaction.commit();   
-            return true;
+            return "Updated Successfully";
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new CustomException(exception.getMessage());
+            throw new CustomException("Error occured while Updating employee", exception);
         } finally {
-            session.close();  
+            if (session != null) {
+                session.close();  
+            }     
         }   
     }
 
-    public int deleteEmployeeById(int employeeId) throws CustomException{
+    public String deleteEmployee(Employee employee) throws CustomException {
         Session session = null;   
         try {  
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction(); 
-            Employee employee = (Employee)session.get(Employee.class, employeeId);   
-            employee.setStatus("inactive");
             session.update(employee); 
             transaction.commit(); 
-            return 1;
+            return "Deleted Successfully";
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new CustomException(exception.getMessage());
+            throw new CustomException("Error occured while Deleting employee by Id", exception);
         } finally {
-            session.close();  
+            if (session != null) {
+                session.close();  
+            }       
         }    
     }
 }

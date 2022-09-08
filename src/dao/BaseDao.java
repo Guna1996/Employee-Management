@@ -17,14 +17,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDao {
-    static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-    public static Connection mysqlConnection() {
-        try {
-            Connection connection = DriverManager.getConnection(Constant.DATABASE_URL, Constant.DATABASE_USER_NAME, Constant.DATABASE_PASSWORD);
-            return connection;
-        } catch(Exception exception) {
-            exception.printStackTrace();  
-            return null;
-        }     
+    static SessionFactory sessionFactory = null;
+
+    public SessionFactory databaseConnection() {
+        if (sessionFactory == null) {
+            sessionFactory = new Configuration().configure().buildSessionFactory();
+        }
+        return sessionFactory;
     }
 }

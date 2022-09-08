@@ -27,31 +27,12 @@ public class RoleDao extends BaseDao {
     public Role retrieveRoleByName(String name) throws CustomException{
         try {
             Session session = sessionFactory.openSession(); 
-            Criteria criteria = session.createCriteria(Role.class);
-            criteria.add(Restrictions.eq("name", name));
-            List<Role> roles = criteria.list();
+            List<Role> roles = session.createQuery("FROM Role where name = :name").setString("name", name).list();
             return roles.get(0);
         } catch(Exception exception) {
             exception.printStackTrace();  
             throw new CustomException(exception.getMessage());
         }     
-    }
- 
-    public List<Employee> retrieveEmployeesByRoleName(String roleName) throws CustomException{
-        Session session = null;  
-        List<Employee> employees = new ArrayList<Employee>();
-        try {
-            session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-            employees = session.createQuery("FROM Employee where status = 'active'").list();
-            transaction.commit();
-            return employees;
-        } catch (Exception exception) {
-            exception.printStackTrace(); 
-            throw new CustomException(exception.getMessage());
-        } finally {
-            session.close();  
-        }    
     }
 }
    

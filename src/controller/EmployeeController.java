@@ -7,19 +7,16 @@
  */
 package com.ideas2it.controller;
 
-
-import com.ideas2it.exception.CustomException;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.dto.ProjectDto;
+import com.ideas2it.exception.CustomException;
 import com.ideas2it.service.Service;
-import com.ideas2it.utils.ValidationUtil;
 import com.ideas2it.utils.Constant;
-import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
+import com.ideas2it.utils.ValidationUtil;
 
-import java.time.LocalDate;  
 import java.time.format.DateTimeParseException;
+import java.time.LocalDate;  
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -29,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 /**
  * The {@code EmployeeController} class contains the main method. access  and controls the methods of the
@@ -87,8 +86,16 @@ public class EmployeeController {
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;
-
+ 
                 case 3:
+                    try {
+                       projectManagerPortal();
+                    } catch(InputMismatchException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
+                    break;
+
+                case 4:
                     
                     break;
         
@@ -319,9 +326,10 @@ public class EmployeeController {
             System.out.print("**Enter your employeeeId** ");
             employeeId = scannerInput.nextInt();
             employeeDto.setId(employeeId);
+            isEmployeeAvailable = service.isEmployeeAvailable(employeeId);
             roleName = validateString("enter the employee role you want to update:");
         }
-        if (operation.equals(add) || operation.equals(update)) {
+        if (operation.equals(add) || isEmployeeAvailable) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
 	    employeeDto.setFirstName(validateString("First Name:"));
 	    employeeDto.setLastName(validateString("Last Name:"));
@@ -340,22 +348,24 @@ public class EmployeeController {
             employeeDto.setPhoneNumber(validateString("phoneNumber:")); 
             employeeDto.setStatus("active"); 
             timeDelay();
-            if (operation.equals(add)) {                    
-                if(service.addEmployee(employeeDto, userType)) {
+            if (operation.equals(add)) {
+                int generatedEmployeeId = service.addEmployee(employeeDto, userType);                  
+                if (generatedEmployeeId != failed) {
                     logger.info("\n1 row inserted..Employee added Successfully");
                 } else {
                     logger.info("\n0 row inserted..process failed");
                 }
-            } else if(operation.equals(update)) {
-                if(service.updateEmployee(employeeDto, roleName)) {
-                    logger.info("\nEmployee updated SUCCESSFULLY");
+            } else if (operation.equals(update)) {
+                String result = service.updateEmployee(employeeDto, roleName);
+                if (result != null) {
+                    logger.info(result);
                 } else {
                     logger.info("\nProcess FAILED..invalid email or dob");
                 }
             }
     
         } else { 
-            logger.info("invalid email or dob");
+            logger.info("employeeId not found");
         }      
     }
 
@@ -389,15 +399,19 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId** ");
         int employeeId = scannerInput.nextInt();
-        EmployeeDto employeeDto = service.getEmployeeDetailsById(employeeId);
-        System.out.println("---------------------------------------------------------------------------------"
-            +"------------------------------------------------------------------------------------------");  
-        System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
-            "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
-        System.out.println("------------------------------------------------------------------------------------"
-            +"---------------------------------------------------------------------------------------");
-        System.out.println(employeeDto);         
-    }    
+        if (service.isEmployeeAvailable(employeeId)) {
+            EmployeeDto employeeDto = service.getEmployeeDetailsById(employeeId);
+            System.out.println("---------------------------------------------------------------------------------"
+                +"------------------------------------------------------------------------------------------");  
+            System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
+                "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
+            System.out.println("------------------------------------------------------------------------------------"
+                +"---------------------------------------------------------------------------------------");
+            System.out.println(employeeDto);  
+        } else { 
+            logger.info("employeeId not found");
+        }        
+    }     
 
 
 
@@ -406,11 +420,16 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId you want to delete** ");
         int employeeId = scannerInput.nextInt();
-        if (service.deleteEmployee(employeeId) != failed) {
-            logger.info("\nEmployee Deleted SUCCESSFULLY");
-        } else {
-            logger.info("\nProcess FAILED..invalid email or dob");
-        }  
+        if (service.isEmployeeAvailable(employeeId)) {
+            String isDeleted = service.deleteEmployee(employeeId);
+            if (isDeleted != null) {
+                logger.info(isDeleted);
+            } else {
+                logger.info("\nProcess FAILED..invalid email or dob");
+            }
+        } else { 
+            logger.info("employeeId not found");
+        }     
     }
     
     /**
