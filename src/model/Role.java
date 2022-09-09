@@ -23,14 +23,14 @@ import javax.persistence.GeneratedValue;
 public class Role {
 
     @Id 
-    @GeneratedValue 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name="id")
     protected int id;
 
     @Column(name = "name", unique = true)
     protected String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private List<Employee> employees;
    
     public Role() { 

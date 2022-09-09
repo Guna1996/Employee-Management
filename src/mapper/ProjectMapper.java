@@ -18,8 +18,15 @@ public class ProjectMapper {
         return project;
     }
 
+    public Project fromDtoId(ProjectDto projectDto) {
+        Project project = new Project(projectDto.getId(), projectDto.getName(), projectDto.getClientName(), projectDto.getCompanyName(), projectDto.getStartDate(),
+            projectDto.getEstimatedDuration(), projectDto.getDescription(), projectDto.getTechnologyUsed(), projectDto.getStatus());
+        return project;
+    }
+
+
     public ProjectDto toDto(Project project) {
-        ProjectDto projectDto = new ProjectDto(project.getId(),project.getName(), project.getClientName(), project.getCompanyName(), project.getStartDate(),
+        ProjectDto projectDto = new ProjectDto(project.getId(), project.getName(), project.getClientName(), project.getCompanyName(), project.getStartDate(),
             project.getEstimatedDuration(), project.getDescription(), project.getTechnologyUsed(), project.getStatus());
         return projectDto;
     }

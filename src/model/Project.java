@@ -7,19 +7,24 @@
  */
 package com.ideas2it.model;
 
+import com.ideas2it.model.Employee;
+
 import java.time.LocalDate;  
 import javax.persistence.Entity;  
 import javax.persistence.Id;  
 import javax.persistence.Table; 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue; 
+import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+import java.util.List;
+import java.util.ArrayList; 
  
 @Entity
 @Table(name = "project")
 public class Project {
     @Id 
-    @GeneratedValue
-    @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     protected int id;
     
     @Column(name = "name")
@@ -45,7 +50,13 @@ public class Project {
 
     @Column(name = "status")
     protected String status;
-   
+    
+    @OneToMany(mappedBy = "project")
+    private List<EmployeeProject> employeeProjects;
+
+    public Project() {
+    }
+
     public Project(String name, String clientName, String companyName, LocalDate startDate, String estimatedDuration, String description, 
         String technologyUsed, String status) { 
         this.name = name;

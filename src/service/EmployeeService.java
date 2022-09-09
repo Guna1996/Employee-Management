@@ -40,14 +40,12 @@ import java.time.LocalDate;
  * since 1.0
  * jls Advanced logics+
  */
-public class Service {
+public class EmployeeService {
 
     EmployeeDao employeeDao = new EmployeeDao();
-    ProjectDao projectDao = new ProjectDao();
     EmployeeProjectDao employeeProjectDao = new EmployeeProjectDao();
     EmployeeMapper employeeMapper = new EmployeeMapper();
     EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
-    ProjectMapper projectMapper = new ProjectMapper();
     RoleDao roleDao = new RoleDao();
    
     /**

@@ -28,7 +28,7 @@ import com.ideas2it.model.Role;
 @Table(name = "employee")
 public class Employee {
     @Id 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     protected int id;
     
@@ -75,6 +75,9 @@ public class Employee {
         inverseJoinColumns = { @JoinColumn(name = "role_id")}
     )
     private List<Role> roles = new ArrayList<Role>();
+
+    @OneToMany(mappedBy = "employee")
+    private List<EmployeeProject> employeeProjects;
 
     @Transient
     protected String roleName; 

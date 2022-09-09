@@ -7,55 +7,48 @@
  */
 package com.ideas2it.dao;
 
+import com.ideas2it.model.Project;
+import com.ideas2it.utils.Constant;
 import com.ideas2it.dao.BaseDao;
 import com.ideas2it.exception.CustomException;
-import com.ideas2it.model.Employee;
-import com.ideas2it.model.Role;
-import com.ideas2it.utils.Constant;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.List;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.hibernate.boot.Metadata;  
-import org.hibernate.boot.MetadataSources;  
-import org.hibernate.boot.registry.StandardServiceRegistry;  
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;    
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.Session;  
-import org.hibernate.SessionFactory;    
-import org.hibernate.Transaction;  
-  
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;  
+import org.hibernate.Transaction; 
+
 /**
-* Implementation to Insert,update and Access employee 
+* 
 **/
-public class EmployeeDao extends BaseDao {
+public class ProjectDao extends BaseDao {
      Date date = new Date(0);
+     
      /**
      * <p>
-     * This method is used to insert Trainee details
+     * 
      * </p>
      * 
      */  
-    public int insertEmployee(Employee employee) throws CustomException {
+    public int insertProject(Project project) throws CustomException {
         SessionFactory sessionFactory = databaseConnection();
-        int employeeId = 0;
+        int projectId = 0;
         Session session = null;
         try {
             session = sessionFactory.openSession();  
             Transaction transaction = session.beginTransaction();     
-            employeeId = (Integer)session.save(employee);  
+            projectId = (Integer)session.save(project);  
             transaction.commit();
-            return employeeId;        
+            return projectId;        
         } catch(Exception exception) {
             exception.printStackTrace();
-            throw new CustomException("Error occured while Inserting employee", exception);
+            throw new CustomException("Error occured while Inserting project", exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -63,19 +56,18 @@ public class EmployeeDao extends BaseDao {
         }
     } 
 
-    public List<Employee> retrieveEmployees() throws CustomException {
+    public List<Project> retrieveProjects() throws CustomException {
         SessionFactory sessionFactory = databaseConnection();
         Session session = null;  
-        List<Employee> employees = new ArrayList<Employee>();
         try {
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            employees = session.createQuery("FROM Employee where status = :status").setString("status", "active").list();
+            List<Project> projects  = projects = session.createQuery("FROM Project where status = :status").setString("status", "active").list();
             transaction.commit();
-            return employees;
+            return projects;
         } catch (Exception exception) {
             exception.printStackTrace(); 
-            throw new CustomException("Error occured while Retrieving all employees" ,exception);
+            throw new CustomException("Error occured while Retrieving all projects" ,exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -83,19 +75,18 @@ public class EmployeeDao extends BaseDao {
         }    
     }
 
-    public Employee retrieveEmployeeById(int employeeId) throws CustomException {
+    public Project retrieveProjectById(int projectId) throws CustomException {
         SessionFactory sessionFactory = databaseConnection();
         Session session = null;      
         try {  
-            String status = "active";
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction(); 
-            Employee employee = (Employee) session.createQuery("FROM Employee where status = :status and id = :id").setString("status", "active").setInteger("id", employeeId).uniqueResult();   
+            Project project = (Project) session.createQuery("FROM Project where status = :status and id = :id").setString("status", "active").setInteger("id", projectId).uniqueResult();   
             transaction.commit();
-            return employee;
+            return project;
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new CustomException("Error occured while Retrieving employee by Id", exception);
+            throw new CustomException("Error occured while Retrieving project by Id", exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -103,18 +94,17 @@ public class EmployeeDao extends BaseDao {
         }     
     }
 
-    public String updateEmployee(Employee employee) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();  
+    public String updateProject(Project project) throws CustomException {  
         Session session = null;   
         try {  
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            session.update(employee); 
+            session.update(project); 
             transaction.commit();   
             return "Updated Successfully";
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new CustomException("Error occured while Updating employee", exception);
+            throw new CustomException("Error occured while Updating project", exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -122,18 +112,17 @@ public class EmployeeDao extends BaseDao {
         }   
     }
 
-    public String deleteEmployee(Employee employee) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+    public String deleteProject(Project project) throws CustomException {
         Session session = null;   
         try {  
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction(); 
-            session.update(employee); 
+            session.update(project); 
             transaction.commit(); 
             return "Deleted Successfully";
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new CustomException("Error occured while Deleting employee by Id", exception);
+            throw new CustomException("Error occured while Deleting project by Id", exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -141,6 +130,3 @@ public class EmployeeDao extends BaseDao {
         }    
     }
 }
-   
-    
-    

@@ -5,21 +5,58 @@
  *
  *
  */
-package com.ideas2it.dto;
+package com.ideas2it.model;
 
 import java.time.LocalDate;  
+import javax.persistence.Entity;  
+import javax.persistence.*;  
+import javax.persistence.Table; 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue; 
  
-public class EmployeeProjectDto {
+@Entity
+@Table(name = "employee_project")
+public class EmployeeProject {
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
     protected int id;
+
+    @Transient
+    @Column(name = "employee_id")
     protected int employeeId;
+
+    @Transient
+    @Column(name = "project_id")
     protected int projectId;
+
+    @Column(name = "status")
     protected String status;
+
+    @Column(name = "assigned_date")
     protected LocalDate assignedDate;
+
+    @Column(name = "assigned_by")
     protected String assignedBy;
+
+    @Column(name = "employee_role")
     protected String employeeRole;
+
+    @Column(name = "relieved_date")
     protected LocalDate relievedDate;
+  
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    public EmployeeProject() {
+    }
    
-    public EmployeeProjectDto(int id, int employeeId, int projectId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
+    public EmployeeProject(int id, int employeeId, int projectId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
         this.id = id;
         this.employeeId = employeeId;
         this.projectId = projectId;
@@ -29,11 +66,8 @@ public class EmployeeProjectDto {
         this.employeeRole = employeeRole;
         this.relievedDate = relievedDate;
     }
-
-    public EmployeeProjectDto() {
-    }
  
-    public EmployeeProjectDto(int employeeId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
+    public EmployeeProject(int employeeId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
         this.employeeId = employeeId;
         this.projectId = projectId;
         this.assignedDate = assignedDate;
@@ -106,10 +140,4 @@ public class EmployeeProjectDto {
     public void setRelievedDate(LocalDate relievedDate) {
         this.relievedDate = relievedDate;
     } 
-    
-    @Override
-    public String toString() {
-        String output = String.format("%20s %20s %20s %20s %20s %20s %20s %20s\n", id, employeeId, projectId, assignedDate, assignedBy, status, employeeRole, relievedDate);    
-        return output;   
-    }
 }

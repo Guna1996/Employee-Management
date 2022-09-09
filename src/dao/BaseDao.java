@@ -17,12 +17,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDao {
-    static SessionFactory sessionFactory = null;
+    static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
-    public SessionFactory databaseConnection() {
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration().configure().buildSessionFactory();
-        }
+    public SessionFactory databaseConnection() throws CustomException{
+        try {
+            if (sessionFactory == null) {
+                sessionFactory = new Configuration().configure().buildSessionFactory();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace(); 
+            throw new CustomException("Error occured while Cofiguring database" ,exception);
+        } 
         return sessionFactory;
     }
 }

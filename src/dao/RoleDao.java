@@ -14,6 +14,7 @@ import com.ideas2it.exception.CustomException;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,15 +25,23 @@ import org.hibernate.Transaction;
 
 public class RoleDao extends BaseDao {
 
-    public Role retrieveRoleByName(String name) throws CustomException{
+    public Role retrieveRoleByName(String name) throws CustomException {
+        Session session = null;
         try {
-            Session session = sessionFactory.openSession(); 
+            SessionFactory sessionFactory = databaseConnection();
+            session = sessionFactory.openSession(); 
+            Transaction transaction = session.beginTransaction();
             List<Role> roles = session.createQuery("FROM Role where name = :name").setString("name", name).list();
+            transaction.commit();
             return roles.get(0);
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();  
-            throw new CustomException(exception.getMessage());
-        }     
+            throw new CustomException("Error occured while retrieving role by name", exception);
+        } finally {
+            if (session != null) {
+                session.close();  
+            }    
+        }
     }
 }
    

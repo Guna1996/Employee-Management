@@ -11,7 +11,9 @@ import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.dto.ProjectDto;
 import com.ideas2it.exception.CustomException;
-import com.ideas2it.service.Service;
+import com.ideas2it.service.EmployeeService;
+import com.ideas2it.service.EmployeeProjectService;
+import com.ideas2it.service.ProjectService;
 import com.ideas2it.utils.Constant;
 import com.ideas2it.utils.ValidationUtil;
 
@@ -41,7 +43,9 @@ import org.apache.log4j.Logger;
  */
 public class EmployeeController {
     private Scanner scanner = new Scanner(System.in);
-    private Service service = new Service();
+    private EmployeeService employeeService = new EmployeeService();
+    private EmployeeProjectService employeeProjectService = new EmployeeProjectService();
+    private ProjectService projectService = new ProjectService();
     private static boolean isContinue = true;
     static Logger logger = Logger.getLogger(EmployeeController.class);
  
@@ -296,7 +300,11 @@ public class EmployeeController {
                    
                     break;
                 case 8:
-                    
+                    try {
+                        manageProjects();
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     break;                 
                 default:
                     System.out.print("Thank you");
@@ -305,6 +313,62 @@ public class EmployeeController {
         } while(isDecession);
     }
    
+     public void manageProjects() throws CustomException{
+        Scanner scannerInput = new Scanner(System.in);
+        boolean isChoice = true;
+        do {
+            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n 4. update specific detail of a project\n 5. assign projects to employees\n 6. display assigned projects to employees\n 7. delete assigned employees to project\n 8. Go back\n ");  
+            int choice = scannerInput.nextInt();
+            switch (choice) {
+                case 1:
+                    try {
+                        addOrUpdateProjectDetails(Constant.ADD, Constant.PROJECT_MANAGER);
+                    } catch( CustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                case 2:
+                    try {
+                        addOrUpdateProjectDetails(Constant.UPDATE, Constant.PROJECT_MANAGER);
+                    } catch( CustomException error) {  
+                        logger.error(error.getMessage()); 
+                    } 
+                    break;
+                case 3:
+                    try {
+                        displayProjects();
+                    } catch( CustomException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
+                    break; 
+                case 4:
+                    try {
+                        updateProjectDetail(Constant.PROJECT_MANAGER);
+                    } catch( CustomException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
+                    break; 
+                 case 5:
+                    try {
+                        assignProjectToEmployees();
+                    } catch( CustomException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
+                    break;   
+                case 6:
+                    
+                    break;
+                case 7:
+                     
+                    break;              
+                default:
+                        System.out.print("Thank you");
+                        isChoice = false;
+                        break;
+            }          
+        }while (isChoice);               
+    } 
+    
     /**
      * <p>
      * This method is used to add or update Employee details
@@ -320,16 +384,14 @@ public class EmployeeController {
         String email = null;
         LocalDate dob = null;
         String roleName = null;
-        boolean isEmployeeAvailable = false;
         EmployeeDto employeeDto = new EmployeeDto();
         if (operation.equals(update)) {
             System.out.print("**Enter your employeeeId** ");
             employeeId = scannerInput.nextInt();
             employeeDto.setId(employeeId);
-            isEmployeeAvailable = service.isEmployeeAvailable(employeeId);
             roleName = validateString("enter the employee role you want to update:");
         }
-        if (operation.equals(add) || isEmployeeAvailable) {
+        if (operation.equals(add) || employeeService.isEmployeeAvailable(employeeId)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
 	    employeeDto.setFirstName(validateString("First Name:"));
 	    employeeDto.setLastName(validateString("Last Name:"));
@@ -349,18 +411,18 @@ public class EmployeeController {
             employeeDto.setStatus("active"); 
             timeDelay();
             if (operation.equals(add)) {
-                int generatedEmployeeId = service.addEmployee(employeeDto, userType);                  
+                int generatedEmployeeId = employeeService.addEmployee(employeeDto, userType);                  
                 if (generatedEmployeeId != failed) {
                     logger.info("\n1 row inserted..Employee added Successfully");
                 } else {
                     logger.info("\n0 row inserted..process failed");
                 }
             } else if (operation.equals(update)) {
-                String result = service.updateEmployee(employeeDto, roleName);
+                String result = employeeService.updateEmployee(employeeDto, roleName);
                 if (result != null) {
                     logger.info(result);
                 } else {
-                    logger.info("\nProcess FAILED..invalid email or dob");
+                    logger.info("\nProcess FAILED..invalid employee id");
                 }
             }
     
@@ -370,7 +432,7 @@ public class EmployeeController {
     }
 
     public void displayEmployeesDetails() throws CustomException {
-        List<EmployeeDto> employeeDtos = service.getEmployeesDetails();
+        List<EmployeeDto> employeeDtos = employeeService.getEmployeesDetails();
         System.out.println("---------------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
         System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
@@ -383,7 +445,7 @@ public class EmployeeController {
     }
 
     public void displayEmployeesDetailsByRoleName(String roleName) throws CustomException {
-        List<EmployeeDto> employeeDtos = service.getEmployeesDetailsByRoleName(roleName);
+        List<EmployeeDto> employeeDtos = employeeService.getEmployeesDetailsByRoleName(roleName);
         System.out.println("---------------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
         System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
@@ -399,8 +461,8 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId** ");
         int employeeId = scannerInput.nextInt();
-        if (service.isEmployeeAvailable(employeeId)) {
-            EmployeeDto employeeDto = service.getEmployeeDetailsById(employeeId);
+        if (employeeService.isEmployeeAvailable(employeeId)) {
+            EmployeeDto employeeDto = employeeService.getEmployeeDetailsById(employeeId);
             System.out.println("---------------------------------------------------------------------------------"
                 +"------------------------------------------------------------------------------------------");  
             System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
@@ -420,18 +482,222 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId you want to delete** ");
         int employeeId = scannerInput.nextInt();
-        if (service.isEmployeeAvailable(employeeId)) {
-            String isDeleted = service.deleteEmployee(employeeId);
+        if (employeeService.isEmployeeAvailable(employeeId)) {
+            String isDeleted = employeeService.deleteEmployee(employeeId);
             if (isDeleted != null) {
                 logger.info(isDeleted);
             } else {
-                logger.info("\nProcess FAILED..invalid email or dob");
+                logger.info("\nProcess FAILED..invalid employee id");
             }
         } else { 
             logger.info("employeeId not found");
         }     
     }
+   
+    public void addOrUpdateProjectDetails(String operation, String userType) throws  CustomException {
+        int failed = 0;
+        String add = "add";
+        String update = "update";
+        String email = null;
+        LocalDate dob = null;
+        int projectId = 0;
+        int employeeId = 0;
+        Scanner scannerInput = new Scanner(System.in);
+        ProjectDto projectDto = new ProjectDto();
+        if (operation.equals(update)) {
+            System.out.print("**Enter your employeeeId** ");
+            employeeId = scannerInput.nextInt();
+            System.out.print("**Enter the Project Id you want to update:");
+            projectId = scannerInput.nextInt();
+            projectDto.setId(projectId);            
+        }
+        if (operation.equals(add) || (employeeService.isEmployeeAvailable(employeeId) && projectService.isProjectAvailable(projectId))) {
+            System.out.print("Enter the Required Data to **add Project**\n"); 
+	    projectDto.setName(validateString("Project Name:"));
+	    projectDto.setClientName(validateString("Client Name:"));
+            projectDto.setCompanyName(validateString("Company Name:"));
+            try {
+	        projectDto.setStartDate(LocalDate.parse(validateString("Started Date (YYYY-MM-DD):")));
+                projectDto.setStatus(validateString("Status:"));
+                projectDto.setEstimatedDuration(validateString("Estimated Duration (in month):"));
+                projectDto.setDescription(validateString("Description :"));
+	        projectDto.setTechnologyUsed(validateString("Technology Used:"));
+            } catch(Exception error) {
+                throw new  CustomException("date parse error!!");
+            }
+            timeDelay();
+            if (operation.equals(add)) {                    
+                if(projectService.addProject(projectDto) != failed) {
+                    logger.info("\n1 row inserted..Project added Successfully");
+                } else {
+                    logger.info("\n0 row inserted..process failed");
+                }
+            } else if(operation.equals(update)) {
+                if(projectService.updateProject(projectDto) != null) {
+                    logger.info("\nProject updated SUCCESSFULLY");
+                } else {
+                    logger.info("\nProcess FAILED..invalid employee id or project id ");
+                }
+            }
     
+        } else {
+            
+            logger.info("invalid employeeId or projectId");
+        }      
+    }
+
+    public void displayProjects() throws  CustomException{
+        List<ProjectDto> projectDtos = projectService.getProjectsDetails();
+        System.out.println("---------------------------------------------------------------------------------"
+            +"------------------------------------------------------------------------------------------");  
+        System.out.format(" %17s %17s %17s %17s %17s %17s %17s %17s %17s\n", "ID", "NAME", "CLIENT_NAME", 
+            "COMPANY_NAME", "START DATE", "ESTIMATED_DURATION", "ESTIMATED_BUDGET", "TECHNOLOGY_USED", "STATUS"); 
+        System.out.println("------------------------------------------------------------------------------------"
+            +"---------------------------------------------------------------------------------------");
+        for (ProjectDto projectDto: projectDtos) {
+            System.out.println(projectDto);  
+        } 
+    }
+
+    public void updateProjectDetail(String userType) throws  CustomException{
+        int isUpdated = 0;
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your employeeeId** ");
+        int employeeId = scannerInput.nextInt();
+        if (employeeService.isEmployeeAvailable(employeeId)) {
+            System.out.print("**Enter the Project Id you want to update:"); 
+            int projectId = scannerInput.nextInt();
+            System.out.print("select the data you want to update\n 1.Name\n 2.Client Name\n 3. Company Name\n"
+                + " 4. Estimated Duration\n 5. Description\n 6. Technology Used\n 7. Status\n");
+            int option = scannerInput.nextInt();
+            switch(option) {
+                case 1:
+                    String name = validateString("Name:");
+                    isUpdated = projectService.updateProjectDetail("name", name, projectId);
+                    break;
+                case 2:
+                    String clientName = validateString("Client Name:");
+                    isUpdated = projectService.updateProjectDetail("client_name", clientName, projectId); 
+                    break;
+                case 3:
+                    String CompanyName = validateString("Company Name:");
+                    isUpdated = projectService.updateProjectDetail("company_name", CompanyName, projectId); 
+                    break;
+                case 4:
+                    String estimatedDuration = validateString("Estimated Duration (in month):");
+                    isUpdated = projectService.updateProjectDetail("estimated_duration", estimatedDuration, projectId);
+                    break;
+                case 5:
+                    String estimatedBudget = validateString("Description:");
+                    projectService.updateProjectDetail("estimated_budget", estimatedBudget, projectId);
+                    break;
+                case 6:
+                    String technologyUsed = validateString("Technology Used :");
+                    isUpdated = projectService.updateProjectDetail("technology_used", technologyUsed, projectId);
+                   break;
+                case 7:
+                    String Status = validateString("Status  :");
+                    isUpdated = projectService.updateProjectDetail("status", Status, projectId);
+                    break;
+                default:
+                    break;
+            }    
+            if (isUpdated >= 1) {
+                logger.info("\nEmployee detail updated SUCCESSFULLY");
+            } else {
+                logger.info("\nProcess FAILED..");
+            }
+        } else {
+            logger.info("\nInvalid Email or Dob"); 
+        }  
+    }
+
+    public void deleteProject() throws CustomException {
+        int failed = 0;
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your projectId you want to delete** ");
+        int projectId = scannerInput.nextInt();
+        if (projectService.isProjectAvailable(projectId)) {
+            String isDeleted = projectService.deleteProject(projectId);
+            if (isDeleted != null) {
+                logger.info(isDeleted);
+            } else {
+                logger.info("\nProcess FAILED..invalid project id");
+            }
+        } else { 
+            logger.info("projectId not found");
+        }     
+    }
+    
+    public void assignProjectToEmployees() throws CustomException{
+        List<EmployeeProjectDto> assignedEmployeesToProjectDto = new ArrayList<EmployeeProjectDto>();
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your employeeeId** ");
+        int employeeId = scannerInput.nextInt();
+        if (employeeService.isEmployeeAvailable(employeeId)) {
+            System.out.print("Enter the Project Id: ");
+            int projectId = scannerInput.nextInt();  
+         // if (!assignedProjectsToEmployees.containsKey(projectId)) {   
+                System.out.print("Enter the number of Employees you want to Assign: ");
+                int number = scanner.nextInt();
+                for (int index=0; index<number;index++) {
+                    EmployeeProjectDto employeeProjectDto = new EmployeeProjectDto();
+                    System.out.print("Enter the Employee Id: ");
+                    int assignedEmployeeId = scanner.nextInt();
+                    employeeProjectDto.setEmployeeId(assignedEmployeeId);
+                    employeeProjectDto.setProjectId(projectId);
+                    employeeProjectDto.setAssignedDate(LocalDate.parse(validateString("Assigned Date (YYYY-MM-DD):")));
+                    employeeProjectDto.setEmployeeRole(validateString("Employee Role :"));
+                    employeeProjectDto.setRelievedDate(LocalDate.parse(validateString("Relieved Date (YYYY-MM-DD):")));                  
+                    assignedEmployeesToProjectDto.add(employeeProjectDto);
+                }
+                if (true) {      
+                    employeeProjectService.assignProjectToEmployees(assignedEmployeesToProjectDto);
+                    System.out.print("Assigned Successfully");
+                } else {
+                    System.out.print("invalid employee ID!!");
+                }
+         // } else {
+         //     System.out.print("This Employee already assigned try again!");
+         // }
+        } else {
+            System.out.print("invalid login id or password");
+        }
+    }  
+
+    /* public void displayAssignedProjectsToEmployees() throws CustomException{
+        List<EmployeeProjectDto> assignedEmployeesDto = service.getAssignedProjectsToEmployees();
+        System.out.println("---------------------------------------------------------------------------------"
+            +"------------------------------------------------------------------------------------------");  
+        System.out.format("%20s %20s %20s %20s %20s %20s %20s %20s\n", "ID", "EMPLOYEE ID", "PROJECT ID", 
+            "ASSIGNED ON", "ASSIGNED BY", "STATUS", "EMPLOYEE ROLE", "RELIEVED DATE"); 
+        System.out.println("------------------------------------------------------------------------------------"
+            +"---------------------------------------------------------------------------------------");
+        for (EmployeeProjectDto employeeProjectDto: assignedEmployeesDto) {
+            System.out.println(employeeProjectDto);  
+        } 
+    }  
+
+    public void deleteAssignedEmployeeToProject(String userType) throws CustomException{
+        int failed = 0;
+        System.out.print("**Enter your email and Dob to Login** ");
+        String employeeEmail = validateString("Email Id:");
+        LocalDate employeeDob = LocalDate.parse(validateString("dob (YYYY-MM-DD):")); 
+        if (service.checkIsEmployeeAvailable(employeeEmail, employeeDob, Constant.PROJECT_MANAGER)) {
+            System.out.print("Enter the Employee Id you want to delete: ");
+            int employeeId = scanner.nextInt();
+            System.out.print("Enter the Project Id you want to delete: ");
+            int projectId = scanner.nextInt();
+            if (service.deleteAssignedEmployeeToProjectById(employeeId, projectId) != failed) {
+                logger.info("\n1 row deleted..Employee deleted Successfully");
+            } else {
+                logger.info("\n0 row deleted..process failed");
+            }
+        } else {     
+            logger.info("invalid email or dob");
+        }   
+    }      
+      */
     /**
      * <p>
      * This method is used to validate names while getting input
@@ -487,7 +753,7 @@ public class EmployeeController {
     public void timeDelay() {
         try {
            System.out.print("Processing");
-           Thread.sleep(500); // Just to give the user a chance to see "hello". 
+           Thread.sleep(500);  
            System.out.print(".");
            Thread.sleep(500);
            System.out.print(".");
