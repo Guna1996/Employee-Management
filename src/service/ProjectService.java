@@ -65,6 +65,16 @@ public class ProjectService {
         return projectDtos;         
     }
 
+    public ProjectDto getProjectsDetailsById(int projectId) throws CustomException {
+        Project project = projectDao.retrieveProjectById(projectId);
+        ProjectDto projectDto = projectMapper.toDto(project);
+        return projectDto;         
+    }
+
+     public Project getProjectToViewAssignedEmployees(int projectId) throws CustomException {
+        return projectDao.retrieveProjectById(projectId);        
+    }
+
     public boolean isProjectAvailable(int projectId) throws CustomException {
         Project project = projectDao.retrieveProjectById(projectId);
         if (project != null) {

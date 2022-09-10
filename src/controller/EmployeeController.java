@@ -317,7 +317,7 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         boolean isChoice = true;
         do {
-            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n 4. update specific detail of a project\n 5. assign projects to employees\n 6. display assigned projects to employees\n 7. delete assigned employees to project\n 8. Go back\n ");  
+            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n 4. update specific detail of a project\n 5. assign projects to employees\n 6. display assigned projects to employees\n 7. display employees assigned to project\n 8. Go back\n ");  
             int choice = scannerInput.nextInt();
             switch (choice) {
                 case 1:
@@ -356,10 +356,18 @@ public class EmployeeController {
                     }  
                     break;   
                 case 6:
-                    
+                    try {
+                        displayAssignedProjectsToEmployees();
+                    } catch( CustomException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
                     break;
                 case 7:
-                     
+                    try {
+                        displayEmployeesAssignedToProject();
+                    } catch( CustomException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }  
                     break;              
                 default:
                         System.out.print("Thank you");
@@ -634,9 +642,10 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId** ");
         int employeeId = scannerInput.nextInt();
-        if (employeeService.isEmployeeAvailable(employeeId)) {
-            System.out.print("Enter the Project Id: ");
-            int projectId = scannerInput.nextInt();  
+        String email = validateString("Email Id:");
+        System.out.print("Enter the Project Id: ");
+        int projectId = scannerInput.nextInt();  
+        if (employeeService.isEmployeeAvailable(employeeId) && projectService.isProjectAvailable(projectId)) {
          // if (!assignedProjectsToEmployees.containsKey(projectId)) {   
                 System.out.print("Enter the number of Employees you want to Assign: ");
                 int number = scanner.nextInt();
@@ -646,6 +655,8 @@ public class EmployeeController {
                     int assignedEmployeeId = scanner.nextInt();
                     employeeProjectDto.setEmployeeId(assignedEmployeeId);
                     employeeProjectDto.setProjectId(projectId);
+                    employeeProjectDto.setAssignedBy(email);
+                    employeeProjectDto.setStatus(validateString("Status:"));
                     employeeProjectDto.setAssignedDate(LocalDate.parse(validateString("Assigned Date (YYYY-MM-DD):")));
                     employeeProjectDto.setEmployeeRole(validateString("Employee Role :"));
                     employeeProjectDto.setRelievedDate(LocalDate.parse(validateString("Relieved Date (YYYY-MM-DD):")));                  
@@ -661,12 +672,12 @@ public class EmployeeController {
          //     System.out.print("This Employee already assigned try again!");
          // }
         } else {
-            System.out.print("invalid login id or password");
+            System.out.print("invalid employeeId or projectId");
         }
     }  
 
-    /* public void displayAssignedProjectsToEmployees() throws CustomException{
-        List<EmployeeProjectDto> assignedEmployeesDto = service.getAssignedProjectsToEmployees();
+    public void displayAssignedProjectsToEmployees() throws CustomException{
+        List<EmployeeProjectDto> assignedEmployeesDto = employeeProjectService.getassignedProjectToEmployees();
         System.out.println("---------------------------------------------------------------------------------"
             +"------------------------------------------------------------------------------------------");  
         System.out.format("%20s %20s %20s %20s %20s %20s %20s %20s\n", "ID", "EMPLOYEE ID", "PROJECT ID", 
@@ -678,7 +689,26 @@ public class EmployeeController {
         } 
     }  
 
-    public void deleteAssignedEmployeeToProject(String userType) throws CustomException{
+    public void displayEmployeesAssignedToProject() throws CustomException{
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your projectId** ");
+        int projectId = scannerInput.nextInt();
+        if (projectService.isProjectAvailable(projectId)) {
+            List<EmployeeDto> employeeDtos = employeeProjectService.getEmployeesDetailsByProjectId(projectId);
+            System.out.println("---------------------------------------------------------------------------------"
+                +"------------------------------------------------------------------------------------------");  
+            System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
+                "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
+            System.out.println("------------------------------------------------------------------------------------"
+                +"---------------------------------------------------------------------------------------");
+            for (EmployeeDto employeeDto: employeeDtos) {
+                System.out.println(employeeDto);  
+            } 
+        }
+    }  
+
+
+   /* public void deleteAssignedEmployeeToProject(String userType) throws CustomException{
         int failed = 0;
         System.out.print("**Enter your email and Dob to Login** ");
         String employeeEmail = validateString("Email Id:");

@@ -8,9 +8,9 @@
 package com.ideas2it.service;
 
 
-import com.ideas2it.dao.EmployeeDao;
+import com.ideas2it.service.EmployeeService;
 import com.ideas2it.dao.EmployeeProjectDao;
-import com.ideas2it.dao.ProjectDao;
+import com.ideas2it.service.ProjectService;
 import com.ideas2it.dao.RoleDao;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.EmployeeProjectDto;
@@ -42,7 +42,9 @@ import java.time.LocalDate;
  */
 public class EmployeeProjectService {
 
-    EmployeeDao employeeDao = new EmployeeDao();
+    EmployeeService employeeService = new EmployeeService();
+    EmployeeMapper employeeMapper = new EmployeeMapper();
+    ProjectService projectService = new ProjectService();
     EmployeeProjectDao employeeProjectDao = new EmployeeProjectDao();
     EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
    
@@ -57,9 +59,38 @@ public class EmployeeProjectService {
     public boolean assignProjectToEmployees(List<EmployeeProjectDto> assignedEmployeesToProjectDto) throws CustomException {
         List<EmployeeProject> assignedEmployeesToProject = new ArrayList<EmployeeProject>();
         for (EmployeeProjectDto employeeProjectDto: assignedEmployeesToProjectDto) {
+            EmployeeDto employeeDto = employeeService.getEmployeeDetailsById(employeeProjectDto.getEmployeeId()); 
+            employeeProjectDto.setEmployeeDto(employeeDto);
+            ProjectDto projectDto = projectService.getProjectsDetailsById(employeeProjectDto.getProjectId());
+            employeeProjectDto.setProjectDto(projectDto);
             EmployeeProject employeeProject = employeeProjectMapper.fromDto(employeeProjectDto);
             assignedEmployeesToProject.add(employeeProject);
         }  
         return employeeProjectDao.assignProjectToEmployees(assignedEmployeesToProject);
-    }  
+    }
+
+    public List<EmployeeProjectDto> getassignedProjectToEmployees() throws CustomException{
+        List<EmployeeProject> employeesProjects = employeeProjectDao.retrieveAssignedProjectsToEmployees();
+        List<EmployeeProjectDto> employeesProjectsDto = new ArrayList<EmployeeProjectDto>();
+        for (EmployeeProject employeeProject: employeesProjects) {
+            employeeProject.setEmployeeId(employeeProject.getEmployee().getId());
+            employeeProject.setProjectId(employeeProject.getProject().getId());
+            EmployeeProjectDto employeeProjectDto = employeeProjectMapper.toDto(employeeProject);
+            employeesProjectsDto.add(employeeProjectDto);
+        }  
+        return employeesProjectsDto;         
+    }
+  
+    public List<EmployeeDto> getEmployeesDetailsByProjectId(int projectId) throws CustomException {
+        List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
+        Project project = projectService.getProjectToViewAssignedEmployees(projectId);
+        List<EmployeeProject> employeesAssignedToProject = project.getEmployeesAssignedToProject();
+        for (EmployeeProject employeeProject: employeesAssignedToProject) {
+            Employee employee = employeeProject.getEmployee();
+            employee.setRoleName(employee.getRole().get(0).getName());
+            EmployeeDto employeeDto = employeeMapper.toDto(employee);
+            employeeDtos.add(employeeDto);
+        }  
+        return employeeDtos;
+    }        
 }

@@ -16,7 +16,7 @@ enum Gender{
 public class ValidationUtil {
     static int count = 8;
     static String company = "I2I";
-    public static String AMOUNT_REGEX = "[0-9][0-9]";
+    public static String AMOUNT_REGEX = "[0-9]";
     public static String PHONE_NUMBER_REGEX = "(0/91)?[7-9][0-9]{9}";
     public static String EMAIL_REGEX = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";   
     public static String NAME_REGEX = "^[a-zA-Z]*$";

@@ -23,11 +23,9 @@ public class EmployeeProject {
     protected int id;
 
     @Transient
-    @Column(name = "employee_id")
     protected int employeeId;
 
     @Transient
-    @Column(name = "project_id")
     protected int projectId;
 
     @Column(name = "status")
@@ -45,11 +43,11 @@ public class EmployeeProject {
     @Column(name = "relieved_date")
     protected LocalDate relievedDate;
   
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
 
@@ -65,9 +63,10 @@ public class EmployeeProject {
         this.status = status;
         this.employeeRole = employeeRole;
         this.relievedDate = relievedDate;
+        
     }
  
-    public EmployeeProject(int employeeId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
+    public EmployeeProject(LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate, Employee employee, Project project) { 
         this.employeeId = employeeId;
         this.projectId = projectId;
         this.assignedDate = assignedDate;
@@ -75,6 +74,8 @@ public class EmployeeProject {
         this.status = status;
         this.employeeRole = employeeRole;
         this.relievedDate = relievedDate;
+        this.employee = employee;
+        this.project = project;
     }
 
     public int getId() {
@@ -107,6 +108,23 @@ public class EmployeeProject {
 
     public LocalDate getRelievedDate() {
         return relievedDate;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public void setId(int id) {

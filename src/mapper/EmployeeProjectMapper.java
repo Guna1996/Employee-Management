@@ -8,13 +8,20 @@
 package com.ideas2it.mapper;
 
 import com.ideas2it.model.EmployeeProject;
+import com.ideas2it.model.Employee;
+import com.ideas2it.model.Project;
 import com.ideas2it.dto.EmployeeProjectDto;
+import com.ideas2it.mapper.EmployeeMapper;
+import com.ideas2it.mapper.ProjectMapper;
  
 public class EmployeeProjectMapper {
-    
+    EmployeeMapper employeeMapper = new EmployeeMapper();
+    ProjectMapper projectMapper = new ProjectMapper();  
     public EmployeeProject fromDto(EmployeeProjectDto employeeProjectDto) {
-        EmployeeProject employeeProject = new EmployeeProject(employeeProjectDto.getEmployeeId(), employeeProjectDto.getAssignedDate(),
-            employeeProjectDto.getAssignedBy(), employeeProjectDto.getStatus(), employeeProjectDto.getEmployeeRole(), employeeProjectDto.getRelievedDate());
+        Employee employee = employeeMapper.fromDtoId(employeeProjectDto.getEmployeeDto());
+        Project project = projectMapper.fromDtoId(employeeProjectDto.getProjectDto());
+        EmployeeProject employeeProject = new EmployeeProject(employeeProjectDto.getAssignedDate(),
+            employeeProjectDto.getAssignedBy(), employeeProjectDto.getStatus(), employeeProjectDto.getEmployeeRole(), employeeProjectDto.getRelievedDate() ,employee ,project);
         return employeeProject;
     }
 

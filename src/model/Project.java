@@ -17,6 +17,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.*;
 import java.util.List;
+import java.util.List;
 import java.util.ArrayList; 
  
 @Entity
@@ -51,8 +52,8 @@ public class Project {
     @Column(name = "status")
     protected String status;
     
-    @OneToMany(mappedBy = "project")
-    private List<EmployeeProject> employeeProjects;
+    @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
+    private List<EmployeeProject> employeesAssignedToProject;
 
     public Project() {
     }
@@ -106,6 +107,10 @@ public class Project {
         return estimatedDuration;
     }
 
+    public List<EmployeeProject> getEmployeesAssignedToProject() {
+        return employeesAssignedToProject;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -117,6 +122,10 @@ public class Project {
     public String getStatus() {
         return status;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }    
 
     public void setName(String name) {
         this.name = name;

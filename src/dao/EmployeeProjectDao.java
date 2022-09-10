@@ -62,12 +62,24 @@ public class EmployeeProjectDao extends BaseDao {
         }
     } 
 
-    public void retrieveAssignedProjectsToEmployees() throws CustomException{
-      
-    }
-
-    public void deleteAssignedEmployeeToProjectById() throws CustomException {
-                  
+    public List<EmployeeProject> retrieveAssignedProjectsToEmployees() throws CustomException {
+        SessionFactory sessionFactory = databaseConnection();
+        Session session = null;  
+        List<EmployeeProject> employeesProject = new ArrayList<EmployeeProject>();
+        try {
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            employeesProject = session.createQuery("FROM EmployeeProject where status = :status").setString("status", "active").list();
+            transaction.commit();
+            return employeesProject;
+        } catch (Exception exception) {
+            exception.printStackTrace(); 
+            throw new CustomException("Error occured while Retrieving all assigned employees to project" ,exception);
+        } finally {
+            if (session != null) {
+                session.close();  
+            }   
+        }    
     }
 }
    

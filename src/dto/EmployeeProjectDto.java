@@ -7,8 +7,11 @@
  */
 package com.ideas2it.dto;
 
-import java.time.LocalDate;  
- 
+import com.ideas2it.dto.EmployeeDto;
+import com.ideas2it.dto.ProjectDto;
+
+import java.time.LocalDate; 
+  
 public class EmployeeProjectDto {
     protected int id;
     protected int employeeId;
@@ -18,8 +21,10 @@ public class EmployeeProjectDto {
     protected String assignedBy;
     protected String employeeRole;
     protected LocalDate relievedDate;
+    protected EmployeeDto employeeDto;
+    protected ProjectDto projectDto;
    
-    public EmployeeProjectDto(int id, int employeeId, int projectId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
+    public EmployeeProjectDto(int id, int projectId, int employeeId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
         this.id = id;
         this.employeeId = employeeId;
         this.projectId = projectId;
@@ -33,9 +38,7 @@ public class EmployeeProjectDto {
     public EmployeeProjectDto() {
     }
  
-    public EmployeeProjectDto(int employeeId, LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
-        this.employeeId = employeeId;
-        this.projectId = projectId;
+    public EmployeeProjectDto(LocalDate assignedDate, String assignedBy, String status, String employeeRole, LocalDate relievedDate) { 
         this.assignedDate = assignedDate;
         this.assignedBy = assignedBy;
         this.status = status;
@@ -73,6 +76,23 @@ public class EmployeeProjectDto {
 
     public LocalDate getRelievedDate() {
         return relievedDate;
+    }
+
+    public EmployeeDto getEmployeeDto() {
+        return employeeDto;
+    }
+
+    public ProjectDto getProjectDto() {
+        return projectDto;
+    }
+
+    public void setProjectDto(ProjectDto projectDto) {
+        this.projectDto = projectDto;
+    }
+
+
+    public void setEmployeeDto(EmployeeDto employeeDto) {
+        this.employeeDto = employeeDto;
     }
 
     public void setId(int id) {

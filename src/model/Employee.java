@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import java.util.List;
+
 import java.time.LocalDate;
 import javax.persistence.Entity;  
 import javax.persistence.*; 
@@ -21,8 +23,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.GeneratedValue;
-import com.ideas2it.model.Role;
-   
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import com.ideas2it.model.Role;   
  
 @Entity
 @Table(name = "employee")
@@ -77,6 +80,7 @@ public class Employee {
     private List<Role> roles = new ArrayList<Role>();
 
     @OneToMany(mappedBy = "employee")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<EmployeeProject> employeeProjects;
 
     @Transient
@@ -179,11 +183,22 @@ public class Employee {
      public List<Role> getRole() {
         return roles;
     }
+
+      public List<EmployeeProject> getListEmployeeProject() {
+        return employeeProjects;
+    }
+    
+    public void setListEmployeeProject(List<EmployeeProject> employeeProjects) {
+        this.employeeProjects = employeeProjects;
+    }
     
     public void setRole(List<Role> roles) {
         this.roles = roles;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

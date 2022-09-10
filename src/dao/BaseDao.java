@@ -17,7 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDao {
-    static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    static SessionFactory sessionFactory = null;
 
     public SessionFactory databaseConnection() throws CustomException{
         try {
