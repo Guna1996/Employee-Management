@@ -7,19 +7,20 @@
  */
 package com.ideas2it.dao;
 
-import com.ideas2it.utils.Constant;
-import com.ideas2it.exception.CustomException;
 
-import org.hibernate.SessionFactory; 
-import org.hibernate.cfg.Configuration;
+import com.ideas2it.exception.CustomException;
+import com.ideas2it.utils.Constant;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import org.hibernate.cfg.Configuration;
+import org.hibernate.SessionFactory; 
+
 public class BaseDao {
     static SessionFactory sessionFactory = null;
 
-    public SessionFactory databaseConnection() throws CustomException{
+    public SessionFactory databaseConnection() throws CustomException {
         try {
             if (sessionFactory == null) {
                 sessionFactory = new Configuration().configure().buildSessionFactory();

@@ -7,10 +7,7 @@
  */
 package com.ideas2it.service;
 
-
-import com.ideas2it.service.EmployeeService;
 import com.ideas2it.dao.EmployeeProjectDao;
-import com.ideas2it.service.ProjectService;
 import com.ideas2it.dao.RoleDao;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.EmployeeProjectDto;
@@ -23,6 +20,8 @@ import com.ideas2it.model.Employee;
 import com.ideas2it.model.EmployeeProject;
 import com.ideas2it.model.Project;
 import com.ideas2it.model.Role;
+import com.ideas2it.service.EmployeeService;
+import com.ideas2it.service.ProjectService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,19 +43,12 @@ public class EmployeeProjectService {
 
     EmployeeService employeeService = new EmployeeService();
     EmployeeMapper employeeMapper = new EmployeeMapper();
+    ProjectMapper projectMapper = new ProjectMapper();
     ProjectService projectService = new ProjectService();
     EmployeeProjectDao employeeProjectDao = new EmployeeProjectDao();
     EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
    
-    /**
-     * <p>
-     * 
-     * </p>
-     * 
-     * @parm 
-     */     
-
-    public boolean assignProjectToEmployees(List<EmployeeProjectDto> assignedEmployeesToProjectDto) throws CustomException {
+    public String assignProjectToEmployees(List<EmployeeProjectDto> assignedEmployeesToProjectDto) throws CustomException {
         List<EmployeeProject> assignedEmployeesToProject = new ArrayList<EmployeeProject>();
         for (EmployeeProjectDto employeeProjectDto: assignedEmployeesToProjectDto) {
             EmployeeDto employeeDto = employeeService.getEmployeeDetailsById(employeeProjectDto.getEmployeeId()); 
@@ -92,5 +84,17 @@ public class EmployeeProjectService {
             employeeDtos.add(employeeDto);
         }  
         return employeeDtos;
-    }        
+    }
+
+    public List<ProjectDto> getProjectsDetailsByEmployeeId(int employeeId) throws CustomException {
+        List<ProjectDto> projectDtos = new ArrayList<ProjectDto>();
+        Employee employee = employeeService.getEmployeeToViewAssignedProjects(employeeId);
+        List<EmployeeProject> projectsAssignedToEmployee = employee.getProjectsAssignedToEmployee();
+        for (EmployeeProject employeeProject: projectsAssignedToEmployee) {
+            Project project = employeeProject.getProject();
+            ProjectDto projectDto = projectMapper.toDto(project);
+            projectDtos.add(projectDto);
+        }  
+        return projectDtos;
+    }                
 }

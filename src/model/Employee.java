@@ -7,69 +7,89 @@
  */
 package com.ideas2it.model;
 
-import java.util.ArrayList;
+import com.ideas2it.model.Role; 
 
-import java.util.List;
-
-import java.util.List;
-
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import javax.persistence.Entity;  
-import javax.persistence.*; 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.List;
+
 import javax.persistence.CascadeType;
-import javax.persistence.Table; 
 import javax.persistence.Column;
+import javax.persistence.Entity;  
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id; 
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.JoinColumn;
-import javax.persistence.GeneratedValue;
+import javax.persistence.OneToMany;
+import javax.persistence.Table; 
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.ColumnDefault;  
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import com.ideas2it.model.Role;   
+import org.hibernate.annotations.UpdateTimestamp;
  
 @Entity
 @Table(name = "employee")
 public class Employee {
+
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    protected int id;
+    private int id;
     
     @Column(name = "first_name")
-    protected String firstName;
+    private String firstName;
 
     @Column(name = "last_name")
-    protected String lastName;
+    private String lastName;
   
     @Column(name = "dob")
-    protected LocalDate dob;
+    private LocalDate dob;
 
     @Column(name = "gender")
-    protected String gender;
+    private String gender;
 
     @Column(name = "date_of_joining")
-    protected LocalDate dateOfJoining;
+    private LocalDate dateOfJoining;
 
     @Column(name = "batch")
-    protected String batch;
+    private String batch;
 
     @Column(name = "designation")
-    protected String designation;
+    private String designation;
 
     @Column(name = "city")
-    protected String city;
+    private String city;
 
     @Column(name = "father_name")
-    protected String fatherName;
+    private String fatherName;
 
     @Column(name = "email")
-    protected String email;
+    private String email;
 
     @Column(name = "phone_number")
-    protected String phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "status")
-    protected String status;
+    private String status;
+ 
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_date")
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "updated_date")
+    private Timestamp updatedAt;
    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -81,10 +101,10 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<EmployeeProject> employeeProjects;
+    private List<EmployeeProject> projectsAssignedToEmployee;
 
     @Transient
-    protected String roleName; 
+    private String roleName; 
 
     public Employee() {
     }
@@ -184,12 +204,12 @@ public class Employee {
         return roles;
     }
 
-      public List<EmployeeProject> getListEmployeeProject() {
-        return employeeProjects;
+      public List<EmployeeProject> getProjectsAssignedToEmployee() {
+        return projectsAssignedToEmployee;
     }
     
-    public void setListEmployeeProject(List<EmployeeProject> employeeProjects) {
-        this.employeeProjects = employeeProjects;
+    public void setProjectsAssignedToEmployee(List<EmployeeProject> projectsAssignedToEmployee) {
+        this.projectsAssignedToEmployee = projectsAssignedToEmployee;
     }
     
     public void setRole(List<Role> roles) {

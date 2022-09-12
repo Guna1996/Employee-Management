@@ -8,19 +8,21 @@
 package com.ideas2it.dao;
 
 import com.ideas2it.dao.BaseDao;
-import com.ideas2it.model.Role;
-import com.ideas2it.model.Employee;
 import com.ideas2it.exception.CustomException;
+import com.ideas2it.model.Employee;
+import com.ideas2it.model.Role;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction; 
 
 public class RoleDao extends BaseDao {

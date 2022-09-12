@@ -53,7 +53,7 @@ public class EmployeeDao extends BaseDao {
             employeeId = (Integer)session.save(employee);  
             transaction.commit();
             return employeeId;        
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             throw new CustomException("Error occured while Inserting employee", exception);
         } finally {

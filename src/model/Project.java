@@ -7,18 +7,25 @@
  */
 package com.ideas2it.model;
 
-import com.ideas2it.model.Employee;
+import com.ideas2it.model.Employee;  
 
+import java.sql.Timestamp;
 import java.time.LocalDate;  
-import javax.persistence.Entity;  
-import javax.persistence.Id;  
-import javax.persistence.Table; 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.*;
-import java.util.List;
-import java.util.List;
 import java.util.ArrayList; 
+import java.util.List;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;  
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;  
+import javax.persistence.OneToMany;
+import javax.persistence.Table; 
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp; 
  
 @Entity
 @Table(name = "project")
@@ -26,31 +33,41 @@ public class Project {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    protected int id;
+    private int id;
     
     @Column(name = "name")
-    protected String name;
+    private String name;
 
     @Column(name = "client_name")
-    protected String clientName;
+    private String clientName;
 
     @Column(name = "company_name")
-    protected String companyName;
+    private String companyName;
 
     @Column(name = "start_name")
-    protected LocalDate startDate;
+    private LocalDate startDate;
 
     @Column(name = "estimated_duration")
-    protected String estimatedDuration;
+    private String estimatedDuration;
 
     @Column(name = "description")
-    protected String description;
+    private String description;
 
     @Column(name = "technology_used")
-    protected String technologyUsed;
+    private String technologyUsed;
 
     @Column(name = "status")
-    protected String status;
+    private String status;
+    
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_date")
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "updated_date")
+    private Timestamp updatedAt;
     
     @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
     private List<EmployeeProject> employeesAssignedToProject;
@@ -137,6 +154,10 @@ public class Project {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public void setEmployeesAssignedToProject(List<EmployeeProject> employeesAssignedToProject) {
+        this.employeesAssignedToProject = employeesAssignedToProject;
     }
 
     public void setStartDate(LocalDate startDate) {

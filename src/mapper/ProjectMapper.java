@@ -7,8 +7,8 @@
  */
 package com.ideas2it.mapper;
 
-import com.ideas2it.model.Project;
 import com.ideas2it.dto.ProjectDto;
+import com.ideas2it.model.Project;
  
 public class ProjectMapper {
     

@@ -7,12 +7,22 @@
  */
 package com.ideas2it.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;  
-import javax.persistence.Entity;  
-import javax.persistence.*;  
-import javax.persistence.Table; 
+
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue; 
+import javax.persistence.Entity;  
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;  
+import javax.persistence.Table; 
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.ColumnDefault; 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
  
 @Entity
 @Table(name = "employee_project")
@@ -20,28 +30,38 @@ public class EmployeeProject {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false, columnDefinition="INT NOT NULL AUTO_INCREMENT")
-    protected int id;
+    private int id;
 
     @Transient
-    protected int employeeId;
+    private int employeeId;
 
     @Transient
-    protected int projectId;
+    private int projectId;
 
     @Column(name = "status")
-    protected String status;
+    private String status;
 
     @Column(name = "assigned_date")
-    protected LocalDate assignedDate;
+    private LocalDate assignedDate;
 
     @Column(name = "assigned_by")
-    protected String assignedBy;
+    private String assignedBy;
 
     @Column(name = "employee_role")
-    protected String employeeRole;
+    private String employeeRole;
 
     @Column(name = "relieved_date")
-    protected LocalDate relievedDate;
+    private LocalDate relievedDate;
+
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_date")
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "updated_date")
+    private Timestamp updatedAt;
   
     @ManyToOne
     @JoinColumn(name = "employee_id")

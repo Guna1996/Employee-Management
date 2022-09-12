@@ -23,6 +23,7 @@ import com.ideas2it.model.Employee;
 import com.ideas2it.model.EmployeeProject;
 import com.ideas2it.model.Project;
 import com.ideas2it.model.Role;
+import com.ideas2it.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class ProjectService {
         return projectDto;         
     }
 
-     public Project getProjectToViewAssignedEmployees(int projectId) throws CustomException {
+    public Project getProjectToViewAssignedEmployees(int projectId) throws CustomException {
         return projectDao.retrieveProjectById(projectId);        
     }
 
@@ -84,9 +85,16 @@ public class ProjectService {
         }
     }
 
+    public String deleteEmployeesAssignedToProjectByProjectId(int projectId) throws CustomException {
+        List<EmployeeProject> employeesAssignedToProject = new ArrayList<EmployeeProject>();
+        Project project = projectDao.retrieveProjectById(projectId);
+        project.setEmployeesAssignedToProject(employeesAssignedToProject);
+        return projectDao.deleteEmployeesAssignedToProject(project);
+    }
+
     public String deleteProject(int projectId) throws CustomException{
         Project project = projectDao.retrieveProjectById(projectId);
-        project.setStatus("inactive");  
+        project.setStatus(Constants.INACTIVE);  
         return projectDao.deleteProject(project); 
     }  
 

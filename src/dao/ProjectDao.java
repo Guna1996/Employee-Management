@@ -7,18 +7,18 @@
  */
 package com.ideas2it.dao;
 
-import com.ideas2it.model.Project;
-import com.ideas2it.utils.Constant;
 import com.ideas2it.dao.BaseDao;
 import com.ideas2it.exception.CustomException;
+import com.ideas2it.model.Project;
+import com.ideas2it.utils.Constant;
 
 import java.sql.Connection;
-import java.util.List;
-import java.util.ArrayList;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;  
@@ -113,6 +113,24 @@ public class ProjectDao extends BaseDao {
     }
 
     public String deleteProject(Project project) throws CustomException {
+        Session session = null;   
+        try {  
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction(); 
+            session.update(project); 
+            transaction.commit(); 
+            return "Deleted Successfully";
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new CustomException("Error occured while Deleting project by Id", exception);
+        } finally {
+            if (session != null) {
+                session.close();  
+            }       
+        }    
+    }
+
+    public String deleteEmployeesAssignedToProject(Project project) throws CustomException {
         Session session = null;   
         try {  
             session = sessionFactory.openSession();

@@ -23,11 +23,11 @@ import com.ideas2it.model.Employee;
 import com.ideas2it.model.EmployeeProject;
 import com.ideas2it.model.Project;
 import com.ideas2it.model.Role;
+import com.ideas2it.utils.Constants;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
-
 
 /**
  * The {@code Service} class contains the method for trainees, trainers and Human Resource Services. access 
@@ -47,14 +47,7 @@ public class EmployeeService {
     EmployeeMapper employeeMapper = new EmployeeMapper();
     EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
     RoleDao roleDao = new RoleDao();
-   
-    /**
-     * <p>
-     * 
-     * </p>
-     * 
-     * @parm 
-     */     
+    
     public int addEmployee(EmployeeDto employeeDto, String roleName) throws CustomException{
         List<Role> roles = new ArrayList<Role>();
         Employee employee = employeeMapper.fromDto(employeeDto);
@@ -63,7 +56,6 @@ public class EmployeeService {
         employee.setRole(roles);
         return employeeDao.insertEmployee(employee); 
     }
-
    
     public List<EmployeeDto> getEmployeesDetails() throws CustomException{
         List<Employee> employees = employeeDao.retrieveEmployees();
@@ -98,13 +90,12 @@ public class EmployeeService {
 
     public boolean isEmployeeAvailable(int employeeId) throws CustomException {
         Employee employee = employeeDao.retrieveEmployeeById(employeeId);
-        if (employee != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return (employee != null);
     }
-        
+
+    public Employee getEmployeeToViewAssignedProjects(int employeeId) throws CustomException {
+        return employeeDao.retrieveEmployeeById(employeeId);        
+    }
 
     public String updateEmployee(EmployeeDto employeeDto, String employeeRole) throws CustomException {
         Employee employee = employeeMapper.fromDtoId(employeeDto); 
@@ -119,10 +110,8 @@ public class EmployeeService {
     public String deleteEmployee(int employeeId) throws CustomException{
         List<Role> roles = new ArrayList<Role>();
         Employee employee = employeeDao.retrieveEmployeeById(employeeId);   
-        employee.setStatus("inactive");
+        employee.setStatus(Constants.INACTIVE); 
         employee.setRole(roles);
         return employeeDao.deleteEmployee(employee); 
     }
-    
-   
 }

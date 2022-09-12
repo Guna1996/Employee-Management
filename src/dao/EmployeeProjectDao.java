@@ -41,7 +41,7 @@ public class EmployeeProjectDao extends BaseDao {
      * This method is used to assign project to employees
      * 
      */  
-    public boolean assignProjectToEmployees(List<EmployeeProject> assignedEmployeesToProject) throws CustomException{
+    public String assignProjectToEmployees(List<EmployeeProject> assignedEmployeesToProject) throws CustomException{
         SessionFactory sessionFactory = databaseConnection();
         Session session = null;
         try {
@@ -51,7 +51,7 @@ public class EmployeeProjectDao extends BaseDao {
                 session.save(employeeProject);  
             }
             transaction.commit();
-            return true;     
+            return "Assigned Successfully";     
         } catch(Exception exception) {
             exception.printStackTrace();
             throw new CustomException("Error occured while Inserting employee", exception);

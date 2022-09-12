@@ -1,13 +1,12 @@
 package com.ideas2it.utils;
 
-import java.time.format.DateTimeParseException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
 import java.time.LocalDate;  
 import java.time.Period;  
 import java.util.Date;
 import java.util.Scanner;
-
 
 enum Gender{
     Male, male, female, Female;

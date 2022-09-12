@@ -14,7 +14,7 @@ import com.ideas2it.exception.CustomException;
 import com.ideas2it.service.EmployeeService;
 import com.ideas2it.service.EmployeeProjectService;
 import com.ideas2it.service.ProjectService;
-import com.ideas2it.utils.Constant;
+import com.ideas2it.utils.Constants;
 import com.ideas2it.utils.ValidationUtil;
 
 import java.time.format.DateTimeParseException;
@@ -64,7 +64,7 @@ public class EmployeeController {
     
     /**
      * <p>
-     * This the concrete method which perform Trainer and trainee operations
+     * This the concrete method which perform Trainer and Trainee operations
      * </p>
      * 
      * 
@@ -98,10 +98,6 @@ public class EmployeeController {
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;
-
-                case 4:
-                    
-                    break;
         
                 default:
                         System.out.print("Thank you");
@@ -113,7 +109,7 @@ public class EmployeeController {
 
     /**
      * <p>
-     * This method is used Perform Trainee operations
+     * This method is used perform trainee operations
      * </p>
      * 
      */ 
@@ -122,12 +118,12 @@ public class EmployeeController {
         boolean isChoice = true;
         do {
             logger.info("\n\n****choose one option from below from TRAINEE PORTAL****\n 1. Add your details\n"
-                +" 2. update your complete details\n 3. update Specific detail\n 4. view your details\n 5. Go Back\n");  
+                +" 2. update your complete details\n 3. display your projects\n 4. view your details\n  5. Go Back\n");  
             int operation = scannerInput.nextInt(); 
             switch (operation) {
 	        case 1:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINEE);
+                        addOrUpdateEmployeeDetails(Constants.ADD, Constants.TRAINEE);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
@@ -135,14 +131,18 @@ public class EmployeeController {
 
                 case 2:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINEE);
+                        addOrUpdateEmployeeDetails(Constants.UPDATE, Constants.TRAINEE);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
  
                 case 3:
-                   
+                    try {
+                        displayProjectsAssignedToEmployee(); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     break;
 
                 case 4:
@@ -172,13 +172,13 @@ public class EmployeeController {
         do {
             logger.info("\n\n****choose one option from below from TRAINER PORTAL****"
                 +"\n 1. Add Trainer details\n 2. update your complete details\n 3. Display all trainers\n"
-                +" 4. Display all Trainees\n 5. view your details\n 6. delete employee details\n 7. Display All Employees\n 8. Go Back\n");
+                +" 4. Display all Trainees\n 5. view your details\n 6. delete employee details\n 7. Display All Employees\n 8. Display projects assigned to you\n 9. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
                 case 1:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.TRAINER);
+                        addOrUpdateEmployeeDetails(Constants.ADD, Constants.TRAINER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
@@ -186,7 +186,7 @@ public class EmployeeController {
                 
                 case 2:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.TRAINER);
+                        addOrUpdateEmployeeDetails(Constants.UPDATE, Constants.TRAINER);
                     } catch(CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
@@ -194,7 +194,7 @@ public class EmployeeController {
  
                 case 3:
                     try {
-                        displayEmployeesDetailsByRoleName(Constant.TRAINER);
+                        displayEmployeesDetailsByRoleName(Constants.TRAINER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                   
@@ -202,7 +202,7 @@ public class EmployeeController {
  
                 case 4:
                     try {
-                       displayEmployeesDetailsByRoleName(Constant.TRAINEE);
+                       displayEmployeesDetailsByRoleName(Constants.TRAINEE);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
@@ -232,6 +232,14 @@ public class EmployeeController {
                         logger.error(exception.getMessage()); 
                     } 
                     break;
+
+                case 8:
+                    try {
+                        displayProjectsAssignedToEmployee(); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
+                    break;
                  
                 default:
                     System.out.print("Thank you");
@@ -247,13 +255,13 @@ public class EmployeeController {
             logger.info("\n\n****choose one option from below from PROJECT MANAGER PORTAL****"
                 +"\n 1. Add Project Manager details\n 2. update your complete details\n 3. Display all Trainers\n"
                 +" 4. Display all Projectmanagers\n 5. view your details\n 6. delete ProjectManager details\n"
-                +" 7. update Specific detail\n 8. Manage projects\n 9. Go Back\n");
+                +" 7. Display projects assigned to a particular employee\n 8. Manage projects\n 9. Go Back\n");
             int trainerOption = scannerInput.nextInt();
   
             switch (trainerOption) {
                 case 1:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.ADD, Constant.PROJECT_MANAGER);
+                        addOrUpdateEmployeeDetails(Constants.ADD, Constants.PROJECT_MANAGER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
@@ -261,7 +269,7 @@ public class EmployeeController {
                 
                 case 2:
                     try {
-                        addOrUpdateEmployeeDetails(Constant.UPDATE, Constant.PROJECT_MANAGER);
+                        addOrUpdateEmployeeDetails(Constants.UPDATE, Constants.PROJECT_MANAGER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
@@ -269,14 +277,14 @@ public class EmployeeController {
  
                 case 3:
                     try {
-                        displayEmployeesDetailsByRoleName(Constant.TRAINER);
+                        displayEmployeesDetailsByRoleName(Constants.TRAINER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                   
                     break; 
                 case 4:
                     try {
-                        displayEmployeesDetailsByRoleName(Constant.PROJECT_MANAGER);
+                        displayEmployeesDetailsByRoleName(Constants.PROJECT_MANAGER);
                     } catch(CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }       
@@ -297,7 +305,11 @@ public class EmployeeController {
                     } 
                     break;                 
                 case 7:
-                   
+                    try {
+                        displayProjectsAssignedToEmployee(); 
+                    } catch(CustomException exception) {  
+                        logger.error(exception.getMessage()); 
+                    } 
                     break;
                 case 8:
                     try {
@@ -313,23 +325,23 @@ public class EmployeeController {
         } while(isDecession);
     }
    
-     public void manageProjects() throws CustomException{
+    public void manageProjects() throws CustomException{
         Scanner scannerInput = new Scanner(System.in);
         boolean isChoice = true;
         do {
-            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n 4. update specific detail of a project\n 5. assign projects to employees\n 6. display assigned projects to employees\n 7. display employees assigned to project\n 8. Go back\n ");  
+            logger.info("\n\nChoose one option from below\n 1. Add projects \n 2. Update projects\n 3. Display projects\n  4. assign projects to employees\n 5. display assigned projects to employees\n 6. display employees assigned to project\n 7. delete Assigned employees to project\n 8. Go back\n ");  
             int choice = scannerInput.nextInt();
             switch (choice) {
                 case 1:
                     try {
-                        addOrUpdateProjectDetails(Constant.ADD, Constant.PROJECT_MANAGER);
+                        addOrUpdateProjectDetails(Constants.ADD, Constants.PROJECT_MANAGER);
                     } catch( CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;
                 case 2:
                     try {
-                        addOrUpdateProjectDetails(Constant.UPDATE, Constant.PROJECT_MANAGER);
+                        addOrUpdateProjectDetails(Constants.UPDATE, Constants.PROJECT_MANAGER);
                     } catch( CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
@@ -343,32 +355,32 @@ public class EmployeeController {
                     break; 
                 case 4:
                     try {
-                        updateProjectDetail(Constant.PROJECT_MANAGER);
-                    } catch( CustomException error) {  
-                        logger.error(error+" Error!! invalid input");
-                    }  
-                    break; 
-                 case 5:
-                    try {
                         assignProjectToEmployees();
                     } catch( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;   
-                case 6:
+                case 5:
                     try {
                         displayAssignedProjectsToEmployees();
                     } catch( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;
-                case 7:
+                case 6:
                     try {
                         displayEmployeesAssignedToProject();
                     } catch( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
-                    break;              
+                    break;        
+
+                case 7: 
+                    try {
+                        deleteAssignedEmployeeToProject();
+                    } catch( CustomException error) {  
+                        logger.error(error+" Error!! invalid input");
+                    }    
                 default:
                         System.out.print("Thank you");
                         isChoice = false;
@@ -384,8 +396,8 @@ public class EmployeeController {
      * 
      */ 
     public void addOrUpdateEmployeeDetails(String operation, String userType) throws CustomException {
-        Scanner scannerInput = new Scanner(System.in);
         int failed = 0;
+        Scanner scannerInput = new Scanner(System.in);
         int employeeId = 0;
         String add = "add";
         String update = "update";
@@ -397,26 +409,26 @@ public class EmployeeController {
             System.out.print("**Enter your employeeeId** ");
             employeeId = scannerInput.nextInt();
             employeeDto.setId(employeeId);
-            roleName = validateString("enter the employee role you want to update:");
+            roleName = validate("enter the employee role you want to update:");
         }
         if (operation.equals(add) || employeeService.isEmployeeAvailable(employeeId)) {
             System.out.print("Enter the Required Data to **SignUP**\n"); 
-	    employeeDto.setFirstName(validateString("First Name:"));
-	    employeeDto.setLastName(validateString("Last Name:"));
+	    employeeDto.setFirstName(validate("First Name:"));
+	    employeeDto.setLastName(validate("Last Name:"));
             try {
-	        employeeDto.setDob(LocalDate.parse(validateString("dob (YYYY-MM-DD):")));
-                employeeDto.setGender(validateString("Gender:"));
-                employeeDto.setDesignation(validateString("Designation:"));
-                employeeDto.setCity(validateString("City :"));
-	        employeeDto.setDateOfJoining(LocalDate.parse(validateString("Date of Joining:")));
+	        employeeDto.setDob(LocalDate.parse(validate("dob (YYYY-MM-DD):")));
+                employeeDto.setGender(validate("Gender:"));
+                employeeDto.setDesignation(validate("Designation:"));
+                employeeDto.setCity(validate("City :"));
+	        employeeDto.setDateOfJoining(LocalDate.parse(validate("Date of Joining:")));
             } catch(Exception error) {
                 throw new CustomException("date parse error!!");
             }
-            employeeDto.setBatch(validateString("Batch:"));
-            employeeDto.setFatherName(validateString("Father Name  :"));
-            employeeDto.setEmail(validateString("Email Id:"));
-            employeeDto.setPhoneNumber(validateString("phoneNumber:")); 
-            employeeDto.setStatus("active"); 
+            employeeDto.setBatch(validate("Batch:"));
+            employeeDto.setFatherName(validate("Father Name  :"));
+            employeeDto.setEmail(validate("Email Id:"));
+            employeeDto.setPhoneNumber(validate("phoneNumber:")); 
+            employeeDto.setStatus(Constants.ACTIVE); 
             timeDelay();
             if (operation.equals(add)) {
                 int generatedEmployeeId = employeeService.addEmployee(employeeDto, userType);                  
@@ -486,14 +498,13 @@ public class EmployeeController {
 
 
     public void deleteEmployee() throws CustomException {
-        int failed = 0;
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId you want to delete** ");
         int employeeId = scannerInput.nextInt();
         if (employeeService.isEmployeeAvailable(employeeId)) {
-            String isDeleted = employeeService.deleteEmployee(employeeId);
-            if (isDeleted != null) {
-                logger.info(isDeleted);
+            String messageFromService = employeeService.deleteEmployee(employeeId);
+            if (messageFromService != null) {
+                logger.info(messageFromService);
             } else {
                 logger.info("\nProcess FAILED..invalid employee id");
             }
@@ -521,15 +532,15 @@ public class EmployeeController {
         }
         if (operation.equals(add) || (employeeService.isEmployeeAvailable(employeeId) && projectService.isProjectAvailable(projectId))) {
             System.out.print("Enter the Required Data to **add Project**\n"); 
-	    projectDto.setName(validateString("Project Name:"));
-	    projectDto.setClientName(validateString("Client Name:"));
-            projectDto.setCompanyName(validateString("Company Name:"));
+	    projectDto.setName(validate("Project Name:"));
+	    projectDto.setClientName(validate("Client Name:"));
+            projectDto.setCompanyName(validate("Company Name:"));
             try {
-	        projectDto.setStartDate(LocalDate.parse(validateString("Started Date (YYYY-MM-DD):")));
-                projectDto.setStatus(validateString("Status:"));
-                projectDto.setEstimatedDuration(validateString("Estimated Duration (in month):"));
-                projectDto.setDescription(validateString("Description :"));
-	        projectDto.setTechnologyUsed(validateString("Technology Used:"));
+	        projectDto.setStartDate(LocalDate.parse(validate("Started Date (YYYY-MM-DD):")));
+                projectDto.setStatus(validate("Status:"));
+                projectDto.setEstimatedDuration(validate("Estimated Duration (in month):"));
+                projectDto.setDescription(validate("Description :"));
+	        projectDto.setTechnologyUsed(validate("Technology Used:"));
             } catch(Exception error) {
                 throw new  CustomException("date parse error!!");
             }
@@ -567,68 +578,14 @@ public class EmployeeController {
         } 
     }
 
-    public void updateProjectDetail(String userType) throws  CustomException{
-        int isUpdated = 0;
-        Scanner scannerInput = new Scanner(System.in);
-        System.out.print("**Enter your employeeeId** ");
-        int employeeId = scannerInput.nextInt();
-        if (employeeService.isEmployeeAvailable(employeeId)) {
-            System.out.print("**Enter the Project Id you want to update:"); 
-            int projectId = scannerInput.nextInt();
-            System.out.print("select the data you want to update\n 1.Name\n 2.Client Name\n 3. Company Name\n"
-                + " 4. Estimated Duration\n 5. Description\n 6. Technology Used\n 7. Status\n");
-            int option = scannerInput.nextInt();
-            switch(option) {
-                case 1:
-                    String name = validateString("Name:");
-                    isUpdated = projectService.updateProjectDetail("name", name, projectId);
-                    break;
-                case 2:
-                    String clientName = validateString("Client Name:");
-                    isUpdated = projectService.updateProjectDetail("client_name", clientName, projectId); 
-                    break;
-                case 3:
-                    String CompanyName = validateString("Company Name:");
-                    isUpdated = projectService.updateProjectDetail("company_name", CompanyName, projectId); 
-                    break;
-                case 4:
-                    String estimatedDuration = validateString("Estimated Duration (in month):");
-                    isUpdated = projectService.updateProjectDetail("estimated_duration", estimatedDuration, projectId);
-                    break;
-                case 5:
-                    String estimatedBudget = validateString("Description:");
-                    projectService.updateProjectDetail("estimated_budget", estimatedBudget, projectId);
-                    break;
-                case 6:
-                    String technologyUsed = validateString("Technology Used :");
-                    isUpdated = projectService.updateProjectDetail("technology_used", technologyUsed, projectId);
-                   break;
-                case 7:
-                    String Status = validateString("Status  :");
-                    isUpdated = projectService.updateProjectDetail("status", Status, projectId);
-                    break;
-                default:
-                    break;
-            }    
-            if (isUpdated >= 1) {
-                logger.info("\nEmployee detail updated SUCCESSFULLY");
-            } else {
-                logger.info("\nProcess FAILED..");
-            }
-        } else {
-            logger.info("\nInvalid Email or Dob"); 
-        }  
-    }
-
     public void deleteProject() throws CustomException {
-        int failed = 0;
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your projectId you want to delete** ");
         int projectId = scannerInput.nextInt();
         if (projectService.isProjectAvailable(projectId)) {
-            String isDeleted = projectService.deleteProject(projectId);
-            if (isDeleted != null) {
-                logger.info(isDeleted);
+            String messageFromService = projectService.deleteProject(projectId);
+            if (messageFromService != null) {
+                logger.info(messageFromService);
             } else {
                 logger.info("\nProcess FAILED..invalid project id");
             }
@@ -642,7 +599,7 @@ public class EmployeeController {
         Scanner scannerInput = new Scanner(System.in);
         System.out.print("**Enter your employeeeId** ");
         int employeeId = scannerInput.nextInt();
-        String email = validateString("Email Id:");
+        String email = validate("Email Id:");
         System.out.print("Enter the Project Id: ");
         int projectId = scannerInput.nextInt();  
         if (employeeService.isEmployeeAvailable(employeeId) && projectService.isProjectAvailable(projectId)) {
@@ -656,17 +613,17 @@ public class EmployeeController {
                     employeeProjectDto.setEmployeeId(assignedEmployeeId);
                     employeeProjectDto.setProjectId(projectId);
                     employeeProjectDto.setAssignedBy(email);
-                    employeeProjectDto.setStatus(validateString("Status:"));
-                    employeeProjectDto.setAssignedDate(LocalDate.parse(validateString("Assigned Date (YYYY-MM-DD):")));
-                    employeeProjectDto.setEmployeeRole(validateString("Employee Role :"));
-                    employeeProjectDto.setRelievedDate(LocalDate.parse(validateString("Relieved Date (YYYY-MM-DD):")));                  
+                    employeeProjectDto.setStatus(validate("Status:"));
+                    employeeProjectDto.setAssignedDate(LocalDate.parse(validate("Assigned Date (YYYY-MM-DD):")));
+                    employeeProjectDto.setEmployeeRole(validate("Employee Role :"));
+                    employeeProjectDto.setRelievedDate(LocalDate.parse(validate("Relieved Date (YYYY-MM-DD):")));                  
                     assignedEmployeesToProjectDto.add(employeeProjectDto);
                 }
-                if (true) {      
-                    employeeProjectService.assignProjectToEmployees(assignedEmployeesToProjectDto);
-                    System.out.print("Assigned Successfully");
+                String messageFromService = employeeProjectService.assignProjectToEmployees(assignedEmployeesToProjectDto);
+                if (messageFromService != null) {      
+                    System.out.print(messageFromService);
                 } else {
-                    System.out.print("invalid employee ID!!");
+                    System.out.print("Invalid employee ID!!");
                 }
          // } else {
          //     System.out.print("This Employee already assigned try again!");
@@ -707,27 +664,40 @@ public class EmployeeController {
         }
     }  
 
+    public void displayProjectsAssignedToEmployee() throws CustomException{
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your employeeId** ");
+        int employeeId = scannerInput.nextInt();
+        if (employeeService.isEmployeeAvailable(employeeId)) {
+            List<ProjectDto> projectDtos = employeeProjectService.getProjectsDetailsByEmployeeId(employeeId);
+            System.out.println("---------------------------------------------------------------------------------"
+                +"------------------------------------------------------------------------------------------");  
+            System.out.format(" %17s %17s %17s %17s %17s %17s %17s %17s %17s\n", "ID", "NAME", "CLIENT_NAME", 
+                "COMPANY_NAME", "START DATE", "ESTIMATED_DURATION", "ESTIMATED_BUDGET", "TECHNOLOGY_USED", "STATUS"); 
+            System.out.println("------------------------------------------------------------------------------------"
+                +"---------------------------------------------------------------------------------------");
+            for (ProjectDto projectDto: projectDtos) {
+                System.out.println(projectDto);  
+            } 
+        }  
+    }
 
-   /* public void deleteAssignedEmployeeToProject(String userType) throws CustomException{
-        int failed = 0;
-        System.out.print("**Enter your email and Dob to Login** ");
-        String employeeEmail = validateString("Email Id:");
-        LocalDate employeeDob = LocalDate.parse(validateString("dob (YYYY-MM-DD):")); 
-        if (service.checkIsEmployeeAvailable(employeeEmail, employeeDob, Constant.PROJECT_MANAGER)) {
-            System.out.print("Enter the Employee Id you want to delete: ");
-            int employeeId = scanner.nextInt();
-            System.out.print("Enter the Project Id you want to delete: ");
-            int projectId = scanner.nextInt();
-            if (service.deleteAssignedEmployeeToProjectById(employeeId, projectId) != failed) {
-                logger.info("\n1 row deleted..Employee deleted Successfully");
+    public void deleteAssignedEmployeeToProject() throws CustomException{
+        Scanner scannerInput = new Scanner(System.in);
+        System.out.print("**Enter your projectId you want to delete** ");
+        int projectId = scannerInput.nextInt();
+        if (projectService.isProjectAvailable(projectId)) {
+            String messageFromService = projectService.deleteEmployeesAssignedToProjectByProjectId(projectId);
+            if (messageFromService != null) {
+                logger.info(messageFromService);
             } else {
-                logger.info("\n0 row deleted..process failed");
+                logger.info("\nProcess FAILED..invalid project id");
             }
-        } else {     
-            logger.info("invalid email or dob");
-        }   
-    }      
-      */
+        } else { 
+            logger.info("projectId not found");
+        }     
+    }
+
     /**
      * <p>
      * This method is used to validate names while getting input
@@ -735,7 +705,7 @@ public class EmployeeController {
      * 
      * @parm input is used as attribute to validate the given input
      */ 
-     public String validateString(String input) throws CustomException{
+     public String validate(String input) throws CustomException{
         int invalidInput = 0;
         int loop = 4;
         String string= null;
@@ -769,7 +739,7 @@ public class EmployeeController {
             }
             if (isValid) {
                 break; 
-            }else{
+            } else {
                 invalidInput++;
                 logger.info("\nInvalid Input!! you have "+loop--+" more chance");
             }
