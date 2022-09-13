@@ -33,16 +33,21 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;  
 
 /**
- * Implementation to Insert,update and Access Trainers 
+ * The {@code EmployeeProjectDao} class contains the method for performing CRUD operaion in database.
+ *
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
  */
-public class EmployeeProjectDao extends BaseDao { 
+public class EmployeeProjectDao { 
     /**
      * <p>
      * This method is used to assign project to employees
      * 
      */  
     public String assignProjectToEmployees(List<EmployeeProject> assignedEmployeesToProject) throws CustomException{
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;
         try {
             session = sessionFactory.openSession();  
@@ -63,7 +68,7 @@ public class EmployeeProjectDao extends BaseDao {
     } 
 
     public List<EmployeeProject> retrieveAssignedProjectsToEmployees() throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;  
         List<EmployeeProject> employeesProject = new ArrayList<EmployeeProject>();
         try {

@@ -18,9 +18,12 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory; 
 
 public class BaseDao {
-    static SessionFactory sessionFactory = null;
+    private static SessionFactory sessionFactory = null;
 
-    public SessionFactory databaseConnection() throws CustomException {
+    private BaseDao() {
+    }
+    
+    public static SessionFactory databaseConnection() throws CustomException {
         try {
             if (sessionFactory == null) {
                 sessionFactory = new Configuration().configure().buildSessionFactory();

@@ -25,19 +25,24 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction; 
 
 /**
-* 
-**/
-public class ProjectDao extends BaseDao {
-     Date date = new Date(0);
-     
-     /**
+ * The {@code ProjectDao} class contains the method for performing CRUD operaion in database.
+ *
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */
+public class ProjectDao {
+
+    /**
      * <p>
-     * 
+     * This method is used to insert Project details into database
      * </p>
      * 
-     */  
+     *  @parm project is a model which has project details
+     */ 
     public int insertProject(Project project) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         int projectId = 0;
         Session session = null;
         try {
@@ -56,8 +61,14 @@ public class ProjectDao extends BaseDao {
         }
     } 
 
+    /**
+     * <p>
+     * This method is used to retrieve all Project details from database
+     * </p>
+     *
+     */
     public List<Project> retrieveProjects() throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;  
         try {
             session = sessionFactory.openSession();
@@ -75,8 +86,15 @@ public class ProjectDao extends BaseDao {
         }    
     }
 
+    /**
+     * <p>
+     * This method is used to retrieve Project details from database by id
+     * </p>
+     *
+     * @parm projectId is id of the project
+     */ 
     public Project retrieveProjectById(int projectId) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;      
         try {  
             session = sessionFactory.openSession();
@@ -94,7 +112,15 @@ public class ProjectDao extends BaseDao {
         }     
     }
 
+    /**
+     * <p>
+     * This method is used to update Project details in database
+     * </p>
+     *
+     *  @parm project is a model which has projectdetails
+     */ 
     public String updateProject(Project project) throws CustomException {  
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;   
         try {  
             session = sessionFactory.openSession();
@@ -112,25 +138,8 @@ public class ProjectDao extends BaseDao {
         }   
     }
 
-    public String deleteProject(Project project) throws CustomException {
-        Session session = null;   
-        try {  
-            session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction(); 
-            session.update(project); 
-            transaction.commit(); 
-            return "Deleted Successfully";
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new CustomException("Error occured while Deleting project by Id", exception);
-        } finally {
-            if (session != null) {
-                session.close();  
-            }       
-        }    
-    }
-
     public String deleteEmployeesAssignedToProject(Project project) throws CustomException {
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;   
         try {  
             session = sessionFactory.openSession();

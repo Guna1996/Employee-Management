@@ -9,19 +9,11 @@ package com.ideas2it.service;
 
 
 import com.ideas2it.dao.EmployeeDao;
-import com.ideas2it.dao.EmployeeProjectDao;
-import com.ideas2it.dao.ProjectDao;
 import com.ideas2it.dao.RoleDao;
 import com.ideas2it.dto.EmployeeDto;
-import com.ideas2it.dto.EmployeeProjectDto;
-import com.ideas2it.dto.ProjectDto;
 import com.ideas2it.exception.CustomException;
 import com.ideas2it.mapper.EmployeeMapper;
-import com.ideas2it.mapper.EmployeeProjectMapper;
-import com.ideas2it.mapper.ProjectMapper;
 import com.ideas2it.model.Employee;
-import com.ideas2it.model.EmployeeProject;
-import com.ideas2it.model.Project;
 import com.ideas2it.model.Role;
 import com.ideas2it.utils.Constants;
 
@@ -30,10 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@code Service} class contains the method for trainees, trainers and Human Resource Services. access 
- * and controls the methods of the classes, such as {@code TraineeDao} {@code TrainerDao} {@code HumanResourceDao}, Accessed by  
+ * The {@code EmployeeService} class contains the methods to perform services for Employees. access 
+ * and controls the methods of the classes, such as {@code EmployeeDao} {@code RoleDao} {@code Employeemapper}, Accessed by  
  * creating an instance of that classes.
- * Implementation to perform Trainer and Trainee related Services
  *
  *
  * @author  Gunaseelan K
@@ -43,11 +34,17 @@ import java.util.List;
 public class EmployeeService {
 
     EmployeeDao employeeDao = new EmployeeDao();
-    EmployeeProjectDao employeeProjectDao = new EmployeeProjectDao();
     EmployeeMapper employeeMapper = new EmployeeMapper();
-    EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
     RoleDao roleDao = new RoleDao();
     
+    /**
+     * <p>
+     * This method is used to add Employee details
+     * </p>
+     * 
+     * @parm employeeDto is data transfer object which has employee details
+     *
+     */
     public int addEmployee(EmployeeDto employeeDto, String roleName) throws CustomException{
         List<Role> roles = new ArrayList<Role>();
         Employee employee = employeeMapper.fromDto(employeeDto);
@@ -57,6 +54,12 @@ public class EmployeeService {
         return employeeDao.insertEmployee(employee); 
     }
    
+    /**
+     * <p>
+     * This method is used to get all Employee details
+     * </p>
+     *
+     */
     public List<EmployeeDto> getEmployeesDetails() throws CustomException{
         List<Employee> employees = employeeDao.retrieveEmployees();
         List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
@@ -68,6 +71,13 @@ public class EmployeeService {
         return employeeDtos;         
     }
 
+    /**
+     * <p>
+     * This method is used to get either trainee, trainer or project manager details
+     * </p>
+     *
+     * * @parm roleName is Role of the employee 
+     */
     public List<EmployeeDto> getEmployeesDetailsByRoleName(String roleName) throws CustomException{
         Role role = roleDao.retrieveRoleByName(roleName);
         List<Employee> employees = role.getEmployee();
@@ -80,6 +90,13 @@ public class EmployeeService {
         return employeeDtos;         
     }
     
+    /**
+     * <p>
+     * This method is used to get Employee details by ID
+     * </p>
+     *
+     * * @parm employeeId is id of the employee
+     */
     public EmployeeDto getEmployeeDetailsById(int employeeId) throws CustomException {
         Employee employee = employeeDao.retrieveEmployeeById(employeeId); 
         employee.setRoleName(employee.getRole().get(0).getName());     
@@ -88,15 +105,37 @@ public class EmployeeService {
         return employeeDto;         
     }
 
+    /**
+     * <p>
+     * This method is used to get Employee details by ID
+     * </p>
+     *
+     * * @parm employeeId is id of the employee
+     */
     public boolean isEmployeeAvailable(int employeeId) throws CustomException {
         Employee employee = employeeDao.retrieveEmployeeById(employeeId);
         return (employee != null);
     }
 
+    /**
+     * <p>
+     * This method is used to get Employee to view assigned projects
+     * </p>
+     *
+     * @parm employeeId is id of the employee
+     */
     public Employee getEmployeeToViewAssignedProjects(int employeeId) throws CustomException {
         return employeeDao.retrieveEmployeeById(employeeId);        
     }
 
+    /**
+     * <p>
+     * This method is used to update Employee details
+     * </p>
+     *
+     * @parm employeeDto is data transfer object which has employee details
+     * @parm employRole is Role of the employee 
+     */
     public String updateEmployee(EmployeeDto employeeDto, String employeeRole) throws CustomException {
         Employee employee = employeeMapper.fromDtoId(employeeDto); 
         Employee employeeDb = employeeDao.retrieveEmployeeById(employee.getId());      
@@ -107,11 +146,18 @@ public class EmployeeService {
         return employeeDao.updateEmployee(employee); 
     }
 
+    /**
+     * <p>
+     * This method is used to delete employee details by id
+     * </p>
+     *
+     * * @parm employeeId is id of the employee
+     */
     public String deleteEmployee(int employeeId) throws CustomException{
         List<Role> roles = new ArrayList<Role>();
         Employee employee = employeeDao.retrieveEmployeeById(employeeId);   
         employee.setStatus(Constants.INACTIVE); 
         employee.setRole(roles);
-        return employeeDao.deleteEmployee(employee); 
+        return employeeDao.updateEmployee(employee); 
     }
 }

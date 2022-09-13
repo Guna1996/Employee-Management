@@ -179,7 +179,7 @@ public class EmployeeDto {
 
     @Override
     public String toString() {
-        String output = String.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", id, firstName, lastName, dob, gender, dateOfJoining, batch, 
+        String output = String.format("\n%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", id, firstName, lastName, dob, gender, dateOfJoining, batch, 
         designation, city, fatherName, email, phoneNumber, status, roleName);    
         return output;   
     }

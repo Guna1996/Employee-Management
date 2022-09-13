@@ -129,7 +129,7 @@ public class EmployeeProjectDto {
     
     @Override
     public String toString() {
-        String output = String.format("%20s %20s %20s %20s %20s %20s %20s %20s\n", id, employeeId, projectId, assignedDate, assignedBy, status, employeeRole, relievedDate);    
+        String output = String.format("\n%20s %20s %20s %20s %20s %20s %20s %20s\n", id, employeeId, projectId, assignedDate, assignedBy, status, employeeRole, relievedDate);    
         return output;   
     }
 }

@@ -8,7 +8,6 @@
 package com.ideas2it.service;
 
 import com.ideas2it.dao.EmployeeProjectDao;
-import com.ideas2it.dao.RoleDao;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.dto.ProjectDto;
@@ -29,10 +28,9 @@ import java.time.LocalDate;
 
 
 /**
- * The {@code Service} class contains the method for trainees, trainers and Human Resource Services. access 
- * and controls the methods of the classes, such as {@code TraineeDao} {@code TrainerDao} {@code HumanResourceDao}, Accessed by  
+ * The {@code EmployeeProjectService} class contains the method for assigning employees to project. access 
+ * and controls the methods of the classes, such as {@code EmployeeDao} {@code ProjectDao} {@code EmployeeprojectDao} {@code EmployeeProjectMApper}, Accessed by  
  * creating an instance of that classes.
- * Implementation to perform Trainer and Trainee related Services
  *
  *
  * @author  Gunaseelan K
@@ -42,12 +40,20 @@ import java.time.LocalDate;
 public class EmployeeProjectService {
 
     EmployeeService employeeService = new EmployeeService();
-    EmployeeMapper employeeMapper = new EmployeeMapper();
     ProjectMapper projectMapper = new ProjectMapper();
     ProjectService projectService = new ProjectService();
     EmployeeProjectDao employeeProjectDao = new EmployeeProjectDao();
     EmployeeProjectMapper employeeProjectMapper = new EmployeeProjectMapper();
+    EmployeeMapper employeeMapper = new EmployeeMapper();
    
+    /**
+     * <p>
+     * This method is used to assign employees to project
+     * </p>
+     * 
+     * @parm assignedEmployeesToProjectDto is data transfer object which has employee details and project id
+     *
+     */
     public String assignProjectToEmployees(List<EmployeeProjectDto> assignedEmployeesToProjectDto) throws CustomException {
         List<EmployeeProject> assignedEmployeesToProject = new ArrayList<EmployeeProject>();
         for (EmployeeProjectDto employeeProjectDto: assignedEmployeesToProjectDto) {
@@ -61,6 +67,12 @@ public class EmployeeProjectService {
         return employeeProjectDao.assignProjectToEmployees(assignedEmployeesToProject);
     }
 
+    /**
+     * <p>
+     * This method is used to get assigned Project to Employees
+     * </p>
+     *
+     */
     public List<EmployeeProjectDto> getassignedProjectToEmployees() throws CustomException{
         List<EmployeeProject> employeesProjects = employeeProjectDao.retrieveAssignedProjectsToEmployees();
         List<EmployeeProjectDto> employeesProjectsDto = new ArrayList<EmployeeProjectDto>();
@@ -73,6 +85,13 @@ public class EmployeeProjectService {
         return employeesProjectsDto;         
     }
   
+    /**
+     * <p>
+     * This method is used to get assigned employees to a project by project id
+     * </p>
+     *
+     * @parm projectId is id of the project
+     */
     public List<EmployeeDto> getEmployeesDetailsByProjectId(int projectId) throws CustomException {
         List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
         Project project = projectService.getProjectToViewAssignedEmployees(projectId);
@@ -86,6 +105,13 @@ public class EmployeeProjectService {
         return employeeDtos;
     }
 
+    /**
+     * <p>
+     * This method is used to get assigned projects to a employee by empployee id
+     * </p>
+     *
+     * @parm employeeId is id of the employee
+     */
     public List<ProjectDto> getProjectsDetailsByEmployeeId(int employeeId) throws CustomException {
         List<ProjectDto> projectDtos = new ArrayList<ProjectDto>();
         Employee employee = employeeService.getEmployeeToViewAssignedProjects(employeeId);

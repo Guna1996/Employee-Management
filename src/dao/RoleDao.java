@@ -12,10 +12,6 @@ import com.ideas2it.exception.CustomException;
 import com.ideas2it.model.Employee;
 import com.ideas2it.model.Role;
 
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +21,27 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction; 
 
-public class RoleDao extends BaseDao {
+/**
+ * The {@code RoleDao} class contains the method for performing CRUD operaion in database.
+ *
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */
+public class RoleDao {
 
+    /**
+     * <p>
+     * This method is used to get role object by role name
+     * </p>
+     *
+     * @parm name is Role of the employee 
+     */
     public Role retrieveRoleByName(String name) throws CustomException {
         Session session = null;
         try {
-            SessionFactory sessionFactory = databaseConnection();
+            SessionFactory sessionFactory = BaseDao.databaseConnection();
             session = sessionFactory.openSession(); 
             Transaction transaction = session.beginTransaction();
             List<Role> roles = session.createQuery("FROM Role where name = :name").setString("name", name).list();

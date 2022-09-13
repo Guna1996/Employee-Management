@@ -33,18 +33,24 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;  
   
 /**
-* Implementation to Insert,update and Access employee 
-**/
-public class EmployeeDao extends BaseDao {
-     Date date = new Date(0);
+ * The {@code EmployeeDao} class contains the method for performing CRUD operaion in database.
+ *
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */
+public class EmployeeDao {
+
      /**
      * <p>
-     * This method is used to insert Trainee details
+     * This method is used to insert Employee details into database
      * </p>
      * 
+     * @parm employee is a model which has employee details
      */  
     public int insertEmployee(Employee employee) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         int employeeId = 0;
         Session session = null;
         try {
@@ -63,8 +69,14 @@ public class EmployeeDao extends BaseDao {
         }
     } 
 
+    /**
+     * <p>
+     * This method is used to retrieve all Employee details from database
+     * </p>
+     *
+     */
     public List<Employee> retrieveEmployees() throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;  
         List<Employee> employees = new ArrayList<Employee>();
         try {
@@ -83,8 +95,15 @@ public class EmployeeDao extends BaseDao {
         }    
     }
 
+    /**
+     * <p>
+     * This method is used to retrieve Employee details from database by id
+     * </p>
+     *
+     * @parm employeeId is id of the employee 
+     */ 
     public Employee retrieveEmployeeById(int employeeId) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
+        SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;      
         try {  
             String status = "active";
@@ -103,8 +122,15 @@ public class EmployeeDao extends BaseDao {
         }     
     }
 
+    /**
+     * <p>
+     * This method is used to update Employee details in database
+     * </p>
+     *
+     * @parm employee is a model which has employee details
+     */ 
     public String updateEmployee(Employee employee) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();  
+        SessionFactory sessionFactory = BaseDao.databaseConnection();  
         Session session = null;   
         try {  
             session = sessionFactory.openSession();
@@ -120,25 +146,6 @@ public class EmployeeDao extends BaseDao {
                 session.close();  
             }     
         }   
-    }
-
-    public String deleteEmployee(Employee employee) throws CustomException {
-        SessionFactory sessionFactory = databaseConnection();
-        Session session = null;   
-        try {  
-            session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction(); 
-            session.update(employee); 
-            transaction.commit(); 
-            return "Deleted Successfully";
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new CustomException("Error occured while Deleting employee by Id", exception);
-        } finally {
-            if (session != null) {
-                session.close();  
-            }       
-        }    
     }
 }
    

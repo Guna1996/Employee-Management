@@ -122,7 +122,7 @@ public class ProjectDto {
 
    @Override
     public String toString() {
-        String output = String.format(" %17s  %17s  %17s  %17s  %17s  %17s  %17s  %17s %17s\n", id, name,
+        String output = String.format("\n%17s  %17s  %17s  %17s  %17s  %17s  %17s  %17s %17s\n", id, name,
         clientName, companyName, startDate, estimatedDuration, description, technologyUsed, status);    
         return output;   
     }

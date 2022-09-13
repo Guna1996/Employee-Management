@@ -51,8 +51,8 @@ public class Employee {
     @Column(name = "last_name")
     private String lastName;
   
-    @Column(name = "dob")
-    private LocalDate dob;
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
 
     @Column(name = "gender")
     private String gender;
@@ -109,11 +109,11 @@ public class Employee {
     public Employee() {
     }
     
-    public Employee(String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String gender, LocalDate dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dob = dob;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.dateOfJoining = dateOfJoining;
         this.batch = batch;
@@ -125,13 +125,13 @@ public class Employee {
         this.status = status;
     }
  
-    public Employee(int id, String firstName, String lastName, LocalDate dob, String gender, LocalDate dateOfJoining, String batch, 
+    public Employee(int id, String firstName, String lastName, LocalDate dateOfBirth, String gender, LocalDate dateOfJoining, String batch, 
         String designation, String city, String fatherName, String email,  String phoneNumber, String status) { 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.status = status;
-        this.dob = dob;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.dateOfJoining = dateOfJoining;
         this.batch = batch;
@@ -159,7 +159,7 @@ public class Employee {
     }
 
     public LocalDate getDob() {
-        return dob;
+        return dateOfBirth;
     }
 
     public String getGender() {
@@ -232,8 +232,8 @@ public class Employee {
         this.status = status;
     }
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
+    public void setDob(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public void setGender(String gender) {
