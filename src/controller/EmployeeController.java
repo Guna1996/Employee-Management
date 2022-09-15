@@ -500,6 +500,9 @@ public class EmployeeController {
      * <p>
      * This method is used to add or update project details
      * </p>
+     *
+     * @parm operation is add or update operation based on user choice
+     * @parm userType is trainee, trainer or project Manager based on user choice 
      */ 
     public void addOrUpdateProjectDetails(String operation, String userType) throws  CustomException {
         int projectId = 0;

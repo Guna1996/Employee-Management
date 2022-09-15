@@ -17,12 +17,32 @@ import java.sql.DriverManager;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory; 
 
+/**
+ * The {@code BaseDao} class contains the method for database connection .
+ *
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */
 public class BaseDao {
     private static SessionFactory sessionFactory = null;
 
+    /**
+     * <p>
+     * This method is empty constructor. its declared as private to avoid creating object 
+     * </p>
+     * 
+     */
     private BaseDao() {
     }
     
+    /**
+     * <p>
+     * This method performs hibernate configuration. It creates table as well as perform database conncetion
+     * </p>
+     * 
+     */
     public static SessionFactory databaseConnection() throws CustomException {
         try {
             if (sessionFactory == null) {
