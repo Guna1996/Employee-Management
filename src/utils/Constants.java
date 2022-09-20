@@ -1,5 +1,13 @@
 package com.ideas2it.utils;
 
+/**
+ * The {@code Constants} has final values which are frequently used in various tasks.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */   
 public class Constants {
     public static final int FAILED = 0;
     public static final String ADD = "add";

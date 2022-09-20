@@ -8,7 +8,15 @@
 package com.ideas2it.dto;
 
 import java.time.LocalDate;  
- 
+
+/**
+ * The {@code ProjectDto} has required data members of projects and its getter setters
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */  
 public class ProjectDto {
     protected int id;
     protected String name;

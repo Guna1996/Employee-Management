@@ -51,8 +51,7 @@ public class ProjectDao {
             projectId = (Integer)session.save(project);  
             transaction.commit();
             return projectId;        
-        } catch(Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception exception) {
             throw new CustomException("Error occured while Inserting project", exception);
         } finally {
             if (session != null) {
@@ -103,7 +102,6 @@ public class ProjectDao {
             transaction.commit();
             return project;
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new CustomException("Error occured while Retrieving project by Id", exception);
         } finally {
             if (session != null) {
@@ -129,7 +127,6 @@ public class ProjectDao {
             transaction.commit();   
             return "Updated Successfully";
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new CustomException("Error occured while Updating project", exception);
         } finally {
             if (session != null) {
@@ -148,7 +145,6 @@ public class ProjectDao {
             transaction.commit(); 
             return "Deleted Successfully";
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new CustomException("Error occured while Deleting project by Id", exception);
         } finally {
             if (session != null) {

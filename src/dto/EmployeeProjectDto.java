@@ -11,7 +11,15 @@ import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.dto.ProjectDto;
 
 import java.time.LocalDate; 
-  
+
+/**
+ * The {@code EmployeeProjectDto} has required data members of Employees assigned to projects and its getter setters.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */  
 public class EmployeeProjectDto {
     protected int id;
     protected int employeeId;

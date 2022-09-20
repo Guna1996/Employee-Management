@@ -14,9 +14,24 @@ import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.mapper.EmployeeMapper;
 import com.ideas2it.mapper.ProjectMapper;
  
+/**
+ * The {@code EmployeeProjectMapper} has methods to convert Employeeproject dto to Employeeproject model and vice versa.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */ 
 public class EmployeeProjectMapper {
     EmployeeMapper employeeMapper = new EmployeeMapper();
-    ProjectMapper projectMapper = new ProjectMapper();  
+    ProjectMapper projectMapper = new ProjectMapper(); 
+
+    /**
+     * <p>
+     * This method is used to convert Employeeproject dto to Employeeproject model
+     * </p>
+     *
+     */ 
     public EmployeeProject fromDto(EmployeeProjectDto employeeProjectDto) {
         Employee employee = employeeMapper.fromDtoId(employeeProjectDto.getEmployeeDto());
         Project project = projectMapper.fromDtoId(employeeProjectDto.getProjectDto());
@@ -25,6 +40,12 @@ public class EmployeeProjectMapper {
         return employeeProject;
     }
 
+    /**
+     * <p>
+     * This method is used to convert Employeeproject model to Employeeproject dto
+     * </p>
+     *
+     */ 
     public EmployeeProjectDto toDto(EmployeeProject employeeProject) {
         EmployeeProjectDto employeeProjectDto = new EmployeeProjectDto(employeeProject.getId(),employeeProject.getProjectId(), employeeProject.getEmployeeId(), employeeProject.getAssignedDate(),
             employeeProject.getAssignedBy(), employeeProject.getStatus(), employeeProject.getEmployeeRole(), employeeProject.getRelievedDate());

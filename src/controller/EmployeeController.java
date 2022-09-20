@@ -2,8 +2,6 @@
  * Copyright (c) 2022, ideas2it and/or its affiliates. All rights reserved.
  * IDEAS2IT PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- *
- *
  */
 package com.ideas2it.controller;
 
@@ -76,21 +74,21 @@ public class EmployeeController {
                 case 1:
                     try {
                         traineePortal();
-                    } catch(InputMismatchException error) {  
+                    } catch (InputMismatchException error) {  
                         logger.error(error+" Error!! invalid input");
                     }   
           	    break;
                 case 2:
                     try {
                         trainerPortal();
-                    } catch(InputMismatchException error) {  
+                    } catch (InputMismatchException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;
                 case 3:
                     try {
                        projectManagerPortal();
-                    } catch(InputMismatchException error) {  
+                    } catch (InputMismatchException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;        
@@ -119,28 +117,28 @@ public class EmployeeController {
 	        case 1:
                     try {
                         addOrUpdateEmployeeDetails(Constants.ADD, Constants.TRAINEE);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
                 case 2:
                     try {
                         addOrUpdateEmployeeDetails(Constants.UPDATE, Constants.TRAINEE);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break; 
                 case 3:
                     try {
                         displayProjectsAssignedToEmployee(); 
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
                 case 4:
                     try {
                         displayEmployeeDetailsById();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                                                    
                 default:
@@ -150,7 +148,7 @@ public class EmployeeController {
         } while (isChoice);   
     }       
     
-     /**
+    /**
      * <p>
      * This method is used to Perform Trainer operations
      * </p>
@@ -169,14 +167,14 @@ public class EmployeeController {
                 case 1:
                     try {
                         addOrUpdateEmployeeDetails(Constants.ADD, Constants.TRAINER);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;                
                 case 2:
                     try {
                         addOrUpdateEmployeeDetails(Constants.UPDATE, Constants.TRAINER);
-                    } catch(CustomException error) {  
+                    } catch (CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;
@@ -184,21 +182,21 @@ public class EmployeeController {
                 case 3:
                     try {
                         displayEmployeesDetailsByRoleName(Constants.TRAINER);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                   
                     break;
                 case 4:
                     try {
                        displayEmployeesDetailsByRoleName(Constants.TRAINEE);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
                 case 5:
                     try {
                          displayEmployeeDetailsById();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                    
@@ -206,7 +204,7 @@ public class EmployeeController {
                 case 6:
                    try {
                         deleteEmployee();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                    
@@ -214,14 +212,14 @@ public class EmployeeController {
                 case 7:
                     try {    
                         displayEmployeesDetails();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
                 case 8:
                     try {
                         displayProjectsAssignedToEmployee(); 
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;  
@@ -252,7 +250,7 @@ public class EmployeeController {
                 case 1:
                     try {
                         addOrUpdateEmployeeDetails(Constants.ADD, Constants.PROJECT_MANAGER);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
@@ -260,7 +258,7 @@ public class EmployeeController {
                 case 2:
                     try {
                         addOrUpdateEmployeeDetails(Constants.UPDATE, Constants.PROJECT_MANAGER);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
@@ -268,21 +266,21 @@ public class EmployeeController {
                 case 3:
                     try {
                         displayEmployeesDetailsByRoleName(Constants.TRAINER);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }                                   
                     break; 
                 case 4:
                     try {
                         displayEmployeesDetailsByRoleName(Constants.PROJECT_MANAGER);
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     }       
                     break;
                 case 5:
                     try {
                          displayEmployeeDetailsById();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                                                   
@@ -290,21 +288,21 @@ public class EmployeeController {
                 case 6:
                     try {
                         deleteEmployee();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;                 
                 case 7:
                     try {
                         displayProjectsAssignedToEmployee(); 
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;
                 case 8:
                     try {
                         manageProjects();
-                    } catch(CustomException exception) {  
+                    } catch (CustomException exception) {  
                         logger.error(exception.getMessage()); 
                     } 
                     break;                 
@@ -331,42 +329,42 @@ public class EmployeeController {
                 case 1:
                     try {
                         addOrUpdateProjectDetails(Constants.ADD, Constants.PROJECT_MANAGER);
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;
                 case 2:
                     try {
                         addOrUpdateProjectDetails(Constants.UPDATE, Constants.PROJECT_MANAGER);
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error.getMessage()); 
                     } 
                     break;
                 case 3:
                     try {
                         displayProjects();
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break; 
                 case 4:
                     try {
                         assignProjectToEmployees();
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;   
                 case 5:
                     try {
                         displayAssignedProjectsToEmployees();
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;
                 case 6:
                     try {
                         displayEmployeesAssignedToProject();
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }  
                     break;        
@@ -374,7 +372,7 @@ public class EmployeeController {
                 case 7: 
                     try {
                         deleteAssignedEmployeeToProject();
-                    } catch( CustomException error) {  
+                    } catch ( CustomException error) {  
                         logger.error(error+" Error!! invalid input");
                     }    
                 default:
@@ -382,7 +380,7 @@ public class EmployeeController {
                         isChoice = false;
                         break;
             }          
-        }while (isChoice);               
+        } while (isChoice);               
     } 
     
     /**
@@ -428,7 +426,7 @@ public class EmployeeController {
         }      
     }
 
-     /**
+    /**
      * <p>
      * This method is used to display all Employees Details
      * </p>
@@ -500,9 +498,6 @@ public class EmployeeController {
      * <p>
      * This method is used to add or update project details
      * </p>
-     *
-     * @parm operation is add or update operation based on user choice
-     * @parm userType is trainee, trainer or project Manager based on user choice 
      */ 
     public void addOrUpdateProjectDetails(String operation, String userType) throws  CustomException {
         int projectId = 0;
@@ -532,13 +527,13 @@ public class EmployeeController {
             }
             timeDelay();
             if (operation.equals(Constants.ADD)) {                    
-                if(projectService.addProject(projectDto) != Constants.FAILED) {
+                if (projectService.addProject(projectDto) != Constants.FAILED) {
                     logger.info("\n1 row inserted..Project added Successfully");
                 } else {
                     logger.info("\n0 row inserted..process failed");
                 }
-            } else if(operation.equals(Constants.UPDATE)) {
-                if(projectService.updateProject(projectDto) != null) {
+            } else if (operation.equals(Constants.UPDATE)) {
+                if (projectService.updateProject(projectDto) != null) {
                     logger.info("\nProject Updated SUCCESSFULLY");
                 } else {
                     logger.info("\n.Process Failed");
@@ -559,7 +554,7 @@ public class EmployeeController {
         } 
     }
 
-     /**
+    /**
      * <p>
      * This method is used to delete project by id
      * </p>
@@ -580,7 +575,7 @@ public class EmployeeController {
         }     
     }
     
-     /**
+    /**
      * <p>
      * This method is assign projects to employees
      * </p>
@@ -620,7 +615,7 @@ public class EmployeeController {
         }
     }  
 
-     /**
+    /**
      * <p>
      * This method is used to assign projects to employees
      * </p>
@@ -634,7 +629,7 @@ public class EmployeeController {
         } 
     }  
 
-     /**
+    /**
      * <p>
      * This method is used to display employees assigned to project
      * </p>
@@ -652,7 +647,7 @@ public class EmployeeController {
         }
     }  
 
-     /**
+    /**
      * <p>
      * This method is used to display projects assigned to employee
      * </p>
@@ -670,7 +665,7 @@ public class EmployeeController {
         }  
     }
 
-     /**
+    /**
      * <p>
      * This method is used to delete assigned employee to project
      * </p>
@@ -708,7 +703,7 @@ public class EmployeeController {
             logger.info(input);
             if (input.equals("Date Of Birth (YYYY-MM-DD):") || input.equals("Date of Joining:") || input.equals("Started Date (YYYY-MM-DD):") || input.equals("Assigned Date (YYYY-MM-DD):") || input.equals("Relieved Date (YYYY-MM-DD):")) {
                 string = scanner.next();
-                isValid = ValidationUtil.validateDob(string);
+                isValid = ValidationUtil.validateDate(string);
                 try {
                     int age = ValidationUtil.calculateAge(string);
                 } catch (DateTimeParseException exception) {
@@ -743,7 +738,7 @@ public class EmployeeController {
         return string;
     }    
  
-     /**
+    /**
      * <p>
      * This method is used to get user input using setters
      * </p>
@@ -771,17 +766,27 @@ public class EmployeeController {
         return employeeDto;
     } 
 
+    /**
+     * <p>
+     * This method is used display Employee field names
+     * </p>
+     */ 
     public void displayEmployeeFields() {
         System.out.format("%5s %15s %8s %15s %8s %15s %5s %15s %8s %15s %25s %13s %8s %15s\n", "ID", "FIRST_NAME", "LAST_NAME", 
             "DATE_OF_BIRTH", "GENDER", "DATE_OF_JOINING", "BATCH", "DESIGNATION", "CITY", "FATHER_NAME", "EMAIL", "PHONE_NUMBER", "STATUS", "ROLE"); 
     }
 
+    /**
+     * <p>
+     * This method is used display Project field names
+     * </p>
+     */ 
     public void displayProjectsFields() {
         System.out.format(" %17s %17s %17s %17s %17s %17s %17s %17s %17s\n", "ID", "NAME", "CLIENT_NAME", 
             "COMPANY_NAME", "START DATE", "ESTIMATED_DURATION", "ESTIMATED_BUDGET", "TECHNOLOGY_USED", "STATUS"); 
     }
 
-     /**
+    /**
      * <p>
      * This method is used perform time delay and buffer as processing
      * </p>

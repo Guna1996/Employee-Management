@@ -57,8 +57,7 @@ public class EmployeeProjectDao {
             }
             transaction.commit();
             return "Assigned Successfully";     
-        } catch(Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception exception) {
             throw new CustomException("Error occured while Inserting employee", exception);
         } finally {
             if (session != null) {
@@ -78,7 +77,6 @@ public class EmployeeProjectDao {
             transaction.commit();
             return employeesProject;
         } catch (Exception exception) {
-            exception.printStackTrace(); 
             throw new CustomException("Error occured while Retrieving all assigned employees to project" ,exception);
         } finally {
             if (session != null) {

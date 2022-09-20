@@ -23,7 +23,15 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.ColumnDefault; 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
- 
+
+/**
+ * The {@code EmployeeProject} has data members and its getter setters, where annotations is used to create table using hibernate.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */  
 @Entity
 @Table(name = "employee_project")
 public class EmployeeProject {

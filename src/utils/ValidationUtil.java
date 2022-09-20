@@ -12,6 +12,14 @@ enum Gender{
     Male, male, female, Female;
 }
 
+/**
+ * The {@code ValidationUtil} has methods to validate the given input and perform simple logics using the input.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */   
 public class ValidationUtil {
     static int count = 8;
     static String company = "I2I";
@@ -20,18 +28,24 @@ public class ValidationUtil {
     public static String EMAIL_REGEX = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";   
     public static String NAME_REGEX = "^[a-zA-Z]*$";
     
-    public static String generateStaffNumber() {
-        count++;
-        String employeeId = company + count;
-        return employeeId; 
-    }
-          
+    /**
+     * <p>
+     * This method is used to validate string using regex
+     * </p>
+     *
+     */    
     public static boolean validate(String regex, String validated) {
         boolean result = validated.matches(regex);
         return result;
     }
 
-    public static boolean validateDob(String validated) {
+    /**
+     * <p>
+     * This method is used to validate date
+     * </p>
+     *
+     */
+    public static boolean validateDate(String validated) {
         try {
             LocalDate date = LocalDate.parse(validated); 
         }
@@ -41,6 +55,12 @@ public class ValidationUtil {
         return true;                                  
     }       
     
+    /**
+     * <p>
+     * This method is used to validate gender
+     * </p>
+     *
+     */
     public static boolean validateGender(String validated) {
         Gender[] genderEnum = Gender.values();
         boolean isValid = false;
@@ -54,6 +74,12 @@ public class ValidationUtil {
         return isValid;
     }    
     
+    /**
+     * <p>
+     * This method is used to calculate age
+     * </p>
+     *
+     */
     public static int calculateAge(String dob) {
         LocalDate date = LocalDate.parse(dob);
         LocalDate currentDate = LocalDate.now(); 

@@ -29,7 +29,7 @@ import java.time.LocalDate;
 
 /**
  * The {@code EmployeeProjectService} class contains the method for assigning employees to project. access 
- * and controls the methods of the classes, such as {@code EmployeeDao} {@code ProjectDao} {@code EmployeeprojectDao} {@code EmployeeProjectMApper}, Accessed by  
+ * and controls the methods of the classes, such as {@code EmployeeService} {@code ProjectService} {@code EmployeeProjectDao} {@code EmployeeProjectMApper}, Accessed by  
  * creating an instance of that classes.
  *
  *

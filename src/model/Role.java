@@ -20,6 +20,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.FetchType;
 
+/**
+ * The {@code Role} has data members and its getter setters, where annotations is used to create table using hibernate.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */ 
 @Entity
 @Table(name = "role")
 public class Role {

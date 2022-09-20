@@ -9,7 +9,7 @@ package com.ideas2it.service;
 
 
 import com.ideas2it.dao.EmployeeDao;
-import com.ideas2it.dao.RoleDao;
+import com.ideas2it.service.RoleService;
 import com.ideas2it.dto.EmployeeDto;
 import com.ideas2it.exception.CustomException;
 import com.ideas2it.mapper.EmployeeMapper;
@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * The {@code EmployeeService} class contains the methods to perform services for Employees. access 
- * and controls the methods of the classes, such as {@code EmployeeDao} {@code RoleDao} {@code Employeemapper}, Accessed by  
+ * and controls the methods of the classes, such as {@code EmployeeDao} {@code RoleService} {@code Employeemapper}, Accessed by  
  * creating an instance of that classes.
  *
  *
@@ -35,7 +35,7 @@ public class EmployeeService {
 
     EmployeeDao employeeDao = new EmployeeDao();
     EmployeeMapper employeeMapper = new EmployeeMapper();
-    RoleDao roleDao = new RoleDao();
+    RoleService roleService = new RoleService();
     
     /**
      * <p>
@@ -48,7 +48,7 @@ public class EmployeeService {
     public int addEmployee(EmployeeDto employeeDto, String roleName) throws CustomException{
         List<Role> roles = new ArrayList<Role>();
         Employee employee = employeeMapper.fromDto(employeeDto);
-        Role role = roleDao.retrieveRoleByName(roleName);
+        Role role = roleService.getRoleByName(roleName);
         roles.add(role);
         employee.setRole(roles);
         return employeeDao.insertEmployee(employee); 
@@ -79,7 +79,7 @@ public class EmployeeService {
      * * @parm roleName is Role of the employee 
      */
     public List<EmployeeDto> getEmployeesDetailsByRoleName(String roleName) throws CustomException{
-        Role role = roleDao.retrieveRoleByName(roleName);
+        Role role = roleService.getRoleByName(roleName);
         List<Employee> employees = role.getEmployee();
         List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
         for (Employee employee: employees) {
@@ -139,7 +139,7 @@ public class EmployeeService {
     public String updateEmployee(EmployeeDto employeeDto, String employeeRole) throws CustomException {
         Employee employee = employeeMapper.fromDtoId(employeeDto); 
         Employee employeeDb = employeeDao.retrieveEmployeeById(employee.getId());      
-        Role role = roleDao.retrieveRoleByName(employeeRole);
+        Role role = roleService.getRoleByName(employeeRole);
         List<Role> roles = employeeDb.getRole();
         roles.add(role);
         employee.setRole(roles);

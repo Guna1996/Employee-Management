@@ -9,6 +9,14 @@ package com.ideas2it.dto;
 
 import java.time.LocalDate;   
 
+/**
+ * The {@code EmployeeDto} has required data members of Employees and its getter setters
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */  
 public class EmployeeDto {
     protected int id;
     protected String firstName;

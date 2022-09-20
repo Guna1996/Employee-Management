@@ -7,22 +7,12 @@
  */
 package com.ideas2it.service;
 
-
-import com.ideas2it.dao.EmployeeDao;
-import com.ideas2it.dao.EmployeeProjectDao;
 import com.ideas2it.dao.ProjectDao;
-import com.ideas2it.dao.RoleDao;
-import com.ideas2it.dto.EmployeeDto;
-import com.ideas2it.dto.EmployeeProjectDto;
 import com.ideas2it.dto.ProjectDto;
 import com.ideas2it.exception.CustomException;
-import com.ideas2it.mapper.EmployeeMapper;
-import com.ideas2it.mapper.EmployeeProjectMapper;
 import com.ideas2it.mapper.ProjectMapper;
-import com.ideas2it.model.Employee;
 import com.ideas2it.model.EmployeeProject;
 import com.ideas2it.model.Project;
-import com.ideas2it.model.Role;
 import com.ideas2it.utils.Constants;
 
 import java.util.ArrayList;
@@ -152,8 +142,4 @@ public class ProjectService {
         project.setStatus(Constants.INACTIVE);  
         return projectDao.updateProject(project); 
     }  
-
-    public int updateProjectDetail(String variable, String value, int projectId) throws CustomException {
-        return 0;
-    }
 }

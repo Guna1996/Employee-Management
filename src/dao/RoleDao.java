@@ -48,7 +48,6 @@ public class RoleDao {
             transaction.commit();
             return roles.get(0);
         } catch (Exception exception) {
-            exception.printStackTrace();  
             throw new CustomException("Error occured while retrieving role by name", exception);
         } finally {
             if (session != null) {

@@ -26,7 +26,15 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp; 
- 
+
+/**
+ * The {@code Project} has data members and its getter setters, where annotations is used to create table using hibernate.
+ * 
+ *
+ * @author  Gunaseelan K
+ * since 1.0
+ * jls Advanced logics+
+ */ 
 @Entity
 @Table(name = "project")
 public class Project {

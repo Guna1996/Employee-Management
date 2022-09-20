@@ -47,7 +47,7 @@ public class EmployeeDao {
      * This method is used to insert Employee details into database
      * </p>
      * 
-     * @parm employee is a model which has employee details
+     * @parm employee is a model object which has employee details
      */  
     public int insertEmployee(Employee employee) throws CustomException {
         SessionFactory sessionFactory = BaseDao.databaseConnection();
@@ -60,7 +60,6 @@ public class EmployeeDao {
             transaction.commit();
             return employeeId;        
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new CustomException("Error occured while Inserting employee", exception);
         } finally {
             if (session != null) {
@@ -86,7 +85,6 @@ public class EmployeeDao {
             transaction.commit();
             return employees;
         } catch (Exception exception) {
-            exception.printStackTrace(); 
             throw new CustomException("Error occured while Retrieving all employees" ,exception);
         } finally {
             if (session != null) {
@@ -113,7 +111,6 @@ public class EmployeeDao {
             transaction.commit();
             return employee;
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new CustomException("Error occured while Retrieving employee by Id", exception);
         } finally {
             if (session != null) {
@@ -139,7 +136,6 @@ public class EmployeeDao {
             transaction.commit();   
             return "Updated Successfully";
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new CustomException("Error occured while Updating employee", exception);
         } finally {
             if (session != null) {
