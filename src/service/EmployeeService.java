@@ -119,12 +119,12 @@ public class EmployeeService {
 
     /**
      * <p>
-     * This method is used to get Employee to view assigned projects
+     * This method is used to get Employee by Id
      * </p>
      *
      * @parm employeeId is id of the employee
      */
-    public Employee getEmployeeToViewAssignedProjects(int employeeId) throws CustomException {
+    public Employee getEmployeeById(int employeeId) throws CustomException {
         return employeeDao.retrieveEmployeeById(employeeId);        
     }
 

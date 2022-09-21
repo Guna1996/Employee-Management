@@ -9,7 +9,7 @@ package com.ideas2it.dao;
 
 
 import com.ideas2it.exception.CustomException;
-import com.ideas2it.utils.Constant;
+import com.ideas2it.utils.Constants;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,7 +38,7 @@ public class BaseDao {
             }
         } catch (Exception exception) {
             exception.printStackTrace(); 
-            throw new CustomException("Error occured while Cofiguring database" ,exception);
+            throw new CustomException("Error occured while Cofiguring database", exception);
         } 
         return sessionFactory;
     }

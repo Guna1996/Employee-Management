@@ -11,7 +11,7 @@ import com.ideas2it.dao.BaseDao;
 import com.ideas2it.exception.CustomException;
 import com.ideas2it.model.Employee;
 import com.ideas2it.model.Role;
-import com.ideas2it.utils.Constant;
+import com.ideas2it.utils.Constants;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -81,11 +81,11 @@ public class EmployeeDao {
         try {
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            employees = session.createQuery("FROM Employee where status = :status").setString("status", "active").list();
+            employees = session.createQuery("FROM Employee where status = :status").setString("status", Constants.ACTIVE).list();
             transaction.commit();
             return employees;
         } catch (Exception exception) {
-            throw new CustomException("Error occured while Retrieving all employees" ,exception);
+            throw new CustomException("Error occured while Retrieving all employees", exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -104,10 +104,9 @@ public class EmployeeDao {
         SessionFactory sessionFactory = BaseDao.databaseConnection();
         Session session = null;      
         try {  
-            String status = "active";
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction(); 
-            Employee employee = (Employee) session.createQuery("FROM Employee where status = :status and id = :id").setString("status", "active").setInteger("id", employeeId).uniqueResult();   
+            Employee employee = (Employee) session.createQuery("FROM Employee where status = :status and id = :id").setString("status", Constants.ACTIVE).setInteger("id", employeeId).uniqueResult();   
             transaction.commit();
             return employee;
         } catch (Exception exception) {

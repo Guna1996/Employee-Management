@@ -94,7 +94,7 @@ public class EmployeeProjectService {
      */
     public List<EmployeeDto> getEmployeesDetailsByProjectId(int projectId) throws CustomException {
         List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
-        Project project = projectService.getProjectToViewAssignedEmployees(projectId);
+        Project project = projectService.getProjectById(projectId);
         List<EmployeeProject> employeesAssignedToProject = project.getEmployeesAssignedToProject();
         for (EmployeeProject employeeProject: employeesAssignedToProject) {
             Employee employee = employeeProject.getEmployee();
@@ -114,7 +114,7 @@ public class EmployeeProjectService {
      */
     public List<ProjectDto> getProjectsDetailsByEmployeeId(int employeeId) throws CustomException {
         List<ProjectDto> projectDtos = new ArrayList<ProjectDto>();
-        Employee employee = employeeService.getEmployeeToViewAssignedProjects(employeeId);
+        Employee employee = employeeService.getEmployeeById(employeeId);
         List<EmployeeProject> projectsAssignedToEmployee = employee.getProjectsAssignedToEmployee();
         for (EmployeeProject employeeProject: projectsAssignedToEmployee) {
             Project project = employeeProject.getProject();

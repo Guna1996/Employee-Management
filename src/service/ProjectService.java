@@ -91,12 +91,12 @@ public class ProjectService {
 
     /**
      * <p>
-     * This method is used to get project to view assigned Employees
+     * This method is used to get project object by Id
      * </p>
      *
      * @parm projectId is id of the project
      */
-    public Project getProjectToViewAssignedEmployees(int projectId) throws CustomException {
+    public Project getProjectById(int projectId) throws CustomException {
         return projectDao.retrieveProjectById(projectId);        
     }
 

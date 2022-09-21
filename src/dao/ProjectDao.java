@@ -10,7 +10,7 @@ package com.ideas2it.dao;
 import com.ideas2it.dao.BaseDao;
 import com.ideas2it.exception.CustomException;
 import com.ideas2it.model.Project;
-import com.ideas2it.utils.Constant;
+import com.ideas2it.utils.Constants;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -72,12 +72,12 @@ public class ProjectDao {
         try {
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            List<Project> projects  = projects = session.createQuery("FROM Project where status = :status").setString("status", "active").list();
+            List<Project> projects  = projects = session.createQuery("FROM Project where status = :status").setString("status", Constants.ACTIVE).list();
             transaction.commit();
             return projects;
         } catch (Exception exception) {
             exception.printStackTrace(); 
-            throw new CustomException("Error occured while Retrieving all projects" ,exception);
+            throw new CustomException("Error occured while Retrieving all projects", exception);
         } finally {
             if (session != null) {
                 session.close();  
@@ -98,7 +98,7 @@ public class ProjectDao {
         try {  
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction(); 
-            Project project = (Project) session.createQuery("FROM Project where status = :status and id = :id").setString("status", "active").setInteger("id", projectId).uniqueResult();   
+            Project project = (Project) session.createQuery("FROM Project where status = :status and id = :id").setString("status", Constants.ACTIVE).setInteger("id", projectId).uniqueResult();   
             transaction.commit();
             return project;
         } catch (Exception exception) {

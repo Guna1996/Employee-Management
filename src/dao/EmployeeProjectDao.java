@@ -9,7 +9,7 @@ package com.ideas2it.dao;
 
 import com.ideas2it.model.Employee;
 import com.ideas2it.model.EmployeeProject;
-import com.ideas2it.utils.Constant;
+import com.ideas2it.utils.Constants;
 import com.ideas2it.dao.BaseDao;
 import com.ideas2it.exception.CustomException;
 
@@ -73,11 +73,11 @@ public class EmployeeProjectDao {
         try {
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            employeesProject = session.createQuery("FROM EmployeeProject where status = :status").setString("status", "active").list();
+            employeesProject = session.createQuery("FROM EmployeeProject where status = :status").setString("status", Constants.ACTIVE).list();
             transaction.commit();
             return employeesProject;
         } catch (Exception exception) {
-            throw new CustomException("Error occured while Retrieving all assigned employees to project" ,exception);
+            throw new CustomException("Error occured while Retrieving all assigned employees to project", exception);
         } finally {
             if (session != null) {
                 session.close();  
